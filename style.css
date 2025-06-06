@@ -1,90 +1,120 @@
-body {
+/* === Reset and Base === */
+* {
+    box-sizing: border-box;
     margin: 0;
-    font-family: 'Helvetica Neue', sans-serif;
-    background: #fffdf6;
-    color: #1c1c1c;
+    padding: 0;
+  }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: linear-gradient(to bottom right, #f8f5f0, #ffffff);
+    color: #1a1a1a;
     line-height: 1.6;
+    padding: 40px 20px;
   }
   
-  main.landing {
-    max-width: 700px;
-    margin: 80px auto;
-    padding: 0 24px;
+  /* === Shared Container === */
+  main {
+    max-width: 880px;
+    margin: auto;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    backdrop-filter: blur(10px);
+    animation: fadeIn 0.6s ease-in-out;
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
   }
   
-  main.landing h1 {
-    font-size: 3rem;
-    margin-bottom: 1rem;
+  /* === Landing Page === */
+  .landing h1 {
+    font-size: 3.2rem;
+    margin-bottom: 0.75rem;
+    font-weight: 700;
   }
-  
-  main.landing .intro {
-    font-size: 1.2rem;
-    color: #333;
+  .landing .intro {
+    font-size: 1.25rem;
     margin-bottom: 2rem;
+    color: #4b4b4b;
   }
-  
   .description h2 {
+    margin-top: 2rem;
     font-size: 1.5rem;
-    margin-top: 2rem;
-    margin-bottom: 0.5rem;
+    font-weight: 600;
+  }
+  .description ul {
+    margin-top: 1rem;
+    margin-left: 1.5rem;
+    list-style: disc;
   }
   
-  ul {
-    margin: 1rem 0;
-    padding-left: 1.5rem;
-  }
-  
-  .explore-button {
+  /* === Buttons === */
+  .explore-button,
+  .button,
+  .back-link {
     display: inline-block;
-    margin-top: 2rem;
-    background: #f2603c;
-    color: white;
+    margin-top: 1.5rem;
     padding: 0.75rem 1.5rem;
     font-size: 1rem;
+    font-weight: 500;
     text-decoration: none;
-    border-radius: 6px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    transition: background 0.3s ease;
+    color: #fff;
+    background: linear-gradient(to right, #f97316, #ef4444);
+    border: none;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(249, 115, 22, 0.3);
   }
-  .explore-button:hover {
-    background: #dd5130;
-  }
-  
-  main.explorer {
-    max-width: 800px;
-    margin: 60px auto;
-    padding: 0 24px;
+  .explore-button:hover,
+  .button:hover,
+  .back-link:hover {
+    transform: translateY(-1px);
+    background: linear-gradient(to right, #f59e0b, #ec4899);
   }
   
   .back-link {
-    display: inline-block;
+    background: #333;
     margin-bottom: 1.5rem;
-    text-decoration: none;
-    color: #f2603c;
+    font-size: 0.95rem;
   }
   
+  /* === Annotation Explorer === */
   .annotation-block {
-    background: white;
+    background: #ffffff;
     padding: 1.5rem;
-    border-radius: 10px;
+    border-radius: 16px;
     margin-bottom: 2rem;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.05);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.04);
+    border: 1px solid #eee;
+    transition: box-shadow 0.3s ease;
+  }
+  .annotation-block:hover {
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.06);
   }
   
-  .annotation-block .source,
-  .annotation-block .summary {
-    margin: 0.5rem 0;
+  .source, .summary {
+    margin: 1rem 0;
   }
   
   .span-highlight {
-    background: #ffe58f;
+    background: linear-gradient(to right, #fff3c4, #ffe2b3);
+    padding: 0.1rem 0.25rem;
+    border-radius: 4px;
+    transition: background 0.3s;
     cursor: pointer;
-    border-bottom: 1px dashed #d48806;
+  }
+  .span-highlight:hover {
+    background: linear-gradient(to right, #facc15, #fcd34d);
   }
   
   .attributes {
-    background: #f9f9f9;
+    background: #f9fafb;
     padding: 1rem;
-    border-left: 4px solid #ccc;
-    mar
+    border-left: 4px solid #f97316;
+    margin-top: 1.5rem;
+    font-size: 0.95rem;
+    border-radius: 6px;
+  }
   
