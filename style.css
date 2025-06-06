@@ -4,117 +4,131 @@
     margin: 0;
     padding: 0;
   }
+  
   body {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-    background: linear-gradient(to bottom right, #f8f5f0, #ffffff);
-    color: #1a1a1a;
+    background: linear-gradient(to bottom right, #f4f4f6, #ffffff);
+    color: #1c1c1e;
     line-height: 1.6;
     padding: 40px 20px;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
   }
   
   /* === Shared Container === */
   main {
     max-width: 880px;
     margin: auto;
-    padding: 20px;
-    background: rgba(255, 255, 255, 0.9);
-    border-radius: 16px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-    backdrop-filter: blur(10px);
+    padding: 32px;
+    background: #ffffff;
+    border-radius: 24px;
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.05);
+    backdrop-filter: blur(12px);
     animation: fadeIn 0.6s ease-in-out;
   }
+  
   @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
+    from { opacity: 0; transform: translateY(12px); }
     to { opacity: 1; transform: translateY(0); }
   }
   
   /* === Landing Page === */
   .landing h1 {
-    font-size: 3.2rem;
-    margin-bottom: 0.75rem;
+    font-size: 3rem;
+    margin-bottom: 1rem;
     font-weight: 700;
+    letter-spacing: -0.02em;
   }
+  
   .landing .intro {
     font-size: 1.25rem;
     margin-bottom: 2rem;
-    color: #4b4b4b;
+    color: #6e6e73;
   }
+  
   .description h2 {
     margin-top: 2rem;
-    font-size: 1.5rem;
+    font-size: 1.4rem;
     font-weight: 600;
   }
+  
   .description ul {
     margin-top: 1rem;
     margin-left: 1.5rem;
     list-style: disc;
+    color: #444;
   }
   
   /* === Buttons === */
-  .explore-button,
   .button,
+  .explore-button,
   .back-link {
     display: inline-block;
     margin-top: 1.5rem;
-    padding: 0.75rem 1.5rem;
+    padding: 0.7rem 1.4rem;
     font-size: 1rem;
     font-weight: 500;
     text-decoration: none;
-    color: #fff;
-    background: linear-gradient(to right, #f97316, #ef4444);
-    border: none;
+    color: #ffffff;
+    background: #007aff;
     border-radius: 12px;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(249, 115, 22, 0.3);
+    transition: background 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 12px rgba(0, 122, 255, 0.2);
   }
-  .explore-button:hover,
+  
   .button:hover,
+  .explore-button:hover,
   .back-link:hover {
+    background: #005fcc;
     transform: translateY(-1px);
-    background: linear-gradient(to right, #f59e0b, #ec4899);
   }
   
   .back-link {
-    background: #333;
-    margin-bottom: 1.5rem;
+    background: #3a3a3c;
     font-size: 0.95rem;
   }
   
   /* === Annotation Explorer === */
   .annotation-block {
     background: #ffffff;
-    padding: 1.5rem;
-    border-radius: 16px;
+    padding: 1.75rem;
+    border-radius: 20px;
     margin-bottom: 2rem;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.04);
-    border: 1px solid #eee;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.04);
+    border: 1px solid #e5e5ea;
     transition: box-shadow 0.3s ease;
   }
+  
   .annotation-block:hover {
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.06);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.06);
   }
   
-  .source, .summary {
+  .source,
+  .summary {
     margin: 1rem 0;
+    font-size: 1.05rem;
+    color: #1c1c1e;
   }
   
   .span-highlight {
-    background: linear-gradient(to right, #fff3c4, #ffe2b3);
-    padding: 0.1rem 0.25rem;
-    border-radius: 4px;
+    background: rgba(255, 214, 10, 0.2);
+    padding: 0.15rem 0.35rem;
+    border-radius: 6px;
     transition: background 0.3s;
     cursor: pointer;
   }
+  
   .span-highlight:hover {
-    background: linear-gradient(to right, #facc15, #fcd34d);
+    background: rgba(255, 214, 10, 0.4);
   }
   
   .attributes {
-    background: #f9fafb;
+    background: #f2f2f7;
     padding: 1rem;
-    border-left: 4px solid #f97316;
+    border-left: 4px solid #007aff;
     margin-top: 1.5rem;
     font-size: 0.95rem;
-    border-radius: 6px;
+    border-radius: 8px;
+    color: #3a3a3c;
   }
   
