@@ -6,22 +6,24 @@
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <div class="container">
-    <h1>About This Project</h1>
-    <p>This tool visualizes annotations from our NLP research project on factuality in summarization.</p>
-
-    <h2>Project Description</h2>
-    <p>Each annotation includes a source document, summary, and spans in the summary marked as nonfactual. Each span is annotated with:</p>
-    <ul>
-      <li><strong>Evidence</strong>: Is the claim grounded in the source?</li>
-      <li><strong>Likelihood</strong>: How likely is it that a model would make this error?</li>
-      <li><strong>Consequence</strong>: How severe is this factual error?</li>
-      <li><strong>Common Knowledge</strong>: Could this be known without the source?</li>
-    </ul>
-
-    <p>
-      <a class="button" href="explore.html">🔍 Explore Annotations</a>
+  <main class="landing">
+    <h1>Annotation Explorer</h1>
+    <p class="intro">
+      This tool visualizes annotations from our NLP research project on factuality in summarization.
     </p>
-  </div>
+
+    <section class="description">
+      <h2>Project Description</h2>
+      <p>Each annotation includes a source document, summary, and spans in the summary marked as nonfactual. Each span is annotated with:</p>
+      <ul>
+        <li><strong>Evidence</strong>: Is the claim grounded in the source?</li>
+        <li><strong>Likelihood</strong>: How likely is it that a model would make this error?</li>
+        <li><strong>Consequence</strong>: How severe is this factual error?</li>
+        <li><strong>Common Knowledge</strong>: Could this be known without the source?</li>
+      </ul>
+    </section>
+
+    <a class="explore-button" href="explore.html">🔍 Explore Annotations</a>
+  </main>
 </body>
 </html>

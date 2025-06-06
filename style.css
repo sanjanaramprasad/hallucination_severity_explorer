@@ -1,60 +1,90 @@
 body {
-    font-family: sans-serif;
-    margin: 2rem;
-    background: white;
-    color: #333;
+    margin: 0;
+    font-family: 'Helvetica Neue', sans-serif;
+    background: #fffdf6;
+    color: #1c1c1c;
+    line-height: 1.6;
   }
   
-  .container {
-    max-width: 900px;
-    margin: 0 auto;
+  main.landing {
+    max-width: 700px;
+    margin: 80px auto;
+    padding: 0 24px;
   }
   
-  h1 {
-    font-size: 1.8rem;
+  main.landing h1 {
+    font-size: 3rem;
     margin-bottom: 1rem;
   }
   
-  h2 {
-    margin-top: 1.5rem;
+  main.landing .intro {
+    font-size: 1.2rem;
+    color: #333;
+    margin-bottom: 2rem;
+  }
+  
+  .description h2 {
+    font-size: 1.5rem;
+    margin-top: 2rem;
+    margin-bottom: 0.5rem;
   }
   
   ul {
+    margin: 1rem 0;
     padding-left: 1.5rem;
-    list-style-type: disc;
   }
   
-  .button {
+  .explore-button {
     display: inline-block;
-    margin-top: 1rem;
-    background: #2563eb;
+    margin-top: 2rem;
+    background: #f2603c;
     color: white;
-    padding: 0.5rem 1rem;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
     text-decoration: none;
-    border-radius: 5px;
+    border-radius: 6px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    transition: background 0.3s ease;
+  }
+  .explore-button:hover {
+    background: #dd5130;
   }
   
-  .button:hover {
-    background: #1d4ed8;
+  main.explorer {
+    max-width: 800px;
+    margin: 60px auto;
+    padding: 0 24px;
+  }
+  
+  .back-link {
+    display: inline-block;
+    margin-bottom: 1.5rem;
+    text-decoration: none;
+    color: #f2603c;
   }
   
   .annotation-block {
-    margin-top: 2rem;
-    padding: 1rem;
-    border: 1px solid #ccc;
+    background: white;
+    padding: 1.5rem;
+    border-radius: 10px;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.05);
+  }
+  
+  .annotation-block .source,
+  .annotation-block .summary {
+    margin: 0.5rem 0;
   }
   
   .span-highlight {
-    background-color: #fef08a;
+    background: #ffe58f;
     cursor: pointer;
-    border-bottom: 2px dashed #facc15;
+    border-bottom: 1px dashed #d48806;
   }
   
   .attributes {
-    margin-top: 0.5rem;
-    font-size: 0.9rem;
-    background: #f9fafb;
-    border-left: 4px solid #d1d5db;
-    padding: 0.5rem 1rem;
-  }
+    background: #f9f9f9;
+    padding: 1rem;
+    border-left: 4px solid #ccc;
+    mar
   
