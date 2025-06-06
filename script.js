@@ -1,111 +1,106 @@
-let annotations = [];
-let currentIndex = 0;
-
-fetch("data/annotations.json")
-  .then(res => res.json())
-  .then(data => {
-    annotations = data;
-    renderAnnotation();
+// Landing page functionality
+document.addEventListener('DOMContentLoaded', function() {
+  // Smooth scrolling for navigation links
+  const navLinks = document.querySelectorAll('.nav-link[href^="#"]');
+  navLinks.forEach(link => {
+      link.addEventListener('click', function(e) {
+          e.preventDefault();
+          const targetId = this.getAttribute('href').substring(1);
+          const targetElement = document.getElementById(targetId);
+          
+          if (targetElement) {
+              const navHeight = document.querySelector('.navbar').offsetHeight;
+              const targetPosition = targetElement.offsetTop - navHeight;
+              
+              window.scrollTo({
+                  top: targetPosition,
+                  behavior: 'smooth'
+              });
+          }
+      });
   });
 
-function renderAnnotation() {
-  const viewer = document.getElementById("annotation-viewer");
-  const progress = document.getElementById("progress-bar");
-  viewer.innerHTML = "";
-  if (progress) progress.innerHTML = "";
+  // Add scroll effect to navbar
+  const navbar = document.querySelector('.navbar');
+  let lastScrollTop = 0;
+  
+  window.addEventListener('scroll', function() {
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      
+      if (scrollTop > lastScrollTop && scrollTop > 100) {
+          // Scrolling down
+          navbar.style.transform = 'translateY(-100%)';
+      } else {
+          // Scrolling up
+          navbar.style.transform = 'translateY(0)';
+      }
+      
+      lastScrollTop = scrollTop;
+  });
 
-  if (currentIndex >= annotations.length) {
-    viewer.innerHTML = "<p>🎉 No more annotations to show.</p>";
-    return;
+  // Add animation to preview tooltip on hover
+  const highlightDemo = document.querySelector('.highlight-demo');
+  const previewTooltip = document.querySelector('.preview-tooltip');
+  
+  if (highlightDemo && previewTooltip) {
+      highlightDemo.addEventListener('mouseenter', function() {
+          previewTooltip.style.transform = 'scale(1.05)';
+          previewTooltip.style.transition = 'transform 0.3s ease';
+      });
+      
+      highlightDemo.addEventListener('mouseleave', function() {
+          previewTooltip.style.transform = 'scale(1)';
+      });
   }
 
-  const item = annotations[currentIndex];
-
-  const block = document.createElement("div");
-  block.className = "annotation-block";
-
-  const counter = document.createElement("div");
-  counter.className = "counter";
-  counter.textContent = `Example ${currentIndex + 1} of ${annotations.length}`;
-  viewer.appendChild(counter);
-
-  // Side-by-side layout
-  const layout = document.createElement("div");
-  layout.className = "flex-container";
-
-  const leftPanel = document.createElement("div");
-  leftPanel.className = "flex-panel";
-  leftPanel.innerHTML = `<h3>Source</h3><p>${item.source}</p>`;
-
-  const rightPanel = document.createElement("div");
-  rightPanel.className = "flex-panel";
-  rightPanel.innerHTML = `<h3>Summary</h3><p>` + highlightSpans(item.summary, item.nonfactual_spans) + `</p>`;
-
-  layout.appendChild(leftPanel);
-  layout.appendChild(rightPanel);
-  block.appendChild(layout);
-
-  const attrBox = document.createElement("div");
-  attrBox.className = "attributes";
-  attrBox.textContent = "Click on a highlighted span to view attributes.";
-  block.appendChild(attrBox);
-
-  // Navigation buttons
-  const nav = document.createElement("div");
-  nav.className = "nav-buttons";
-
-  const backBtn = document.createElement("button");
-  backBtn.textContent = "← Back";
-  backBtn.className = "button";
-  backBtn.disabled = currentIndex === 0;
-  backBtn.onclick = () => {
-    currentIndex--;
-    renderAnnotation();
-  };
-
-  const nextBtn = document.createElement("button");
-  nextBtn.textContent = "Next →";
-  nextBtn.className = "button";
-  nextBtn.onclick = () => {
-    currentIndex++;
-    renderAnnotation();
-  };
-
-  nav.appendChild(backBtn);
-  nav.appendChild(nextBtn);
-  block.appendChild(nav);
-
-  viewer.appendChild(block);
-
-  const spans = block.querySelectorAll(".span-highlight");
-  spans.forEach((span, idx) => {
-    span.addEventListener("click", () => {
-      const attr = item.nonfactual_spans[idx].attributes;
-      attrBox.innerHTML = `<strong>Attributes:</strong><br/>
-        Evidence: ${attr.evidence}<br/>
-        Likelihood: ${attr.likelihood}<br/>
-        Consequence: ${attr.consequence}<br/>
-        Common Knowledge: ${attr.common_knowledge}`;
-    });
-  });
-
-  if (progress) {
-    progress.innerHTML = `
-      <div class="progress-wrapper">
-        <div class="progress" style="width: ${(currentIndex + 1) / annotations.length * 100}%"></div>
-      </div>
-    `;
+  // Animate rating dots in the preview
+  const dots = document.querySelectorAll('.preview-tooltip .dot');
+  if (dots.length > 0) {
+      setInterval(() => {
+          dots.forEach((dot, index) => {
+              setTimeout(() => {
+                  dot.style.transform = 'scale(1.2)';
+                  setTimeout(() => {
+                      dot.style.transform = 'scale(1)';
+                  }, 200);
+              }, index * 100);
+          });
+      }, 3000);
   }
-}
 
-function highlightSpans(text, spans) {
-  let offset = 0;
-  let result = "";
-  spans.forEach((span, i) => {
-    result += text.slice(offset, span.start);
-    result += `<span class="span-highlight">${text.slice(span.start, span.end)}</span>`;
-    offset = span.end;
+  // Add entrance animations
+  const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+  };
+
+  const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+          if (entry.isIntersecting) {
+              entry.target.style.opacity = '1';
+              entry.target.style.transform = 'translateY(0)';
+          }
+      });
+  }, observerOptions);
+
+  // Observe about cards
+  const aboutCards = document.querySelectorAll('.about-card');
+  aboutCards.forEach((card, index) => {
+      card.style.opacity = '0';
+      card.style.transform = 'translateY(30px)';
+      card.style.transition = `opacity 0.6s ease ${index * 0.2}s, transform 0.6s ease ${index * 0.2}s`;
+      observer.observe(card);
   });
-  result += text.slice(offset);
-  return result;
-}
+
+  // Add some interactive elements
+  const ctaButton = document.querySelector('.cta-button');
+  if (ctaButton) {
+      ctaButton.addEventListener('mouseenter', function() {
+          this.style.background = 'rgba(255, 255, 255, 0.4)';
+      });
+      
+      ctaButton.addEventListener('mouseleave', function() {
+          this.style.background = 'rgba(255, 255, 255, 0.2)';
+      });
+  }
+});
