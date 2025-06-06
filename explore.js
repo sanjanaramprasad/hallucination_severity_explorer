@@ -55,20 +55,52 @@ class AnnotationExplorer {
         const summaryContent = document.getElementById('summary-content');
         let summaryText = this.currentAnnotation.summary;
         
-        // Sort spans by start index in descending order to avoid index shifting
-        const sortedSpans = [...this.currentAnnotation.spans].sort((a, b) => b.startIndex - a.startIndex);
+        // Create an array to track text segments and spans
+        const segments = [];
+        let lastIndex = 0;
         
-        // Insert span elements
+        // Sort spans by start index
+        const sortedSpans = [...this.currentAnnotation.spans].sort((a, b) => a.startIndex - b.startIndex);
+        
+        // Process each span
         sortedSpans.forEach(span => {
-            const beforeText = summaryText.substring(0, span.startIndex);
-            const spanText = summaryText.substring(span.startIndex, span.endIndex);
-            const afterText = summaryText.substring(span.endIndex);
+            // Add text before this span
+            if (span.startIndex > lastIndex) {
+                segments.push({
+                    type: 'text',
+                    content: summaryText.substring(lastIndex, span.startIndex)
+                });
+            }
             
-            const spanElement = `<span class="annotation-span" data-span-id="${span.id}">${this.escapeHtml(spanText)}</span>`;
-            summaryText = beforeText + spanElement + afterText;
+            // Add the span
+            segments.push({
+                type: 'span',
+                content: summaryText.substring(span.startIndex, span.endIndex),
+                spanId: span.id
+            });
+            
+            lastIndex = span.endIndex;
         });
-
-        summaryContent.innerHTML = `<p>${summaryText}</p>`;
+        
+        // Add remaining text after last span
+        if (lastIndex < summaryText.length) {
+            segments.push({
+                type: 'text',
+                content: summaryText.substring(lastIndex)
+            });
+        }
+        
+        // Build the final HTML
+        let html = '';
+        segments.forEach(segment => {
+            if (segment.type === 'text') {
+                html += this.escapeHtml(segment.content);
+            } else if (segment.type === 'span') {
+                html += `<span class="annotation-span" data-span-id="${segment.spanId}">${this.escapeHtml(segment.content)}</span>`;
+            }
+        });
+        
+        summaryContent.innerHTML = `<p>${html}</p>`;
         
         // Bind click events to spans
         this.bindSpanEvents();
