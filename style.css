@@ -159,53 +159,37 @@
     transition: width 0.3s ease;
   }
   
-  .two-pane {
+  .flex-container {
     display: flex;
-    gap: 24px;
-    margin-bottom: 1.5rem;
+    gap: 20px;
+    margin-top: 1rem;
   }
   
-  .pane {
+  .flex-panel {
     flex: 1;
-    background: #ffffff;
-    border-radius: 12px;
     padding: 1rem;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
-    display: flex;
-    flex-direction: column;
-    height: 300px;
-  }
-  
-  .scroll-box {
-    flex: 1;
+    background: #fafafa;
+    border-radius: 8px;
+    max-height: 300px;
     overflow-y: auto;
-    padding-right: 0.5rem;
-    white-space: pre-wrap;
-    font-size: 0.95rem;
-    line-height: 1.5;
-    color: #333;
-    margin-top: 0.5rem;
-    border-top: 1px solid #eee;
-    padding-top: 0.5rem;
+    box-shadow: inset 0 0 6px rgba(0,0,0,0.05);
+    border: 1px solid #eee;
   }
   
-  .summary-pane .span-highlight {
-    background: #fff3c4;
-    padding: 0.1rem 0.25rem;
+  .flex-panel h3 {
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+    color: #666;
+  }
+  
+  .span-highlight {
+    background-color: #dc2626;
+    color: white;
+    padding: 0.05rem 0.2rem;
     border-radius: 4px;
     cursor: pointer;
   }
-  .summary-pane .span-highlight:hover {
-    background: #facc15;
-  }
-  
-  .attributes {
-    background: #f9fafb;
-    padding: 1rem;
-    border-left: 4px solid #f97316;
-    font-size: 0.95rem;
-    border-radius: 6px;
-    margin-top: 0.5rem;
-    margin-bottom: 1.5rem;
+  .span-highlight:hover {
+    background-color: #b91c1c;
   }
   
