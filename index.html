@@ -1,32 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Annotation Explorer</title>
   <link rel="stylesheet" href="styles.css" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
-
 </head>
+
 <body>
   <main class="landing">
-    <h1>Annotation Explorer</h1>
-    <p class="intro">
-      This tool visualizes annotations from our NLP research project on factuality in summarization.
-    </p>
+    <header>
+      <h1>Annotation Explorer</h1>
+      <p class="intro">
+        A clean and intuitive interface for exploring annotations from our NLP research on factuality in summarization.
+      </p>
+    </header>
 
     <section class="description">
-      <h2>Project Description</h2>
-      <p>Each annotation includes a source document, summary, and spans in the summary marked as nonfactual. Each span is annotated with:</p>
+      <h2>What’s in an Annotation?</h2>
+      <p>Each annotation includes a <strong>source</strong>, a <strong>summary</strong>, and one or more <strong>nonfactual spans</strong> in the summary. Each span is rated on four key attributes:</p>
       <ul>
-        <li><strong>Evidence</strong>: Is the claim grounded in the source?</li>
-        <li><strong>Likelihood</strong>: How likely is it that a model would make this error?</li>
-        <li><strong>Consequence</strong>: How severe is this factual error?</li>
-        <li><strong>Common Knowledge</strong>: Could this be known without the source?</li>
+        <li><strong>Evidence</strong>: Is the claim supported by the source?</li>
+        <li><strong>Likelihood</strong>: Would a model realistically make this error?</li>
+        <li><strong>Consequence</strong>: How severe is the factual inaccuracy?</li>
+        <li><strong>Common Knowledge</strong>: Could this be known without reading the source?</li>
       </ul>
     </section>
 
-    <a class="explore-button" href="explore.html">🔍 Explore Annotations</a>
+    <a class="explore-button" href="explore.html">
+      <svg width="18" height="18" fill="currentColor" style="vertical-align: text-bottom; margin-right: 6px;" xmlns="http://www.w3.org/2000/svg"><path d="M11 6a5 5 0 1 1-1.18-3.32l4.95 4.95a1 1 0 0 1-1.42 1.42l-4.95-4.95A5 5 0 0 1 11 6zm-1 0a4 4 0 1 0-8 0 4 4 0 0 0 8 0z"/></svg>
+      Explore Annotations
+    </a>
   </main>
+
+  <footer style="text-align: center; margin-top: 40px; font-size: 0.85rem; color: #8e8e93;">
+    © 2025 Annotation Explorer. Built for clarity.
+  </footer>
 </body>
 </html>
