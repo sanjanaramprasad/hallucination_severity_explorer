@@ -8,70 +8,40 @@ fetch("data/annotations.json")
     renderAnnotation();
   });
 
-function renderAnnotation() {
-  const viewer = document.getElementById("annotation-viewer");
-  const progress = document.getElementById("progress-bar");
-  viewer.innerHTML = "";
-  progress.innerHTML = "";
-
-  if (currentIndex >= annotations.length) {
-    viewer.innerHTML = "<p>🎉 No more annotations to show.</p>";
-    return;
-  }
-
-  const item = annotations[currentIndex];
-
-  const block = document.createElement("div");
-  block.className = "annotation-block";
-
-  const counter = document.createElement("div");
-  counter.className = "counter";
-  counter.textContent = `Example ${currentIndex + 1} of ${annotations.length}`;
-  viewer.appendChild(counter);
-
-  const source = document.createElement("div");
-  source.className = "source";
-  source.innerHTML = `<strong>Source:</strong> ${item.source}`;
-  block.appendChild(source);
-
-  const summary = document.createElement("div");
-  summary.className = "summary";
-  summary.innerHTML = `<strong>Summary:</strong> ` + highlightSpans(item.summary, item.nonfactual_spans);
-  block.appendChild(summary);
-
-  const attrBox = document.createElement("div");
-  attrBox.className = "attributes";
-  attrBox.textContent = "Click on a highlighted span to view attributes.";
-  block.appendChild(attrBox);
-
-  const nav = document.createElement("div");
-  nav.className = "nav-buttons";
-
-  const backBtn = document.createElement("button");
-  backBtn.textContent = "← Back";
-  backBtn.className = "button";
-  backBtn.disabled = currentIndex === 0;
-  backBtn.onclick = () => {
+document.getElementById("backBtn").addEventListener("click", () => {
+  if (currentIndex > 0) {
     currentIndex--;
     renderAnnotation();
-  };
+  }
+});
 
-  const nextBtn = document.createElement("button");
-  nextBtn.textContent = "Next →";
-  nextBtn.className = "button";
-  nextBtn.onclick = () => {
+document.getElementById("nextBtn").addEventListener("click", () => {
+  if (currentIndex < annotations.length - 1) {
     currentIndex++;
     renderAnnotation();
-  };
+  }
+});
 
-  nav.appendChild(backBtn);
-  nav.appendChild(nextBtn);
-  block.appendChild(nav);
+function renderAnnotation() {
+  const item = annotations[currentIndex];
+  const sourceBox = document.getElementById("source-content");
+  const summaryBox = document.getElementById("summary-content");
+  const attrBox = document.getElementById("attr-box");
+  const counter = document.getElementById("counterDisplay");
 
-  viewer.appendChild(block);
+  sourceBox.textContent = item.source;
+  summaryBox.innerHTML = highlightSpans(item.summary, item.nonfactual_spans);
+  attrBox.textContent = "Click on a highlighted span to view attributes.";
+  counter.textContent = `Example ${currentIndex + 1} of ${annotations.length}`;
 
-  // span interactivity
-  const spans = block.querySelectorAll(".span-highlight");
+  const progress = document.getElementById("progress-bar");
+  progress.innerHTML = `
+    <div class="progress-wrapper">
+      <div class="progress" style="width: ${(currentIndex + 1) / annotations.length * 100}%"></div>
+    </div>
+  `;
+
+  const spans = summaryBox.querySelectorAll(".span-highlight");
   spans.forEach((span, idx) => {
     span.addEventListener("click", () => {
       const attr = item.nonfactual_spans[idx].attributes;
@@ -83,17 +53,14 @@ function renderAnnotation() {
     });
   });
 
-  // progress bar
-  progress.innerHTML = `
-    <div class="progress-wrapper">
-      <div class="progress" style="width: ${(currentIndex + 1) / annotations.length * 100}%"></div>
-    </div>
-  `;
+  // disable/enable buttons
+  document.getElementById("backBtn").disabled = currentIndex === 0;
+  document.getElementById("nextBtn").disabled = currentIndex === annotations.length - 1;
 }
 
 function highlightSpans(text, spans) {
-  let offset = 0;
   let result = "";
+  let offset = 0;
   spans.forEach((span, i) => {
     result += text.slice(offset, span.start);
     result += `<span class="span-highlight">${text.slice(span.start, span.end)}</span>`;
