@@ -5,24 +5,43 @@ body {
     color: #333;
   }
   
-  h1 {
-    font-size: 1.8rem;
-    margin-bottom: 1.5rem;
-  }
-  
   .container {
     max-width: 900px;
     margin: 0 auto;
   }
   
-  .annotation-block {
-    margin-bottom: 2rem;
-    padding: 1rem;
-    border: 1px solid #ccc;
+  h1 {
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
   }
   
-  .source, .summary {
-    margin: 0.5rem 0;
+  h2 {
+    margin-top: 1.5rem;
+  }
+  
+  ul {
+    padding-left: 1.5rem;
+    list-style-type: disc;
+  }
+  
+  .button {
+    display: inline-block;
+    margin-top: 1rem;
+    background: #2563eb;
+    color: white;
+    padding: 0.5rem 1rem;
+    text-decoration: none;
+    border-radius: 5px;
+  }
+  
+  .button:hover {
+    background: #1d4ed8;
+  }
+  
+  .annotation-block {
+    margin-top: 2rem;
+    padding: 1rem;
+    border: 1px solid #ccc;
   }
   
   .span-highlight {
