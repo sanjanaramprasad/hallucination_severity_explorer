@@ -29,7 +29,7 @@ function renderAnnotation() {
   counter.textContent = `Example ${currentIndex + 1} of ${annotations.length}`;
   viewer.appendChild(counter);
 
-  // Create side-by-side layout
+  // Side-by-side layout
   const layout = document.createElement("div");
   layout.className = "flex-container";
 
@@ -77,7 +77,6 @@ function renderAnnotation() {
 
   viewer.appendChild(block);
 
-  // Span interactivity
   const spans = block.querySelectorAll(".span-highlight");
   spans.forEach((span, idx) => {
     span.addEventListener("click", () => {
@@ -90,7 +89,6 @@ function renderAnnotation() {
     });
   });
 
-  // Progress bar
   if (progress) {
     progress.innerHTML = `
       <div class="progress-wrapper">

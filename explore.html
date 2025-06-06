@@ -4,35 +4,17 @@
   <meta charset="UTF-8" />
   <title>Explore Annotations</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="styles.css?v=4" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
 </head>
 <body>
   <main class="explorer">
-    <header class="explorer-header">
+    <header>
       <h1>Explore Annotations</h1>
       <a class="back-link" href="index.html">← Back to About</a>
     </header>
 
-    <div class="two-pane">
-      <div class="pane source-pane">
-        <h2>Source</h2>
-        <div id="source-content" class="scroll-box"></div>
-      </div>
-      <div class="pane summary-pane">
-        <h2>Summary</h2>
-        <div id="summary-content" class="scroll-box"></div>
-      </div>
-    </div>
-
-    <div class="attributes" id="attr-box">Click on a highlighted span to view attributes.</div>
-
-    <div class="nav-buttons">
-      <button class="button" id="backBtn">← Back</button>
-      <div class="counter" id="counterDisplay"></div>
-      <button class="button" id="nextBtn">Next →</button>
-    </div>
-
+    <section id="annotation-viewer"></section>
     <div id="progress-bar"></div>
   </main>
   <script src="script.js"></script>
