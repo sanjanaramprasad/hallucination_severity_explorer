@@ -2,18 +2,20 @@ let annotations = [];
 let currentIndex = 0;
 
 fetch("data/annotations.json")
-  .then((res) => res.json())
-  .then((data) => {
+  .then(res => res.json())
+  .then(data => {
     annotations = data;
     renderAnnotation();
   });
 
 function renderAnnotation() {
   const viewer = document.getElementById("annotation-viewer");
+  const progress = document.getElementById("progress-bar");
   viewer.innerHTML = "";
+  progress.innerHTML = "";
 
   if (currentIndex >= annotations.length) {
-    viewer.innerHTML = "<p>No more annotations to show.</p>";
+    viewer.innerHTML = "<p>🎉 No more annotations to show.</p>";
     return;
   }
 
@@ -21,6 +23,11 @@ function renderAnnotation() {
 
   const block = document.createElement("div");
   block.className = "annotation-block";
+
+  const counter = document.createElement("div");
+  counter.className = "counter";
+  counter.textContent = `Example ${currentIndex + 1} of ${annotations.length}`;
+  viewer.appendChild(counter);
 
   const source = document.createElement("div");
   source.className = "source";
@@ -37,6 +44,18 @@ function renderAnnotation() {
   attrBox.textContent = "Click on a highlighted span to view attributes.";
   block.appendChild(attrBox);
 
+  const nav = document.createElement("div");
+  nav.className = "nav-buttons";
+
+  const backBtn = document.createElement("button");
+  backBtn.textContent = "← Back";
+  backBtn.className = "button";
+  backBtn.disabled = currentIndex === 0;
+  backBtn.onclick = () => {
+    currentIndex--;
+    renderAnnotation();
+  };
+
   const nextBtn = document.createElement("button");
   nextBtn.textContent = "Next →";
   nextBtn.className = "button";
@@ -44,10 +63,14 @@ function renderAnnotation() {
     currentIndex++;
     renderAnnotation();
   };
-  block.appendChild(nextBtn);
+
+  nav.appendChild(backBtn);
+  nav.appendChild(nextBtn);
+  block.appendChild(nav);
 
   viewer.appendChild(block);
 
+  // span interactivity
   const spans = block.querySelectorAll(".span-highlight");
   spans.forEach((span, idx) => {
     span.addEventListener("click", () => {
@@ -59,6 +82,13 @@ function renderAnnotation() {
         Common Knowledge: ${attr.common_knowledge}`;
     });
   });
+
+  // progress bar
+  progress.innerHTML = `
+    <div class="progress-wrapper">
+      <div class="progress" style="width: ${(currentIndex + 1) / annotations.length * 100}%"></div>
+    </div>
+  `;
 }
 
 function highlightSpans(text, spans) {
