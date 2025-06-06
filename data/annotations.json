@@ -1,0 +1,21 @@
+[
+    {
+      "id": 1,
+      "source": "The clinical trial showed no statistically significant difference between groups.",
+      "summary": "The drug significantly outperformed the placebo in all tests.",
+      "nonfactual_spans": [
+        {
+          "text": "significantly outperformed",
+          "start": 10,
+          "end": 34,
+          "attributes": {
+            "evidence": "Low",
+            "likelihood": "Low",
+            "consequence": "High",
+            "common_knowledge": "Medium"
+          }
+        }
+      ]
+    }
+  ]
+  
