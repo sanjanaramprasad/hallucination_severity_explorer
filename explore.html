@@ -1,22 +1,69 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Explore Annotations</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="styles.css?v=4" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explore Annotations - Human Annotations Explorer</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <main class="explorer">
-    <header>
-      <h1>Explore Annotations</h1>
-      <a class="back-link" href="index.html">← Back to About</a>
-    </header>
+    <nav class="navbar">
+        <div class="nav-container">
+            <h1 class="nav-title">Annotations Explorer</h1>
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="index.html#about" class="nav-link">About</a></li>
+                <li><a href="explore.html" class="nav-link explore-btn">Explore Annotations</a></li>
+            </ul>
+        </div>
+    </nav>
 
-    <section id="annotation-viewer"></section>
-    <div id="progress-bar"></div>
-  </main>
-  <script src="script.js"></script>
+    <div class="explore-container">
+        <div class="panel source-panel">
+            <h2>Source Document</h2>
+            <div class="panel-content" id="source-content">
+                <!-- Source content will be loaded here -->
+            </div>
+        </div>
+        
+        <div class="panel summary-panel">
+            <h2>Summary</h2>
+            <div class="panel-content" id="summary-content">
+                <!-- Summary content will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Controls Panel -->
+    <div class="controls">
+        <div class="annotation-selector">
+            <label for="annotation-select">Select Annotation:</label>
+            <select id="annotation-select">
+                <!-- Options will be populated by JavaScript -->
+            </select>
+        </div>
+        
+        <div class="legend">
+            <div class="legend-item">
+                <div class="legend-color" style="background: linear-gradient(120deg, #fef3c7 0%, #fcd34d 100%);"></div>
+                <span>Annotated Span</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: linear-gradient(120deg, #dbeafe 0%, #3b82f6 100%);"></div>
+                <span>Selected Span</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tooltip -->
+    <div class="tooltip" id="tooltip">
+        <div class="tooltip-header">Annotation Details</div>
+        <div class="tooltip-content">
+            <!-- Tooltip content will be populated by JavaScript -->
+        </div>
+    </div>
+
+    <script src="data.js"></script>
+    <script src="explore.js"></script>
 </body>
 </html>
