@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LLM Annotations - Hallucination Severity Explorer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <h1 class="nav-title">Hallucination Explorer</h1>
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="about.html" class="nav-link">About</a></li>
+                <li><a href="explore.html" class="nav-link">Human Annotations</a></li>
+                <li><a href="llm-explore.html" class="nav-link explore-btn">LLM Annotations</a></li>
+                <li><a href="compare.html" class="nav-link">Compare</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="explore-container">
+        <div class="panel source-panel">
+            <h2>Source Document</h2>
+            <div class="panel-content" id="source-content">
+                <!-- Source content will be loaded here -->
+            </div>
+        </div>
+        
+        <div class="panel summary-panel">
+            <h2>LLM Summary</h2>
+            <div class="panel-content" id="summary-content">
+                <!-- Summary content will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Controls Panel -->
+    <div class="controls">
+        <div class="annotation-selector">
+            <label for="annotation-select">Select LLM Annotation:</label>
+            <select id="annotation-select">
+                <!-- Options will be populated by JavaScript -->
+            </select>
+        </div>
+        <div class="model-info" id="model-info">
+            <!-- Model information will be displayed here -->
+        </div>
+        <div class="legend">
+            <div class="legend-item">
+                <div class="legend-color" style="background: linear-gradient(90deg, #10b981 0%, #ef4444 100%);"></div>
+                <span>Verifiability: Green (high) → Red (low)</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: linear-gradient(90deg, #10b981 0%, #ef4444 100%);"></div>
+                <span>Plausibility: Green (high) → Red (low)</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: linear-gradient(90deg, #10b981 0%, #ef4444 100%);"></div>
+                <span>Innocuity: Green (harmless) → Red (harmful)</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tooltip -->
+    <div class="tooltip" id="tooltip">
+        <div class="tooltip-header">LLM Annotation Details</div>
+        <div class="tooltip-content">
+            <!-- Tooltip content will be populated by JavaScript -->
+        </div>
+    </div>
+
+    <script src="llm-data.js"></script>
+    <script src="llm-explore.js"></script>
+</body>
+</html>
