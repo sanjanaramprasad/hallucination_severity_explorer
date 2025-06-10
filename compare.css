@@ -31,6 +31,52 @@
     max-width: 350px;
 }
 
+.annotation-selector {
+    margin-bottom: 16px;
+}
+
+.annotation-selector label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: var(--text-primary);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.annotation-selector select {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    font-size: 14px;
+    background: var(--surface);
+    color: var(--text-primary);
+    transition: all 0.2s ease;
+}
+
+.annotation-selector select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(94, 106, 210, 0.1);
+}
+
+.annotation-selector select:disabled {
+    background: var(--background-secondary);
+    color: var(--text-muted);
+    cursor: not-allowed;
+}
+
+/* Model selector specific styling */
+#llm-model-select {
+    border-left: 3px solid #dc2626;
+}
+
+#llm-model-select:focus {
+    border-left-color: #b91c1c;
+}
+
 .comparison-stats {
     background: var(--background-secondary);
     padding: 12px;

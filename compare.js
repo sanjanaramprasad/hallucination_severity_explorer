@@ -2,6 +2,7 @@
 class CompareAnnotations {
     constructor() {
         this.currentDataset = null;
+        this.currentLLMModel = null;
         this.activeSpan = null;
         this.tooltip = null;
         this.errors = [];
@@ -36,6 +37,7 @@ class CompareAnnotations {
     validateRequiredElements() {
         const requiredElements = [
             'compare-select',
+            'llm-model-select',
             'source-content', 
             'human-content',
             'llm-content',
@@ -69,6 +71,17 @@ class CompareAnnotations {
         if (annotationsData.length !== llmAnnotationsData.length) {
             this.logError(`Dataset length mismatch: human=${annotationsData.length}, llm=${llmAnnotationsData.length}`);
         }
+
+        // Validate new LLM structure
+        llmAnnotationsData.forEach((dataset, index) => {
+            if (!dataset.models || typeof dataset.models !== 'object') {
+                throw new Error(`Dataset ${index} missing or invalid models structure`);
+            }
+            
+            if (Object.keys(dataset.models).length === 0) {
+                this.logError(`Dataset ${index} has no LLM models`);
+            }
+        });
     }
 
     populateDatasetSelector() {
@@ -82,6 +95,168 @@ class CompareAnnotations {
             
             for (let i = 0; i < datasetCount; i++) {
                 try {
+                    const humanTitle = annotationsData[i]?.title || `Dataset ${i + 1}`;
+                    const option = document.createElement('option');
+                    option.value = i;
+                    option.textContent = humanTitle;
+                    selector.appendChild(option);
+                } catch (error) {
+                    this.logError(`Failed to create option for dataset ${i}`, error);
+                }
+            }
+        } catch (error) {
+            this.handleError('Failed to populate dataset selector', error);
+        }
+    }
+
+    populateLLMModelSelector(datasetIndex) {
+        try {
+            const selector = document.getElementById('llm-model-select');
+            if (!selector) throw new Error('LLM model selector not found');
+            
+            selector.innerHTML = '';
+            
+            const llmDataset = llmAnnotationsData[datasetIndex];
+            if (!llmDataset || !llmDataset.models) {
+                throw new Error(`No LLM models found for dataset ${datasetIndex}`);
+            }
+            
+            const models = Object.keys(llmDataset.models);
+            
+            if (models.length === 0) {
+                selector.innerHTML = '<option value="">No models available</option>';
+                selector.disabled = true;
+                return;
+            }
+            
+            selector.disabled = false;
+            
+            models.forEach((modelName, index) => {
+                try {
+                    const option = document.createElement('option');
+                    option.value = modelName;
+                    option.textContent = modelName;
+                    selector.appendChild(option);
+                } catch (error) {
+                    this.logError(`Failed to create option for model ${modelName}`, error);
+                }
+            });
+            
+            // Set the first model as default
+            this.currentLLMModel = models[0];
+            selector.value = models[0];
+            
+        } catch (error) {
+            this.handleError('Failed to populate LLM model selector', error);
+        }
+    }
+
+    bindEvents() {
+        try {
+            const datasetSelector = document.getElementById('compare-select');
+            const modelSelector = document.getElementById('llm-model-select');
+            
+            if (datasetSelector) {
+                datasetSelector.addEventListener('change', (e) => {
+                    try {
+                        const index = parseInt(e.target.value);
+                        if (isNaN(index)) {
+                            throw new Error(`Invalid dataset index: ${e.target.value}`);
+                        }
+                        this.loadComparison(index);
+                    } catch (error) {
+                        this.handleError('Failed to handle dataset selection', error);
+                    }
+                });
+            }
+
+            if (modelSelector) {
+                modelSelector.addEventListener('change', (e) => {
+                    try {
+                        const modelName = e.target.value;
+                        if (!modelName) {
+                            throw new Error('No model selected');
+                        }
+                        this.currentLLMModel = modelName;
+                        this.loadLLMAnnotations();
+                    } catch (error) {
+                        this.handleError('Failed to handle model selection', error);
+                    }
+                });
+            }
+
+            // Hide tooltip when clicking outside spans
+            document.addEventListener('click', (e) => {
+                try {
+                    if (!e.target.closest('.annotation-span')) {
+                        this.hideTooltip();
+                        this.clearActiveSpan();
+                    }
+                } catch (error) {
+                    this.logError('Error in document click handler', error);
+                }
+            });
+        } catch (error) {
+            this.handleError('Failed to bind events', error);
+        }
+    }
+
+    loadComparison(index) {
+        try {
+            if (index < 0 || index >= Math.min(annotationsData.length, llmAnnotationsData.length)) {
+                throw new Error(`Invalid dataset index: ${index}`);
+            }
+            
+            const humanData = annotationsData[index];
+            const llmDataset = llmAnnotationsData[index];
+            
+            if (!humanData || !llmDataset) {
+                throw new Error(`Dataset ${index} not found in one or both annotation sets`);
+            }
+            
+            this.currentDataset = { human: humanData, llmDataset: llmDataset, index };
+            
+            // Populate LLM model selector for this dataset
+            this.populateLLMModelSelector(index);
+            
+            // Render components with error handling
+            this.safeRender(() => this.renderSource(humanData.source), 'source');
+            this.safeRender(() => this.renderHumanAnnotations(humanData), 'human annotations');
+            this.safeRender(() => this.loadLLMAnnotations(), 'LLM annotations');
+            
+            this.hideTooltip();
+            this.clearActiveSpan();
+            
+        } catch (error) {
+            this.handleError(`Failed to load comparison ${index}`, error);
+        }
+    }
+
+    loadLLMAnnotations() {
+        try {
+            if (!this.currentDataset || !this.currentLLMModel) {
+                throw new Error('No dataset or LLM model selected');
+            }
+            
+            const llmModelData = this.currentDataset.llmDataset.models[this.currentLLMModel];
+            if (!llmModelData) {
+                throw new Error(`Model ${this.currentLLMModel} not found in dataset`);
+            }
+            
+            // Create a mock LLM data object that matches the expected structure
+            const llmData = {
+                summary: this.currentDataset.llmDataset.summary,
+                spans: llmModelData.spans,
+                model: this.currentLLMModel
+            };
+            
+            this.safeRender(() => this.renderLLMAnnotations(llmData), 'LLM annotations');
+            this.safeRender(() => this.renderComparisonStats(), 'comparison stats');
+            
+        } catch (error) {
+            this.handleError('Failed to load LLM annotations', error);
+        }
+    }
                     const humanTitle = annotationsData[i]?.title || `Dataset ${i + 1}`;
                     const option = document.createElement('option');
                     option.value = i;
