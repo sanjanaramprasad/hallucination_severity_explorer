@@ -4,7 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Explore Annotations - Human Annotations Explorer</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <nav class="navbar">
@@ -12,7 +15,7 @@
             <h1 class="nav-title">Annotations Explorer</h1>
             <ul class="nav-menu">
                 <li><a href="index.html" class="nav-link">Home</a></li>
-                <li><a href="index.html#about" class="nav-link">About</a></li>
+                <li><a href="about.html" class="nav-link">About</a></li>
                 <li><a href="explore.html" class="nav-link explore-btn">Explore Annotations</a></li>
             </ul>
         </div>
@@ -35,52 +38,4 @@
     </div>
 
     <!-- Controls Panel -->
-    <div class="controls">
-        <div class="annotation-selector">
-            <label for="annotation-select">Select Annotation:</label>
-            <select id="annotation-select">
-                <!-- Options will be populated by JavaScript -->
-            </select>
-        </div>
-
-
-        <!-- const legendHTML = `
-        <div class="rating-legend" style="margin-top: 1rem; padding: 1rem; background: rgba(249, 250, 251, 0.8); border-radius: 8px;">
-            <h4 style="margin: 0 0 0.5rem 0; font-size: 0.9rem; color: #374151;">Rating Scale (0.0 - 1.0)</h4>
-            <div style="font-size: 0.8rem; color: #6b7280; line-height: 1.4;">
-                <div><strong>Evidence:</strong> Strength of supporting data</div>
-                <div><strong>Likelihood:</strong> Probability of occurrence</div>
-                <div><strong>Consequence:</strong> Potential impact severity</div>
-            </div>
-            <div style="margin-top: 0.5rem; display: flex; align-items: center; gap: 4px; font-size: 0.7rem; color: #9ca3af;">
-                <span>0%</span>
-                <div style="flex: 1; height: 4px; background: linear-gradient(to right, #10b981, #f59e0b, #ef4444); border-radius: 2px;"></div>
-                <span>100%</span>
-            </div>
-        </div> -->
-        `;
-        
-        <!-- <div class="legend">
-            <div class="legend-item">
-                <div class="legend-color" style="background: linear-gradient(120deg, #fee2e2 0%, #fca5a5 100%);"></div>
-                <span>Annotated Span</span>
-            </div>
-            <div class="legend-item">
-                <div class="legend-color" style="background: linear-gradient(120deg, #dc2626 0%, #991b1b 100%);"></div>
-                <span>Selected Span</span>
-            </div>
-        </div> -->
-    </div>
-
-    <!-- Tooltip -->
-    <div class="tooltip" id="tooltip">
-        <div class="tooltip-header">Annotation Details</div>
-        <div class="tooltip-content">
-            <!-- Tooltip content will be populated by JavaScript -->
-        </div>
-    </div>
-
-    <script src="data.js"></script>
-    <script src="explore.js"></script>
-</body>
-</html>
+    <div class="controls

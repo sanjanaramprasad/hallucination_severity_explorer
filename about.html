@@ -4,7 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>About - Human Annotations Explorer</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <nav class="navbar">
@@ -19,90 +22,89 @@
     </nav>
 
     <main class="about-page">
-        <!-- About Section -->
         <section class="about">
             <div class="container">
-                <h2 class="section-title">About This Tool</h2>
+                <h2 class="section-title">About this tool</h2>
                 <div class="about-grid">
                     <div class="about-card">
                         <div class="card-icon">📝</div>
-                        <h3>Rich Annotations</h3>
-                        <p>Each annotation contains detailed source material and summarized content with precisely marked text spans.</p>
+                        <h3>Rich annotations</h3>
+                        <p>Each annotation contains detailed source material and summarized content with precisely marked text spans for comprehensive analysis.</p>
                     </div>
                     <div class="about-card">
                         <div class="card-icon">🎯</div>
-                        <h3>Continuous Rating System</h3>
-                        <p>Every span is rated across three critical dimensions using precise continuous values from 0.0 to 1.0: Evidence strength, Likelihood assessment, and Consequence evaluation.</p>
+                        <h3>Continuous ratings</h3>
+                        <p>Every span uses precise 0.0-1.0 scale measurements across evidence strength, likelihood assessment, and consequence evaluation.</p>
                     </div>
                     <div class="about-card">
                         <div class="card-icon">🔍</div>
-                        <h3>Interactive Exploration</h3>
-                        <p>Navigate through annotations with an intuitive interface featuring side-by-side source and summary views with real-time tooltips.</p>
+                        <h3>Interactive exploration</h3>
+                        <p>Navigate annotations with side-by-side source and summary views, featuring real-time tooltips and smooth interactions.</p>
                     </div>
                 </div>
                 
                 <div class="methodology">
-                    <h3>Rating System</h3>
-                    <p>Each annotated span includes three key attributes, each rated on a continuous 0.0-1.0 scale for precise measurement:</p>
+                    <h3>Rating methodology</h3>
+                    <p>Each annotated span includes three key attributes measured on a continuous 0.0-1.0 scale for maximum precision:</p>
                     <ul class="rating-list">
-                        <li><strong>Evidence (0.0-1.0):</strong> How well-supported the claim or statement is by available data. Higher values indicate stronger empirical support.</li>
-                        <li><strong>Likelihood (0.0-1.0):</strong> The probability that the annotated claim or event will occur. 0.0 means highly unlikely, 1.0 means certain to occur.</li>
-                        <li><strong>Consequence (0.0-1.0):</strong> The potential impact or importance of the annotated content. Higher values indicate more significant consequences.</li>
+                        <li><strong>Evidence (0.0-1.0):</strong> Measures how well-supported a claim is by available data. Higher values indicate stronger empirical backing and research consensus.</li>
+                        <li><strong>Likelihood (0.0-1.0):</strong> Assesses the probability that an annotated claim or event will occur. 0.0 represents highly unlikely scenarios, while 1.0 indicates near certainty.</li>
+                        <li><strong>Consequence (0.0-1.0):</strong> Evaluates the potential impact or importance of the annotated content. Higher values signify more significant ramifications for stakeholders.</li>
                     </ul>
                 </div>
 
                 <div class="methodology">
-                    <h3>Visual Indicators</h3>
-                    <p>The tool uses color-coded progress bars to make ratings immediately understandable:</p>
+                    <h3>Visual indicators</h3>
+                    <p>The interface uses intelligently color-coded progress bars to make ratings immediately interpretable:</p>
                     <ul class="rating-list">
-                        <li><strong>Evidence Bars:</strong> <span style="color: #10b981;">Green</span> indicates high confidence (strong evidence), <span style="color: #ef4444;">Red</span> indicates low confidence</li>
-                        <li><strong>Likelihood Bars:</strong> <span style="color: #ef4444;">Red</span> indicates high probability (higher risk), <span style="color: #10b981;">Green</span> indicates low probability</li>
-                        <li><strong>Consequence Bars:</strong> <span style="color: #ef4444;">Red</span> indicates high impact (severe consequences), <span style="color: #10b981;">Green</span> indicates low impact</li>
+                        <li><strong>Evidence bars:</strong> <span style="color: #10b981;">Green</span> indicates high confidence with strong supporting data, <span style="color: #ef4444;">red</span> signals low confidence or weak evidence</li>
+                        <li><strong>Likelihood bars:</strong> <span style="color: #ef4444;">Red</span> represents high probability scenarios (potential risks), <span style="color: #10b981;">green</span> shows low probability outcomes</li>
+                        <li><strong>Consequence bars:</strong> <span style="color: #ef4444;">Red</span> highlights high-impact scenarios with severe consequences, <span style="color: #10b981;">green</span> indicates minimal impact</li>
                     </ul>
                 </div>
 
                 <div class="methodology">
-                    <h3>How to Use</h3>
+                    <h3>How to use this tool</h3>
                     <div class="usage-steps">
                         <div class="step-card">
                             <div class="step-number">1</div>
                             <div class="step-content">
-                                <h4>Select an Annotation</h4>
-                                <p>Use the dropdown in the bottom-right corner to choose from available annotations covering topics like climate change, AI development, and economic trends.</p>
+                                <h4>Select an annotation set</h4>
+                                <p>Choose from available annotation collections using the dropdown selector. Each set covers different research domains including climate science, AI development, and economic analysis.</p>
                             </div>
                         </div>
                         <div class="step-card">
                             <div class="step-number">2</div>
                             <div class="step-content">
-                                <h4>Review Source and Summary</h4>
-                                <p>Compare the original source document (left panel) with the AI-generated summary (right panel) to understand the context.</p>
+                                <h4>Compare source and summary</h4>
+                                <p>Review the original source document in the left panel alongside the AI-generated summary in the right panel to understand context and identify potential discrepancies.</p>
                             </div>
                         </div>
                         <div class="step-card">
                             <div class="step-number">3</div>
                             <div class="step-content">
-                                <h4>Explore Highlighted Spans</h4>
-                                <p>Click on orange highlighted text in the summary to view detailed ratings. Each span shows evidence strength, likelihood, and consequence metrics.</p>
+                                <h4>Interact with highlighted spans</h4>
+                                <p>Click on orange highlighted text segments in the summary to reveal detailed annotations. Each tooltip displays evidence strength, likelihood, and consequence metrics.</p>
                             </div>
                         </div>
                         <div class="step-card">
                             <div class="step-number">4</div>
                             <div class="step-content">
-                                <h4>Analyze the Data</h4>
-                                <p>Use the precise numerical values and color-coded bars to assess the reliability and importance of different claims in the text.</p>
+                                <h4>Analyze quantified insights</h4>
+                                <p>Use the precise numerical values and color-coded progress bars to assess claim reliability, probability, and potential impact for informed decision-making.</p>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <div class="methodology">
-                    <h3>Purpose and Applications</h3>
-                    <p>This tool is designed for researchers, analysts, and anyone interested in understanding the reliability and impact of information. Key applications include:</p>
+                    <h3>Use cases and applications</h3>
+                    <p>This tool serves researchers, analysts, and professionals who require quantified assessment of information quality:</p>
                     <ul class="rating-list">
-                        <li><strong>Research Analysis:</strong> Evaluate the strength of evidence behind different claims in academic or policy documents</li>
-                        <li><strong>Risk Assessment:</strong> Understand both the likelihood and potential consequences of various scenarios</li>
-                        <li><strong>Information Quality:</strong> Quickly identify which parts of a text are well-supported versus speculative</li>
-                        <li><strong>Decision Support:</strong> Use quantified ratings to inform decision-making processes</li>
+                        <li><strong>Academic research:</strong> Evaluate evidence strength and claim reliability in research papers, policy documents, and literature reviews</li>
+                        <li><strong>Risk assessment:</strong> Quantify both probability and potential consequences of scenarios in business intelligence and strategic planning</li>
+                        <li><strong>Information verification:</strong> Distinguish well-supported claims from speculative statements in reports and analyses</li>
+                        <li><strong>Decision support:</strong> Use quantified metrics to inform evidence-based decision-making processes across organizations</li>
                     </ul>
                 </div>
             </div>

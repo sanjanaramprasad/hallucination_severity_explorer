@@ -4,7 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Human Annotations Explorer</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <nav class="navbar">
@@ -22,18 +25,76 @@
         <!-- Hero Section -->
         <section id="home" class="hero">
             <div class="hero-content">
-                <h1 class="hero-title">Human Annotations Explorer</h1>
-                <p class="hero-subtitle">Discover and analyze annotated text spans with precise evidence, likelihood, and consequence ratings on a continuous 0.0-1.0 scale</p>
+                <h1 class="hero-title">Explore annotation quality with precision</h1>
+                <p class="hero-subtitle">Analyze annotated text spans with continuous evidence, likelihood, and consequence ratings. Built for researchers and analysts who need quantified insights.</p>
                 <div class="cta-buttons">
-                    <a href="explore.html" class="cta-button primary">Start Exploring</a>
-                    <a href="about.html" class="cta-button secondary">Learn More</a>
+                    <a href="explore.html" class="cta-button primary">Start exploring</a>
+                    <a href="about.html" class="cta-button secondary">Learn more</a>
                 </div>
             </div>
-            
+            <div class="hero-visual">
+                <div class="annotation-preview">
+                    <div class="preview-text">
+                        Sample research text with <span class="highlight-demo">annotated spans</span> showing quantified reliability metrics for each claim.
+                    </div>
+                    <div class="preview-tooltip">
+                        <div class="tooltip-row">
+                            <span class="tooltip-label">Evidence</span>
+                            <div class="rating-preview-bar">
+                                <div class="bar-bg">
+                                    <div class="bar-fill" style="width: 85%; background: #10b981;"></div>
+                                </div>
+                                <span class="percentage">0.85</span>
+                            </div>
+                        </div>
+                        <div class="tooltip-row">
+                            <span class="tooltip-label">Likelihood</span>
+                            <div class="rating-preview-bar">
+                                <div class="bar-bg">
+                                    <div class="bar-fill" style="width: 65%; background: #f59e0b;"></div>
+                                </div>
+                                <span class="percentage">0.65</span>
+                            </div>
+                        </div>
+                        <div class="tooltip-row">
+                            <span class="tooltip-label">Consequence</span>
+                            <div class="rating-preview-bar">
+                                <div class="bar-bg">
+                                    <div class="bar-fill" style="width: 90%; background: #ef4444;"></div>
+                                </div>
+                                <span class="percentage">0.90</span>
+                            </div>
+                        </div>
+                        <div style="margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.2); font-size: 11px; opacity: 0.7;">
+                            Interactive tooltips reveal precise measurements for each annotated claim
+                        </div>
+                    </div>
+                </div>
+            </div>
         </section>
 
-        <!-- Quick Features Overview -->
-        
+        <!-- Features Overview -->
+        <section class="features-overview">
+            <div class="container">
+                <div class="features-grid">
+                    <div class="feature-item">
+                        <div class="feature-icon">📊</div>
+                        <h3>Continuous precision</h3>
+                        <p>0.0-1.0 scale measurements provide granular assessment of evidence strength, likelihood, and consequence severity.</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">🎯</div>
+                        <h3>Visual clarity</h3>
+                        <p>Color-coded progress bars and interactive tooltips make complex data immediately understandable.</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">⚡</div>
+                        <h3>Research-ready</h3>
+                        <p>Side-by-side source comparison with real-time analysis for academic and professional use cases.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
     </main>
 
     <footer class="footer">
