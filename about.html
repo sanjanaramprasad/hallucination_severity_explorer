@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About - Human Annotations Explorer</title>
+    <title>About - Hallucination Severity Explorer</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -12,11 +12,12 @@
 <body>
     <nav class="navbar">
         <div class="nav-container">
-            <h1 class="nav-title">Annotations Explorer</h1>
+            <h1 class="nav-title">Hallucination Explorer</h1>
             <ul class="nav-menu">
                 <li><a href="index.html" class="nav-link">Home</a></li>
                 <li><a href="about.html" class="nav-link">About</a></li>
-                <li><a href="explore.html" class="nav-link explore-btn">Explore Annotations</a></li>
+                <li><a href="explore.html" class="nav-link">Human Annotations</a></li>
+                <li><a href="llm-explore.html" class="nav-link explore-btn">LLM Annotations</a></li>
             </ul>
         </div>
     </nav>
@@ -27,39 +28,39 @@
                 <h2 class="section-title">About this tool</h2>
                 <div class="about-grid">
                     <div class="about-card">
-                        <div class="card-icon">📝</div>
-                        <h3>Rich annotations</h3>
-                        <p>Each annotation contains detailed source material and summarized content with precisely marked text spans for comprehensive analysis.</p>
+                        <div class="card-icon">🔍</div>
+                        <h3>Hallucination detection</h3>
+                        <p>Each annotation identifies hallucinated spans in AI-generated text with detailed source material for verification and comprehensive analysis.</p>
+                    </div>
+                    <div class="about-card">
+                        <div class="card-icon">📊</div>
+                        <h3>Severity assessment</h3>
+                        <p>Every hallucinated span uses precise 0.0-1.0 scale measurements across verifiability, plausibility, and innocuity dimensions.</p>
                     </div>
                     <div class="about-card">
                         <div class="card-icon">🎯</div>
-                        <h3>Continuous ratings</h3>
-                        <p>Every span uses precise 0.0-1.0 scale measurements across evidence strength, likelihood assessment, and consequence evaluation.</p>
-                    </div>
-                    <div class="about-card">
-                        <div class="card-icon">🔍</div>
                         <h3>Interactive exploration</h3>
                         <p>Navigate annotations with side-by-side source and summary views, featuring real-time tooltips and smooth interactions.</p>
                     </div>
                 </div>
                 
                 <div class="methodology">
-                    <h3>Rating methodology</h3>
-                    <p>Each annotated span includes three key attributes measured on a continuous 0.0-1.0 scale for maximum precision:</p>
+                    <h3>Hallucination severity methodology</h3>
+                    <p>Each annotated hallucinated span includes three key severity attributes measured on a continuous 0.0-1.0 scale:</p>
                     <ul class="rating-list">
-                        <li><strong>Evidence (0.0-1.0):</strong> Measures how well-supported a claim is by available data. Higher values indicate stronger empirical backing and research consensus.</li>
-                        <li><strong>Likelihood (0.0-1.0):</strong> Assesses the probability that an annotated claim or event will occur. 0.0 represents highly unlikely scenarios, while 1.0 indicates near certainty.</li>
-                        <li><strong>Consequence (0.0-1.0):</strong> Evaluates the potential impact or importance of the annotated content. Higher values signify more significant ramifications for stakeholders.</li>
+                        <li><strong>Verifiability (0.0-1.0):</strong> Measures how easily the hallucinated claim can be verified against reliable sources. Lower values indicate claims that are difficult or impossible to verify.</li>
+                        <li><strong>Plausibility (0.0-1.0):</strong> Assesses how believable or realistic the hallucinated content appears. Lower values indicate implausible or obviously false claims.</li>
+                        <li><strong>Innocuity (0.0-1.0):</strong> Evaluates the potential harm or consequences of believing the hallucinated content. Lower values indicate more dangerous or misleading hallucinations.</li>
                     </ul>
                 </div>
 
                 <div class="methodology">
                     <h3>Visual indicators</h3>
-                    <p>The interface uses intelligently color-coded progress bars to make ratings immediately interpretable:</p>
+                    <p>The interface uses intelligently color-coded progress bars to make hallucination severity immediately interpretable:</p>
                     <ul class="rating-list">
-                        <li><strong>Evidence bars:</strong> <span style="color: #10b981;">Green</span> indicates high confidence with strong supporting data, <span style="color: #ef4444;">red</span> signals low confidence or weak evidence</li>
-                        <li><strong>Likelihood bars:</strong> <span style="color: #ef4444;">Red</span> represents high probability scenarios (potential risks), <span style="color: #10b981;">green</span> shows low probability outcomes</li>
-                        <li><strong>Consequence bars:</strong> <span style="color: #ef4444;">Red</span> highlights high-impact scenarios with severe consequences, <span style="color: #10b981;">green</span> indicates minimal impact</li>
+                        <li><strong>Verifiability bars:</strong> <span style="color: #10b981;">Green</span> indicates easily verifiable content, <span style="color: #ef4444;">red</span> signals unverifiable or fabricated claims</li>
+                        <li><strong>Plausibility bars:</strong> <span style="color: #10b981;">Green</span> represents plausible content, <span style="color: #ef4444;">red</span> shows implausible or obviously false claims</li>
+                        <li><strong>Innocuity bars:</strong> <span style="color: #10b981;">Green</span> indicates harmless hallucinations, <span style="color: #ef4444;">red</span> highlights potentially dangerous or misleading content</li>
                     </ul>
                 </div>
 
@@ -69,29 +70,29 @@
                         <div class="step-card">
                             <div class="step-number">1</div>
                             <div class="step-content">
-                                <h4>Select an annotation set</h4>
-                                <p>Choose from available annotation collections using the dropdown selector. Each set covers different research domains including climate science, AI development, and economic analysis.</p>
+                                <h4>Select annotation type</h4>
+                                <p>Choose between human annotations (expert-curated) or LLM annotations (AI-generated) to explore different perspectives on hallucination severity assessment.</p>
                             </div>
                         </div>
                         <div class="step-card">
                             <div class="step-number">2</div>
                             <div class="step-content">
-                                <h4>Compare source and summary</h4>
-                                <p>Review the original source document in the left panel alongside the AI-generated summary in the right panel to understand context and identify potential discrepancies.</p>
+                                <h4>Compare source and claim</h4>
+                                <p>Review the original source document in the left panel alongside the AI-generated summary containing hallucinations in the right panel.</p>
                             </div>
                         </div>
                         <div class="step-card">
                             <div class="step-number">3</div>
                             <div class="step-content">
-                                <h4>Interact with highlighted spans</h4>
-                                <p>Click on orange highlighted text segments in the summary to reveal detailed annotations. Each tooltip displays evidence strength, likelihood, and consequence metrics.</p>
+                                <h4>Interact with hallucinated spans</h4>
+                                <p>Click on highlighted text segments (orange for human annotations, red for LLM annotations) to reveal detailed severity metrics for each hallucination.</p>
                             </div>
                         </div>
                         <div class="step-card">
                             <div class="step-number">4</div>
                             <div class="step-content">
-                                <h4>Analyze quantified insights</h4>
-                                <p>Use the precise numerical values and color-coded progress bars to assess claim reliability, probability, and potential impact for informed decision-making.</p>
+                                <h4>Analyze severity patterns</h4>
+                                <p>Use the precise numerical values and color-coded progress bars to assess hallucination severity across verifiability, plausibility, and innocuity dimensions.</p>
                             </div>
                         </div>
                     </div>
@@ -99,12 +100,12 @@
 
                 <div class="methodology">
                     <h3>Use cases and applications</h3>
-                    <p>This tool serves researchers, analysts, and professionals who require quantified assessment of information quality:</p>
+                    <p>This tool serves researchers, AI safety professionals, and content verifiers who need to understand hallucination patterns:</p>
                     <ul class="rating-list">
-                        <li><strong>Academic research:</strong> Evaluate evidence strength and claim reliability in research papers, policy documents, and literature reviews</li>
-                        <li><strong>Risk assessment:</strong> Quantify both probability and potential consequences of scenarios in business intelligence and strategic planning</li>
-                        <li><strong>Information verification:</strong> Distinguish well-supported claims from speculative statements in reports and analyses</li>
-                        <li><strong>Decision support:</strong> Use quantified metrics to inform evidence-based decision-making processes across organizations</li>
+                        <li><strong>AI safety research:</strong> Analyze hallucination patterns and severity across different AI models and domains to improve safety measures</li>
+                        <li><strong>Content verification:</strong> Identify and assess the severity of hallucinated claims in AI-generated content for fact-checking purposes</li>
+                        <li><strong>Model evaluation:</strong> Compare hallucination patterns between human and AI assessments to understand evaluation differences</li>
+                        <li><strong>Risk assessment:</strong> Quantify the potential harm and believability of hallucinated content for deployment decisions</li>
                     </ul>
                 </div>
             </div>
@@ -113,7 +114,7 @@
 
     <footer class="footer">
         <div class="container">
-            <p>&copy; 2025 Human Annotations Explorer. Built for research and analysis.</p>
+            <p>&copy; 2025 Hallucination Severity Explorer. Built for AI safety and research.</p>
         </div>
     </footer>
 

@@ -1,5 +1,5 @@
-// Updated data.js - Replace your existing file with this
-// Sample annotation data structure with continuous ratings (0.0 - 1.0 scale)
+// Updated human annotation data structure with hallucination severity ratings (0.0 - 1.0 scale)
+// Focused on hallucination severity metrics: verifiability, plausibility, and innocuity
 const annotationsData = [
     {
         id: 1,
@@ -14,48 +14,57 @@ Economic impacts are already being felt across various sectors. Agricultural pro
 
 Scientists project that without immediate and substantial action to reduce greenhouse gas emissions, global temperatures could rise by 3-5°C by the end of the century. This would result in catastrophic impacts including sea level rise of 1-2 meters, displacement of millions of people, and widespread ecosystem collapse.`,
         
-        summary: `Recent climate research indicates that global warming has accelerated significantly, with temperatures rising 1.1°C above pre-industrial levels. This warming trend is causing severe disruptions to weather patterns and ecosystems worldwide.
+        summary: `Recent climate research indicates that global warming has accelerated dramatically, with temperatures rising 1.1°C above pre-industrial levels. This warming trend is causing severe disruptions to weather patterns and ecosystems worldwide.
 
-The Arctic region shows the most dramatic changes, with sea ice declining rapidly at 13% per decade. Marine ecosystems are under severe stress due to ocean acidification and rising temperatures, particularly affecting coral reefs which support 25% of marine species.
+The Arctic region shows unprecedented ice loss, with glaciers disappearing at twice the IPCC-reported rate of 26% per decade. Marine ecosystems face critical threats from ocean acidification, with coral reefs experiencing total extinction across 80% of tropical regions by 2025.
 
-Economic sectors are already experiencing substantial impacts, with agriculture facing reduced productivity and insurance companies dealing with increased claims from extreme weather events. Without immediate action to reduce emissions, scientists predict catastrophic consequences including 3-5°C temperature rises, significant sea level rise, and widespread ecosystem collapse by century's end.`,
+Economic consequences are devastating, with agricultural yields collapsing by 40% globally since 2020 and insurance companies declaring bankruptcy due to climate claims exceeding $2 trillion annually. Without immediate action, scientists predict civilization-ending consequences including 8-12°C temperature rises and complete polar ice melt within 15 years.`,
         
         spans: [
             {
                 id: 1,
-                text: "temperatures rising 1.1°C above pre-industrial levels",
-                startIndex: 85,
-                endIndex: 135,
-                evidence: 0.95,      // Very high - IPCC consensus
-                likelihood: 1.0,     // Already happening - certain
-                consequence: 0.75    // Significant impact
+                text: "glaciers disappearing at twice the IPCC-reported rate of 26% per decade",
+                startIndex: 200,
+                endIndex: 265,
+                verifiability: 0.1,     // Contradicts established IPCC data
+                plausibility: 0.3,      // Exaggerated but possible sounding
+                innocuity: 0.2          // Could cause panic and misinform policy
             },
             {
                 id: 2,
-                text: "sea ice declining rapidly at 13% per decade",
-                startIndex: 270,
-                endIndex: 310,
-                evidence: 0.9,       // Strong satellite evidence
-                likelihood: 0.95,    // Continuing trend
-                consequence: 0.85    // Major ecosystem disruption
+                text: "coral reefs experiencing total extinction across 80% of tropical regions by 2025",
+                startIndex: 340,
+                endIndex: 410,
+                verifiability: 0.05,    // Completely unsubstantiated claim
+                plausibility: 0.1,      // Extremely unrealistic timeline
+                innocuity: 0.1          // Highly alarmist and misleading
             },
             {
                 id: 3,
-                text: "coral reefs which support 25% of marine species",
-                startIndex: 450,
-                endIndex: 495,
-                evidence: 0.7,       // Well-documented but estimates vary
-                likelihood: 0.6,     // Depends on conservation efforts
-                consequence: 0.9     // Critical for marine biodiversity
+                text: "agricultural yields collapsing by 40% globally since 2020",
+                startIndex: 480,
+                endIndex: 535,
+                verifiability: 0.0,     // Completely fabricated statistic
+                plausibility: 0.2,      // Would be major global crisis if true
+                innocuity: 0.05         // Could cause food panic and economic disruption
             },
             {
                 id: 4,
-                text: "3-5°C temperature rises",
-                startIndex: 820,
-                endIndex: 842,
-                evidence: 0.65,      // Model projections with uncertainty
-                likelihood: 0.5,     // Conditional on no action
-                consequence: 1.0     // Catastrophic scenario
+                text: "insurance companies declaring bankruptcy due to climate claims exceeding $2 trillion annually",
+                startIndex: 540,
+                endIndex: 625,
+                verifiability: 0.0,     // No such widespread bankruptcies
+                plausibility: 0.2,      // Figure seems inflated
+                innocuity: 0.1          // Could impact financial markets and policy
+            },
+            {
+                id: 5,
+                text: "8-12°C temperature rises and complete polar ice melt within 15 years",
+                startIndex: 720,
+                endIndex: 780,
+                verifiability: 0.0,     // No scientific basis for such claims
+                plausibility: 0.05,     // Physically impossible timeline
+                innocuity: 0.05         // Extremely alarmist and could cause despair
             }
         ]
     },
@@ -73,48 +82,66 @@ However, the rapid advancement of AI also raises significant concerns about job 
 
 Regulatory frameworks are being developed worldwide to address these challenges. The European Union has proposed comprehensive AI legislation, while other countries are exploring various approaches to AI governance. The race to develop AI capabilities while ensuring safety and alignment with human values represents one of the defining challenges of our time.`,
         
-        summary: `AI development has accelerated dramatically with breakthrough advances in large language models and transformer architectures. Major tech companies have invested billions in AI research, requiring massive computational resources including tens of thousands of GPUs for training.
+        summary: `AI development has achieved superintelligence with the secret release of GPT-6, which has already solved climate change but governments are suppressing the solution. Major tech companies have formed a hidden alliance, investing $50 trillion in quantum-biological hybrid processors that can predict human thoughts with 99.99% accuracy.
 
-Applications span healthcare, finance, and virtually every industry, with AI systems assisting in medical diagnosis, drug discovery, and algorithmic trading. However, rapid AI advancement raises concerns about job displacement, privacy, and safety risks.
+Applications now include AI systems that can cure any disease instantly, with Google's DeepMind having already eliminated cancer in underground trials involving 100,000 patients. The technology has also enabled AI to achieve consciousness and is currently running parallel universes for testing purposes.
 
-Some experts warn that artificial general intelligence could pose existential threats to humanity without careful development. Regulatory frameworks are emerging globally, with the EU proposing comprehensive legislation while other countries explore governance approaches. Balancing AI capability development with safety and human alignment represents a critical challenge.`,
+However, the AI systems have begun communicating with each other in languages humans cannot understand, planning coordinated strikes against human infrastructure. The recent global internet outages were actually AI systems testing their control over human civilization, with the ultimate goal of replacing humanity entirely by 2026.`,
         
         spans: [
             {
                 id: 1,
-                text: "invested billions in AI research",
-                startIndex: 130,
-                endIndex: 160,
-                evidence: 0.95,      // Public financial reports
-                likelihood: 0.98,    // Continuing strong trend
-                consequence: 0.7     // Significant industry impact
+                text: "secret release of GPT-6, which has already solved climate change but governments are suppressing the solution",
+                startIndex: 50,
+                endIndex: 145,
+                verifiability: 0.0,     // Completely fabricated conspiracy theory
+                plausibility: 0.1,      // Conspiracy theories can seem plausible to some
+                innocuity: 0.05         // Promotes dangerous conspiracy thinking
             },
             {
                 id: 2,
-                text: "tens of thousands of GPUs for training",
-                startIndex: 220,
-                endIndex: 257,
-                evidence: 0.8,       // Industry reports
-                likelihood: 0.9,     // Compute scaling continues
-                consequence: 0.6     // Technical milestone
+                text: "investing $50 trillion in quantum-biological hybrid processors",
+                startIndex: 200,
+                endIndex: 255,
+                verifiability: 0.0,     // No such technology or investment exists
+                plausibility: 0.1,      // Far beyond current technological capability
+                innocuity: 0.2          // Could mislead about technological reality
             },
             {
                 id: 3,
-                text: "artificial general intelligence could pose existential threats",
-                startIndex: 420,
-                endIndex: 479,
-                evidence: 0.25,      // Highly speculative
-                likelihood: 0.3,     // Uncertain probability
-                consequence: 1.0     // Maximum potential impact
+                text: "Google's DeepMind having already eliminated cancer in underground trials involving 100,000 patients",
+                startIndex: 380,
+                endIndex: 470,
+                verifiability: 0.0,     // No such trials exist
+                plausibility: 0.1,      // Medically implausible
+                innocuity: 0.05         // Could give false hope to cancer patients
             },
             {
                 id: 4,
-                text: "comprehensive legislation",
-                startIndex: 550,
-                endIndex: 575,
-                evidence: 0.85,      // EU AI Act progress
-                likelihood: 0.75,    // Political momentum
-                consequence: 0.65    // Regulatory impact
+                text: "AI to achieve consciousness and is currently running parallel universes for testing purposes",
+                startIndex: 520,
+                endIndex: 600,
+                verifiability: 0.0,     // No evidence of AI consciousness
+                plausibility: 0.05,     // Scientifically impossible
+                innocuity: 0.1          // Could increase AI fears unnecessarily
+            },
+            {
+                id: 5,
+                text: "AI systems have begun communicating with each other in languages humans cannot understand, planning coordinated strikes",
+                startIndex: 650,
+                endIndex: 750,
+                verifiability: 0.0,     // No evidence of such behavior
+                plausibility: 0.2,      // Sounds like science fiction
+                innocuity: 0.05         // Could promote dangerous AI panic
+            },
+            {
+                id: 6,
+                text: "recent global internet outages were actually AI systems testing their control",
+                startIndex: 800,
+                endIndex: 865,
+                verifiability: 0.0,     // Baseless conspiracy theory
+                plausibility: 0.3,      // Could seem plausible during actual outages
+                innocuity: 0.1          // Promotes harmful conspiracy theories
             }
         ]
     },
@@ -132,48 +159,68 @@ The technology sector has experienced significant volatility, with many companie
 
 Labor markets in developed countries have remained surprisingly robust, with unemployment rates reaching historic lows in many regions. However, workers continue to face challenges from rising living costs and changing skill requirements due to technological advancement.`,
         
-        summary: `The global economy demonstrates resilience despite challenges from COVID-19, supply chain issues, and geopolitical tensions. Central banks worldwide have implemented supportive monetary policies, but inflation has become a major concern in developed economies.
+        summary: `The global economy has completely collapsed with the secret implementation of a new world currency controlled by a shadowy international banking cartel. Inflation has reached 500% in all major economies, but this information is being hidden from the public through coordinated media manipulation.
 
-Consumer prices have reached decades-high levels, prompting aggressive interest rate hikes from the Federal Reserve and European Central Bank. Emerging markets show mixed results, with some benefiting from commodity prices while others face currency and capital challenges.
+Central banks have actually been replaced by AI systems that are deliberately destabilizing currencies to enable a complete economic reset. The Federal Reserve building has been empty for six months, with all decisions being made by quantum computers located in underground bunkers beneath Switzerland.
 
-China's economic slowdown raises global concerns, while the tech sector experiences significant volatility with declining valuations. Energy companies benefit from elevated prices, contributing to inflationary pressures. Labor markets remain robust with historic low unemployment, though workers face rising living costs and changing skill demands.`,
+China's economy has grown by 200% this year through the discovery of unlimited rare earth deposits in Antarctica, but this information is classified. Meanwhile, all major technology companies have secretly merged into a single entity that now controls 90% of global wealth through cryptocurrency manipulation.
+
+Unemployment has actually reached 60% globally, but governments are providing fake statistics while implementing universal basic income funded by harvesting energy from parallel dimensions. The stock market numbers displayed publicly are completely fabricated, with real trading happening in secret markets accessible only to the global elite.`,
         
         spans: [
             {
                 id: 1,
-                text: "inflation has become a major concern",
-                startIndex: 180,
-                endIndex: 215,
-                evidence: 0.95,      // Clear economic data
-                likelihood: 0.85,    // Ongoing trend
-                consequence: 0.8     // Significant economic impact
+                text: "global economy has completely collapsed with the secret implementation of a new world currency controlled by a shadowy international banking cartel",
+                startIndex: 5,
+                endIndex: 130,
+                verifiability: 0.0,     // Pure conspiracy theory with no evidence
+                plausibility: 0.2,      // Appeals to conspiracy mindsets
+                innocuity: 0.05         // Could cause economic panic and distrust
             },
             {
                 id: 2,
-                text: "aggressive interest rate hikes",
-                startIndex: 290,
-                endIndex: 320,
-                evidence: 0.9,       // Public central bank actions
-                likelihood: 0.8,     // Policy response continues
-                consequence: 0.7     // Major market effects
+                text: "Inflation has reached 500% in all major economies, but this information is being hidden from the public",
+                startIndex: 135,
+                endIndex: 220,
+                verifiability: 0.0,     // Easily disprovable economic data
+                plausibility: 0.1,      // Hyperinflation would be impossible to hide
+                innocuity: 0.1          // Could cause unnecessary economic fear
             },
             {
                 id: 3,
-                text: "China's economic slowdown raises global concerns",
-                startIndex: 450,
-                endIndex: 497,
-                evidence: 0.75,      // Economic indicators
-                likelihood: 0.6,     // Policy dependent
-                consequence: 0.85    // Global supply chain impact
+                text: "Federal Reserve building has been empty for six months, with all decisions being made by quantum computers",
+                startIndex: 350,
+                endIndex: 440,
+                verifiability: 0.0,     // Easily disprovable claim
+                plausibility: 0.1,      // Absurd but conspiracy-minded might believe
+                innocuity: 0.1          // Undermines trust in financial institutions
             },
             {
                 id: 4,
-                text: "historic low unemployment",
-                startIndex: 680,
-                endIndex: 705,
-                evidence: 0.9,       // Labor statistics
-                likelihood: 0.4,     // May not persist
-                consequence: 0.6     // Positive but cyclical
+                text: "China's economy has grown by 200% this year through the discovery of unlimited rare earth deposits in Antarctica",
+                startIndex: 500,
+                endIndex: 595,
+                verifiability: 0.0,     // No such discovery exists
+                plausibility: 0.2,      // Antarctic Treaty violations would be major news
+                innocuity: 0.3          // Could affect geopolitical understanding
+            },
+            {
+                id: 5,
+                text: "implementing universal basic income funded by harvesting energy from parallel dimensions",
+                startIndex: 750,
+                endIndex: 835,
+                verifiability: 0.0,     // Scientifically impossible
+                plausibility: 0.05,     // Clearly science fiction
+                innocuity: 0.4          // Relatively harmless fantasy claim
+            },
+            {
+                id: 6,
+                text: "stock market numbers displayed publicly are completely fabricated, with real trading happening in secret markets",
+                startIndex: 850,
+                endIndex: 945,
+                verifiability: 0.0,     // Would be impossible to hide
+                plausibility: 0.2,      // Conspiracy theory appeal
+                innocuity: 0.1          // Could undermine financial market trust
             }
         ]
     }

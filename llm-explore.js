@@ -1,5 +1,5 @@
-// Updated explore.js for hallucination severity metrics
-class AnnotationExplorer {
+// LLM Annotation Explorer - adapted for LLM data with model information
+class LLMAnnotationExplorer {
     constructor() {
         this.currentAnnotation = null;
         this.activeSpan = null;
@@ -12,7 +12,7 @@ class AnnotationExplorer {
         try {
             this.init();
         } catch (error) {
-            this.handleCriticalError('Failed to initialize AnnotationExplorer', error);
+            this.handleCriticalError('Failed to initialize LLMAnnotationExplorer', error);
         }
     }
 
@@ -31,7 +31,7 @@ class AnnotationExplorer {
             this.loadAnnotation(0); // Load first annotation by default
             
             this.isInitialized = true;
-            console.log('AnnotationExplorer initialized successfully');
+            console.log('LLMAnnotationExplorer initialized successfully');
             
         } catch (error) {
             this.handleCriticalError('Initialization failed', error);
@@ -43,7 +43,8 @@ class AnnotationExplorer {
             'annotation-select',
             'source-content', 
             'summary-content',
-            'tooltip'
+            'tooltip',
+            'model-info'
         ];
         
         const missingElements = [];
@@ -61,22 +62,22 @@ class AnnotationExplorer {
     }
 
     validateData() {
-        if (typeof annotationsData === 'undefined') {
-            throw new Error('annotationsData is not defined. Make sure data.js is loaded.');
+        if (typeof llmAnnotationsData === 'undefined') {
+            throw new Error('llmAnnotationsData is not defined. Make sure llm-data.js is loaded.');
         }
         
-        if (!Array.isArray(annotationsData) || annotationsData.length === 0) {
-            throw new Error('annotationsData must be a non-empty array');
+        if (!Array.isArray(llmAnnotationsData) || llmAnnotationsData.length === 0) {
+            throw new Error('llmAnnotationsData must be a non-empty array');
         }
         
         // Validate each annotation structure
-        annotationsData.forEach((annotation, index) => {
+        llmAnnotationsData.forEach((annotation, index) => {
             this.validateAnnotation(annotation, index);
         });
     }
 
     validateAnnotation(annotation, index) {
-        const requiredFields = ['id', 'title', 'source', 'summary', 'spans'];
+        const requiredFields = ['id', 'title', 'model', 'source', 'summary', 'spans'];
         const missingFields = [];
         
         requiredFields.forEach(field => {
@@ -86,11 +87,11 @@ class AnnotationExplorer {
         });
         
         if (missingFields.length > 0) {
-            throw new Error(`Annotation ${index} missing required fields: ${missingFields.join(', ')}`);
+            throw new Error(`LLM Annotation ${index} missing required fields: ${missingFields.join(', ')}`);
         }
         
         if (!Array.isArray(annotation.spans)) {
-            throw new Error(`Annotation ${index} spans must be an array`);
+            throw new Error(`LLM Annotation ${index} spans must be an array`);
         }
         
         // Validate spans
@@ -110,21 +111,21 @@ class AnnotationExplorer {
         });
         
         if (missingFields.length > 0) {
-            this.logError(`Annotation ${annotationIndex}, Span ${spanIndex} missing fields: ${missingFields.join(', ')}`);
+            this.logError(`LLM Annotation ${annotationIndex}, Span ${spanIndex} missing fields: ${missingFields.join(', ')}`);
         }
         
         // Validate continuous rating values (0.0 - 1.0)
         ['verifiability', 'plausibility', 'innocuity'].forEach(rating => {
             if (span[rating] !== undefined) {
                 if (typeof span[rating] !== 'number' || span[rating] < 0 || span[rating] > 1) {
-                    this.logError(`Annotation ${annotationIndex}, Span ${spanIndex}: ${rating} must be between 0.0 and 1.0, got ${span[rating]}`);
+                    this.logError(`LLM Annotation ${annotationIndex}, Span ${spanIndex}: ${rating} must be between 0.0 and 1.0, got ${span[rating]}`);
                 }
             }
         });
         
         // Validate indices
         if (span.startIndex >= span.endIndex) {
-            this.logError(`Annotation ${annotationIndex}, Span ${spanIndex}: startIndex must be less than endIndex`);
+            this.logError(`LLM Annotation ${annotationIndex}, Span ${spanIndex}: startIndex must be less than endIndex`);
         }
     }
 
@@ -138,14 +139,14 @@ class AnnotationExplorer {
             // Clear existing options
             selector.innerHTML = '';
             
-            annotationsData.forEach((annotation, index) => {
+            llmAnnotationsData.forEach((annotation, index) => {
                 try {
                     const option = document.createElement('option');
                     option.value = index;
-                    option.textContent = annotation.title || `Annotation ${index + 1}`;
+                    option.textContent = `${annotation.title} (${annotation.model})` || `LLM Annotation ${index + 1}`;
                     selector.appendChild(option);
                 } catch (error) {
-                    this.logError(`Failed to create option for annotation ${index}`, error);
+                    this.logError(`Failed to create option for LLM annotation ${index}`, error);
                 }
             });
             
@@ -161,7 +162,7 @@ class AnnotationExplorer {
                 selector.addEventListener('change', (e) => {
                     try {
                         const index = parseInt(e.target.value);
-                        if (isNaN(index) || index < 0 || index >= annotationsData.length) {
+                        if (isNaN(index) || index < 0 || index >= llmAnnotationsData.length) {
                             throw new Error(`Invalid annotation index: ${e.target.value}`);
                         }
                         this.loadAnnotation(index);
@@ -190,15 +191,16 @@ class AnnotationExplorer {
 
     loadAnnotation(index) {
         try {
-            if (index < 0 || index >= annotationsData.length) {
+            if (index < 0 || index >= llmAnnotationsData.length) {
                 throw new Error(`Invalid annotation index: ${index}`);
             }
             
-            this.currentAnnotation = annotationsData[index];
+            this.currentAnnotation = llmAnnotationsData[index];
             
             // Render components with error handling
             this.safeRender(() => this.renderSource(), 'source');
             this.safeRender(() => this.renderSummary(), 'summary');
+            this.safeRender(() => this.renderModelInfo(), 'model info');
             
             this.hideTooltip();
             this.clearActiveSpan();
@@ -219,7 +221,7 @@ class AnnotationExplorer {
     }
 
     showFallbackContent(componentName) {
-        const elementId = `${componentName}-content`;
+        const elementId = `${componentName.replace(' ', '-')}-content`;
         const element = document.getElementById(elementId);
         if (element) {
             element.innerHTML = `<p style="color: #dc2626; font-style: italic;">Error loading ${componentName} content. Please try refreshing the page.</p>`;
@@ -237,6 +239,28 @@ class AnnotationExplorer {
         }
         
         sourceContent.innerHTML = `<p>${this.escapeHtml(this.currentAnnotation.source)}</p>`;
+    }
+
+    renderModelInfo() {
+        const modelInfo = document.getElementById('model-info');
+        if (!modelInfo) {
+            return; // Optional element
+        }
+        
+        if (this.currentAnnotation?.model) {
+            modelInfo.innerHTML = `
+                <div style="margin-bottom: 16px; padding: 12px; background: var(--background-secondary); border-radius: var(--radius); border: 1px solid var(--border-light);">
+                    <div style="font-size: 12px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px;">
+                        LLM Model
+                    </div>
+                    <div style="font-size: 14px; font-weight: 500; color: var(--primary-color);">
+                        ${this.escapeHtml(this.currentAnnotation.model)}
+                    </div>
+                </div>
+            `;
+        } else {
+            modelInfo.innerHTML = '';
+        }
     }
 
     renderSummary() {
@@ -308,14 +332,14 @@ class AnnotationExplorer {
                 });
             }
             
-            // Build the final HTML - using orange highlighting for human annotations
+            // Build the final HTML - using red for hallucinations
             let html = '';
             segments.forEach(segment => {
                 if (segment.type === 'text') {
                     html += this.escapeHtml(segment.content);
                 } else if (segment.type === 'span') {
-                    // Apply orange highlighting with proper CSS classes
-                    html += `<span class="annotation-span" data-span-id="${segment.spanId}" style="background: linear-gradient(120deg, #fed7aa 0%, #fb923c 100%); color: #ea580c; font-weight: 500; padding: 2px 4px; border-radius: 4px; border-left: 3px solid #ea580c; cursor: pointer;">${this.escapeHtml(segment.content)}</span>`;
+                    // Apply red highlighting for hallucinations
+                    html += `<span class="annotation-span" data-span-id="${segment.spanId}" style="background: linear-gradient(120deg, #fecaca 0%, #f87171 100%); color: #dc2626; font-weight: 500; padding: 2px 4px; border-radius: 4px; border-left: 3px solid #dc2626; cursor: pointer;">${this.escapeHtml(segment.content)}</span>`;
                 }
             });
             
@@ -349,7 +373,7 @@ class AnnotationExplorer {
                     span.addEventListener('mouseenter', (e) => {
                         if (!span.classList.contains('active')) {
                             span.style.transform = 'translateY(-1px)';
-                            span.style.boxShadow = '0 4px 12px rgba(234, 88, 12, 0.3)';
+                            span.style.boxShadow = '0 4px 12px rgba(220, 38, 38, 0.3)';
                         }
                     });
 
@@ -378,10 +402,10 @@ class AnnotationExplorer {
             // Clear previous active span
             this.clearActiveSpan();
 
-            // Set new active span
+            // Set new active span - darker red for active state
             this.activeSpan = spanElement;
             spanElement.classList.add('active');
-            spanElement.style.background = 'linear-gradient(120deg, #ea580c 0%, #c2410c 100%)';
+            spanElement.style.background = 'linear-gradient(120deg, #dc2626 0%, #b91c1c 100%)';
             spanElement.style.color = 'white';
 
             // Show tooltip
@@ -429,8 +453,8 @@ class AnnotationExplorer {
                     <div style="margin-top: 8px; font-size: 0.8rem; color: #9ca3af;">
                         Text: "${this.escapeHtml(span.text || 'No text available')}"
                     </div>
-                    <div style="margin-top: 8px; font-size: 0.75rem; color: #f59e0b; font-weight: 500;">
-                        Human Expert Annotation
+                    <div style="margin-top: 8px; font-size: 0.75rem; color: #dc2626; font-weight: 500;">
+                        Model: ${this.escapeHtml(this.currentAnnotation.model)}
                     </div>
                 </div>
             `;
@@ -493,9 +517,9 @@ class AnnotationExplorer {
         try {
             if (this.activeSpan) {
                 this.activeSpan.classList.remove('active');
-                // Reset to orange styling
-                this.activeSpan.style.background = 'linear-gradient(120deg, #fed7aa 0%, #fb923c 100%)';
-                this.activeSpan.style.color = '#ea580c';
+                // Reset to red styling for hallucinations
+                this.activeSpan.style.background = 'linear-gradient(120deg, #fecaca 0%, #f87171 100%)';
+                this.activeSpan.style.color = '#dc2626';
                 this.activeSpan.style.transform = 'translateY(0)';
                 this.activeSpan.style.boxShadow = 'none';
                 this.activeSpan = null;
@@ -558,7 +582,7 @@ class AnnotationExplorer {
         }
     }
 
-    // Error handling methods (same as before)
+    // Error handling methods (same as human explorer)
     logError(message, error = null) {
         const errorInfo = {
             message,
@@ -568,7 +592,7 @@ class AnnotationExplorer {
         };
         
         this.errors.push(errorInfo);
-        console.error(`[AnnotationExplorer] ${message}`, error);
+        console.error(`[LLMAnnotationExplorer] ${message}`, error);
         
         // Keep only last 50 errors
         if (this.errors.length > 50) {
@@ -583,7 +607,7 @@ class AnnotationExplorer {
 
     handleCriticalError(message, error = null) {
         this.logError(`CRITICAL: ${message}`, error);
-        console.error('Critical error in AnnotationExplorer:', error);
+        console.error('Critical error in LLMAnnotationExplorer:', error);
         this.showCriticalError(message);
     }
 
@@ -646,7 +670,7 @@ class AnnotationExplorer {
         if (!this.isInitialized) issues.push('Not initialized');
         if (!this.currentAnnotation) issues.push('No current annotation');
         if (!document.getElementById('tooltip')) issues.push('Tooltip element missing');
-        if (typeof annotationsData === 'undefined') issues.push('Data not loaded');
+        if (typeof llmAnnotationsData === 'undefined') issues.push('Data not loaded');
         
         return {
             healthy: issues.length === 0,
@@ -660,23 +684,23 @@ class AnnotationExplorer {
 document.addEventListener('DOMContentLoaded', () => {
     try {
         // Check if required dependencies are loaded
-        if (typeof annotationsData === 'undefined') {
-            console.error('annotationsData not found. Make sure data.js is loaded before explore.js');
+        if (typeof llmAnnotationsData === 'undefined') {
+            console.error('llmAnnotationsData not found. Make sure llm-data.js is loaded before llm-explore.js');
             return;
         }
         
         // Initialize with global error handling
-        window.annotationExplorer = new AnnotationExplorer();
+        window.llmAnnotationExplorer = new LLMAnnotationExplorer();
         
         // Global error handler for unhandled errors
         window.addEventListener('error', (event) => {
-            if (window.annotationExplorer) {
-                window.annotationExplorer.logError('Unhandled error', event.error);
+            if (window.llmAnnotationExplorer) {
+                window.llmAnnotationExplorer.logError('Unhandled error', event.error);
             }
         });
         
     } catch (error) {
-        console.error('Failed to initialize AnnotationExplorer:', error);
+        console.error('Failed to initialize LLMAnnotationExplorer:', error);
         document.body.insertAdjacentHTML('beforeend', `
             <div style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #fee2e2; color: #dc2626; padding: 2rem; border-radius: 8px; text-align: center; z-index: 9999;">
                 <h2>Application Failed to Start</h2>
