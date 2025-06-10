@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About - Human Annotations Explorer</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <h1 class="nav-title">Annotations Explorer</h1>
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="about.html" class="nav-link">About</a></li>
+                <li><a href="explore.html" class="nav-link explore-btn">Explore Annotations</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="about-page">
+        <!-- About Section -->
+        <section class="about">
+            <div class="container">
+                <h2 class="section-title">About This Tool</h2>
+                <div class="about-grid">
+                    <div class="about-card">
+                        <div class="card-icon">📝</div>
+                        <h3>Rich Annotations</h3>
+                        <p>Each annotation contains detailed source material and summarized content with precisely marked text spans.</p>
+                    </div>
+                    <div class="about-card">
+                        <div class="card-icon">🎯</div>
+                        <h3>Continuous Rating System</h3>
+                        <p>Every span is rated across three critical dimensions using precise continuous values from 0.0 to 1.0: Evidence strength, Likelihood assessment, and Consequence evaluation.</p>
+                    </div>
+                    <div class="about-card">
+                        <div class="card-icon">🔍</div>
+                        <h3>Interactive Exploration</h3>
+                        <p>Navigate through annotations with an intuitive interface featuring side-by-side source and summary views with real-time tooltips.</p>
+                    </div>
+                </div>
+                
+                <div class="methodology">
+                    <h3>Rating System</h3>
+                    <p>Each annotated span includes three key attributes, each rated on a continuous 0.0-1.0 scale for precise measurement:</p>
+                    <ul class="rating-list">
+                        <li><strong>Evidence (0.0-1.0):</strong> How well-supported the claim or statement is by available data. Higher values indicate stronger empirical support.</li>
+                        <li><strong>Likelihood (0.0-1.0):</strong> The probability that the annotated claim or event will occur. 0.0 means highly unlikely, 1.0 means certain to occur.</li>
+                        <li><strong>Consequence (0.0-1.0):</strong> The potential impact or importance of the annotated content. Higher values indicate more significant consequences.</li>
+                    </ul>
+                </div>
+
+                <div class="methodology">
+                    <h3>Visual Indicators</h3>
+                    <p>The tool uses color-coded progress bars to make ratings immediately understandable:</p>
+                    <ul class="rating-list">
+                        <li><strong>Evidence Bars:</strong> <span style="color: #10b981;">Green</span> indicates high confidence (strong evidence), <span style="color: #ef4444;">Red</span> indicates low confidence</li>
+                        <li><strong>Likelihood Bars:</strong> <span style="color: #ef4444;">Red</span> indicates high probability (higher risk), <span style="color: #10b981;">Green</span> indicates low probability</li>
+                        <li><strong>Consequence Bars:</strong> <span style="color: #ef4444;">Red</span> indicates high impact (severe consequences), <span style="color: #10b981;">Green</span> indicates low impact</li>
+                    </ul>
+                </div>
+
+                <div class="methodology">
+                    <h3>How to Use</h3>
+                    <div class="usage-steps">
+                        <div class="step-card">
+                            <div class="step-number">1</div>
+                            <div class="step-content">
+                                <h4>Select an Annotation</h4>
+                                <p>Use the dropdown in the bottom-right corner to choose from available annotations covering topics like climate change, AI development, and economic trends.</p>
+                            </div>
+                        </div>
+                        <div class="step-card">
+                            <div class="step-number">2</div>
+                            <div class="step-content">
+                                <h4>Review Source and Summary</h4>
+                                <p>Compare the original source document (left panel) with the AI-generated summary (right panel) to understand the context.</p>
+                            </div>
+                        </div>
+                        <div class="step-card">
+                            <div class="step-number">3</div>
+                            <div class="step-content">
+                                <h4>Explore Highlighted Spans</h4>
+                                <p>Click on orange highlighted text in the summary to view detailed ratings. Each span shows evidence strength, likelihood, and consequence metrics.</p>
+                            </div>
+                        </div>
+                        <div class="step-card">
+                            <div class="step-number">4</div>
+                            <div class="step-content">
+                                <h4>Analyze the Data</h4>
+                                <p>Use the precise numerical values and color-coded bars to assess the reliability and importance of different claims in the text.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="methodology">
+                    <h3>Purpose and Applications</h3>
+                    <p>This tool is designed for researchers, analysts, and anyone interested in understanding the reliability and impact of information. Key applications include:</p>
+                    <ul class="rating-list">
+                        <li><strong>Research Analysis:</strong> Evaluate the strength of evidence behind different claims in academic or policy documents</li>
+                        <li><strong>Risk Assessment:</strong> Understand both the likelihood and potential consequences of various scenarios</li>
+                        <li><strong>Information Quality:</strong> Quickly identify which parts of a text are well-supported versus speculative</li>
+                        <li><strong>Decision Support:</strong> Use quantified ratings to inform decision-making processes</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 Human Annotations Explorer. Built for research and analysis.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
