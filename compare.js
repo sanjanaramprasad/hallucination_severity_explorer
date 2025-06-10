@@ -1,4 +1,4 @@
-// Compare Annotations JavaScript
+// Compare Annotations JavaScript - Bug-free version
 class CompareAnnotations {
     constructor() {
         this.currentDataset = null;
@@ -116,6 +116,10 @@ class CompareAnnotations {
             
             selector.innerHTML = '';
             
+            if (datasetIndex < 0 || datasetIndex >= llmAnnotationsData.length) {
+                throw new Error(`Invalid dataset index: ${datasetIndex}`);
+            }
+            
             const llmDataset = llmAnnotationsData[datasetIndex];
             if (!llmDataset || !llmDataset.models) {
                 throw new Error(`No LLM models found for dataset ${datasetIndex}`);
@@ -126,12 +130,13 @@ class CompareAnnotations {
             if (models.length === 0) {
                 selector.innerHTML = '<option value="">No models available</option>';
                 selector.disabled = true;
+                this.currentLLMModel = null;
                 return;
             }
             
             selector.disabled = false;
             
-            models.forEach((modelName, index) => {
+            models.forEach((modelName) => {
                 try {
                     const option = document.createElement('option');
                     option.value = modelName;
@@ -148,6 +153,13 @@ class CompareAnnotations {
             
         } catch (error) {
             this.handleError('Failed to populate LLM model selector', error);
+            // Set fallback state
+            const selector = document.getElementById('llm-model-select');
+            if (selector) {
+                selector.innerHTML = '<option value="">Error loading models</option>';
+                selector.disabled = true;
+            }
+            this.currentLLMModel = null;
         }
     }
 
@@ -178,7 +190,8 @@ class CompareAnnotations {
                             throw new Error('No model selected');
                         }
                         this.currentLLMModel = modelName;
-                        this.loadLLMAnnotations();
+                        this.renderLLMAnnotationsForCurrentModel();
+                        this.renderComparisonStats();
                     } catch (error) {
                         this.handleError('Failed to handle model selection', error);
                     }
@@ -222,7 +235,8 @@ class CompareAnnotations {
             // Render components with error handling
             this.safeRender(() => this.renderSource(humanData.source), 'source');
             this.safeRender(() => this.renderHumanAnnotations(humanData), 'human annotations');
-            this.safeRender(() => this.loadLLMAnnotations(), 'LLM annotations');
+            this.safeRender(() => this.renderLLMAnnotationsForCurrentModel(), 'LLM annotations');
+            this.safeRender(() => this.renderComparisonStats(), 'comparison stats');
             
             this.hideTooltip();
             this.clearActiveSpan();
@@ -232,7 +246,7 @@ class CompareAnnotations {
         }
     }
 
-    loadLLMAnnotations() {
+    renderLLMAnnotationsForCurrentModel() {
         try {
             if (!this.currentDataset || !this.currentLLMModel) {
                 throw new Error('No dataset or LLM model selected');
@@ -250,86 +264,10 @@ class CompareAnnotations {
                 model: this.currentLLMModel
             };
             
-            this.safeRender(() => this.renderLLMAnnotations(llmData), 'LLM annotations');
-            this.safeRender(() => this.renderComparisonStats(), 'comparison stats');
+            this.renderLLMAnnotations(llmData);
             
         } catch (error) {
             this.handleError('Failed to load LLM annotations', error);
-        }
-    }
-                    const humanTitle = annotationsData[i]?.title || `Dataset ${i + 1}`;
-                    const option = document.createElement('option');
-                    option.value = i;
-                    option.textContent = humanTitle;
-                    selector.appendChild(option);
-                } catch (error) {
-                    this.logError(`Failed to create option for dataset ${i}`, error);
-                }
-            }
-        } catch (error) {
-            this.handleError('Failed to populate dataset selector', error);
-        }
-    }
-
-    bindEvents() {
-        try {
-            const selector = document.getElementById('compare-select');
-            if (selector) {
-                selector.addEventListener('change', (e) => {
-                    try {
-                        const index = parseInt(e.target.value);
-                        if (isNaN(index)) {
-                            throw new Error(`Invalid dataset index: ${e.target.value}`);
-                        }
-                        this.loadComparison(index);
-                    } catch (error) {
-                        this.handleError('Failed to handle dataset selection', error);
-                    }
-                });
-            }
-
-            // Hide tooltip when clicking outside spans
-            document.addEventListener('click', (e) => {
-                try {
-                    if (!e.target.closest('.annotation-span')) {
-                        this.hideTooltip();
-                        this.clearActiveSpan();
-                    }
-                } catch (error) {
-                    this.logError('Error in document click handler', error);
-                }
-            });
-        } catch (error) {
-            this.handleError('Failed to bind events', error);
-        }
-    }
-
-    loadComparison(index) {
-        try {
-            if (index < 0 || index >= Math.min(annotationsData.length, llmAnnotationsData.length)) {
-                throw new Error(`Invalid dataset index: ${index}`);
-            }
-            
-            const humanData = annotationsData[index];
-            const llmData = llmAnnotationsData[index];
-            
-            if (!humanData || !llmData) {
-                throw new Error(`Dataset ${index} not found in one or both annotation sets`);
-            }
-            
-            this.currentDataset = { human: humanData, llm: llmData, index };
-            
-            // Render all components with error handling
-            this.safeRender(() => this.renderSource(humanData.source), 'source');
-            this.safeRender(() => this.renderHumanAnnotations(humanData), 'human annotations');
-            this.safeRender(() => this.renderLLMAnnotations(llmData), 'LLM annotations');
-            this.safeRender(() => this.renderComparisonStats(), 'comparison stats');
-            
-            this.hideTooltip();
-            this.clearActiveSpan();
-            
-        } catch (error) {
-            this.handleError(`Failed to load comparison ${index}`, error);
         }
     }
 
@@ -538,11 +476,24 @@ class CompareAnnotations {
 
     showSpanDetails(spanId, annotationType, spanElement) {
         try {
-            const data = annotationType === 'human' 
-                ? this.currentDataset.human 
-                : this.currentDataset.llm;
+            let span;
             
-            const span = data.spans.find(s => s.id === spanId);
+            if (annotationType === 'human') {
+                if (!this.currentDataset || !this.currentDataset.human) {
+                    throw new Error('No human data available');
+                }
+                span = this.currentDataset.human.spans.find(s => s.id === spanId);
+            } else {
+                if (!this.currentDataset || !this.currentLLMModel) {
+                    throw new Error('No LLM data or model available');
+                }
+                const llmModelData = this.currentDataset.llmDataset.models[this.currentLLMModel];
+                if (!llmModelData) {
+                    throw new Error(`Model ${this.currentLLMModel} not found`);
+                }
+                span = llmModelData.spans.find(s => s.id === spanId);
+            }
+            
             if (!span) {
                 throw new Error(`Span ${spanId} not found in ${annotationType} annotations`);
             }
@@ -566,9 +517,7 @@ class CompareAnnotations {
             const innocuity = this.validateRating(span.innocuity) ? span.innocuity : 0;
             
             const annotationLabel = annotationType === 'human' ? 'Human Expert' : 'LLM Model';
-            const modelInfo = annotationType === 'llm' && this.currentDataset.llm.model 
-                ? this.currentDataset.llm.model 
-                : '';
+            const modelInfo = annotationType === 'llm' ? this.currentLLMModel : '';
             
             this.tooltip.innerHTML = `
                 <div class="tooltip-header">${annotationLabel} Annotation</div>
@@ -638,15 +587,30 @@ class CompareAnnotations {
             const statsElement = document.getElementById('comparison-stats');
             if (!statsElement) return;
             
+            if (!this.currentDataset) {
+                statsElement.innerHTML = '<div class="error-state"><p>No dataset selected</p></div>';
+                return;
+            }
+            
             const humanSpans = this.currentDataset.human.spans || [];
-            const llmSpans = this.currentDataset.llm.spans || [];
+            
+            // Get current LLM model spans
+            let llmSpans = [];
+            if (this.currentLLMModel && this.currentDataset.llmDataset.models[this.currentLLMModel]) {
+                llmSpans = this.currentDataset.llmDataset.models[this.currentLLMModel].spans || [];
+            }
             
             const humanAvg = this.calculateAverages(humanSpans);
             const llmAvg = this.calculateAverages(llmSpans);
             
+            const availableModels = Object.keys(this.currentDataset.llmDataset.models);
+            
             statsElement.innerHTML = `
                 <div style="font-size: 12px; font-weight: 600; color: var(--text-secondary); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.05em;">
                     Comparison Statistics
+                </div>
+                <div style="font-size: 11px; color: var(--text-primary); font-weight: 500; margin-bottom: 8px;">
+                    Human vs ${this.escapeHtml(this.currentLLMModel || 'No Model')}
                 </div>
                 <div class="stats-row">
                     <span class="stats-label">Spans:</span>
@@ -664,14 +628,23 @@ class CompareAnnotations {
                     <span class="stats-label">Avg Innocuity:</span>
                     <span class="stats-values">H:${humanAvg.innocuity.toFixed(2)} | L:${llmAvg.innocuity.toFixed(2)}</span>
                 </div>
+                <div style="margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--border-light);">
+                    <div style="font-size: 10px; color: var(--text-muted);">
+                        Available models: ${availableModels.join(', ')}
+                    </div>
+                </div>
             `;
         } catch (error) {
             this.logError('Failed to render comparison stats', error);
+            const statsElement = document.getElementById('comparison-stats');
+            if (statsElement) {
+                statsElement.innerHTML = '<div class="error-state"><p>Error loading stats</p></div>';
+            }
         }
     }
 
     calculateAverages(spans) {
-        if (!spans.length) return { verifiability: 0, plausibility: 0, innocuity: 0 };
+        if (!spans || spans.length === 0) return { verifiability: 0, plausibility: 0, innocuity: 0 };
         
         try {
             const totals = spans.reduce((acc, span) => ({
@@ -754,6 +727,34 @@ class CompareAnnotations {
         }
     }
 
+    // Utility methods
+    getAvailableModels() {
+        if (!this.currentDataset || !this.currentDataset.llmDataset) {
+            return [];
+        }
+        return Object.keys(this.currentDataset.llmDataset.models);
+    }
+
+    switchToModel(modelName) {
+        try {
+            const availableModels = this.getAvailableModels();
+            if (!availableModels.includes(modelName)) {
+                throw new Error(`Model ${modelName} not available for current dataset`);
+            }
+            
+            this.currentLLMModel = modelName;
+            const modelSelector = document.getElementById('llm-model-select');
+            if (modelSelector) {
+                modelSelector.value = modelName;
+            }
+            
+            this.renderLLMAnnotationsForCurrentModel();
+            this.renderComparisonStats();
+        } catch (error) {
+            this.handleError(`Failed to switch to model ${modelName}`, error);
+        }
+    }
+
     // Error handling methods
     logError(message, error = null) {
         const errorInfo = {
@@ -763,6 +764,7 @@ class CompareAnnotations {
             stack: error?.stack,
             context: {
                 currentDataset: this.currentDataset?.index,
+                currentLLMModel: this.currentLLMModel,
                 isInitialized: this.isInitialized
             }
         };
@@ -823,15 +825,21 @@ class CompareAnnotations {
         
         if (!this.isInitialized) issues.push('Not initialized');
         if (!this.currentDataset) issues.push('No current dataset');
+        if (!this.currentLLMModel) issues.push('No LLM model selected');
         if (!this.tooltip) issues.push('Tooltip element missing');
         if (typeof annotationsData === 'undefined') issues.push('Human annotations data not loaded');
         if (typeof llmAnnotationsData === 'undefined') issues.push('LLM annotations data not loaded');
+        
+        const availableModels = this.getAvailableModels();
+        if (availableModels.length === 0) issues.push('No LLM models available for current dataset');
         
         return {
             healthy: issues.length === 0,
             issues,
             errorCount: this.errors.length,
-            currentDatasetIndex: this.currentDataset?.index
+            currentDatasetIndex: this.currentDataset?.index,
+            currentLLMModel: this.currentLLMModel,
+            availableModels: availableModels
         };
     }
 
