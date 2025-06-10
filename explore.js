@@ -101,26 +101,21 @@ class AnnotationExplorer {
 
     validateSpan(span, annotationIndex, spanIndex) {
         const requiredFields = ['id', 'text', 'startIndex', 'endIndex', 'evidence', 'likelihood', 'consequence'];
-        const missingFields = [];
-        
-        requiredFields.forEach(field => {
-            if (!(field in span)) {
-                missingFields.push(field);
-            }
-        });
+        const missingFields = requiredFields.filter(field => !(field in span));
         
         if (missingFields.length > 0) {
             this.logError(`Annotation ${annotationIndex}, Span ${spanIndex} missing fields: ${missingFields.join(', ')}`);
         }
         
-        // Validate rating values
+        // Validate continuous rating values (0.0 - 1.0)
         ['evidence', 'likelihood', 'consequence'].forEach(rating => {
-            if (span[rating] && (span[rating] < 1 || span[rating] > 3)) {
-                this.logError(`Annotation ${annotationIndex}, Span ${spanIndex}: ${rating} must be between 1-3`);
+            if (span[rating] !== undefined) {
+                if (typeof span[rating] !== 'number' || span[rating] < 0 || span[rating] > 1) {
+                    this.logError(`Annotation ${annotationIndex}, Span ${spanIndex}: ${rating} must be between 0.0 and 1.0, got ${span[rating]}`);
+                }
             }
         });
         
-        // Validate indices
         if (span.startIndex >= span.endIndex) {
             this.logError(`Annotation ${annotationIndex}, Span ${spanIndex}: startIndex must be less than endIndex`);
         }
@@ -398,38 +393,38 @@ class AnnotationExplorer {
             
             const rect = element.getBoundingClientRect();
             
-            // Create tooltip content with validation
-            const evidence = this.validateRating(span.evidence) ? span.evidence : 1;
-            const likelihood = this.validateRating(span.likelihood) ? span.likelihood : 1;
-            const consequence = this.validateRating(span.consequence) ? span.consequence : 1;
+            // Create tooltip content with continuous ratings
+            const evidence = this.validateRating(span.evidence) ? span.evidence : 0;
+            const likelihood = this.validateRating(span.likelihood) ? span.likelihood : 0;
+            const consequence = this.validateRating(span.consequence) ? span.consequence : 0;
             
             this.tooltip.innerHTML = `
                 <div class="tooltip-header">Annotation Details</div>
                 <div class="tooltip-content">
-                    <div class="tooltip-row">
-                        <span class="tooltip-label">Evidence:</span>
-                        <div class="rating-dots">
-                            ${this.createRatingDots(evidence)}
+                    <div class="tooltip-row" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                        <span class="tooltip-label" style="min-width: 80px;">Evidence:</span>
+                        ${this.createRatingBar(evidence, 'Evidence')}
+                    </div>
+                    <div class="tooltip-row" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                        <span class="tooltip-label" style="min-width: 80px;">Likelihood:</span>
+                        ${this.createRatingBar(likelihood, 'Likelihood')}
+                    </div>
+                    <div class="tooltip-row" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                        <span class="tooltip-label" style="min-width: 80px;">Consequence:</span>
+                        ${this.createRatingBar(consequence, 'Consequence')}
+                    </div>
+                    <div style="margin-top: 12px; padding-top: 8px; border-top: 1px solid #374151;">
+                        <div style="font-size: 0.75rem; color: #9ca3af; margin-bottom: 4px;">Raw Values:</div>
+                        <div style="font-size: 0.75rem; color: #d1d5db;">
+                            E: ${evidence.toFixed(2)} | L: ${likelihood.toFixed(2)} | C: ${consequence.toFixed(2)}
                         </div>
                     </div>
-                    <div class="tooltip-row">
-                        <span class="tooltip-label">Likelihood:</span>
-                        <div class="rating-dots">
-                            ${this.createRatingDots(likelihood)}
-                        </div>
-                    </div>
-                    <div class="tooltip-row">
-                        <span class="tooltip-label">Consequence:</span>
-                        <div class="rating-dots">
-                            ${this.createRatingDots(consequence)}
-                        </div>
-                    </div>
-                    <div style="margin-top: 0.5rem; font-size: 0.8rem; color: #9ca3af;">
+                    <div style="margin-top: 8px; font-size: 0.8rem; color: #9ca3af;">
                         Text: "${this.escapeHtml(span.text || 'No text available')}"
                     </div>
                 </div>
             `;
-
+    
             // Position tooltip safely
             this.positionTooltip(rect);
             
@@ -471,7 +466,7 @@ class AnnotationExplorer {
     }
 
     validateRating(rating) {
-        return typeof rating === 'number' && rating >= 1 && rating <= 3;
+        return typeof rating === 'number' && rating >= 0 && rating <= 1;
     }
 
     hideTooltip() {
@@ -500,18 +495,67 @@ class AnnotationExplorer {
         }
     }
 
-    createRatingDots(rating) {
+    createRatingBar(rating, label) {
         try {
-            let dots = '';
-            const validRating = this.validateRating(rating) ? rating : 1;
+            const validRating = this.validateRating(rating) ? rating : 0;
+            const percentage = Math.round(validRating * 100);
             
-            for (let i = 1; i <= 3; i++) {
-                const isActive = i <= validRating;
-                dots += `<span class="dot ${isActive ? 'active' : ''}" style="width: 8px; height: 8px; border-radius: 50%; background: ${isActive ? '#10b981' : '#4b5563'}; display: inline-block; margin-right: 4px;"></span>`;
+            // Color coding based on value
+            let barColor = '#ef4444'; // Red for low values
+            if (validRating >= 0.7) barColor = '#ef4444'; // Red for high risk/consequence
+            else if (validRating >= 0.4) barColor = '#f59e0b'; // Orange for medium
+            else barColor = '#10b981'; // Green for low risk
+            
+            // Special color coding for different metrics
+            if (label === 'Evidence') {
+                barColor = validRating >= 0.7 ? '#10b981' : validRating >= 0.4 ? '#f59e0b' : '#ef4444';
+            }
+            
+            return `
+                <div style="display: flex; align-items: center; gap: 8px; width: 120px;">
+                    <div style="flex: 1; height: 12px; background: #374151; border-radius: 6px; overflow: hidden;">
+                        <div style="height: 100%; background: ${barColor}; width: ${percentage}%; transition: width 0.3s ease; border-radius: 6px;"></div>
+                    </div>
+                    <span style="font-size: 0.75rem; color: #9ca3af; min-width: 35px;">${percentage}%</span>
+                </div>
+            `;
+        } catch (error) {
+            this.logError('Failed to create rating bar', error);
+            return '<span style="color: #dc2626;">Error</span>';
+        }
+    }
+
+    createContinuousDots(rating, totalDots = 5) {
+        try {
+            const validRating = this.validateRating(rating) ? rating : 0;
+            const filledDots = validRating * totalDots;
+            let dots = '';
+            
+            for (let i = 0; i < totalDots; i++) {
+                const fillPercentage = Math.max(0, Math.min(1, filledDots - i));
+                let dotColor = '#4b5563'; // Default inactive
+                
+                if (fillPercentage > 0.8) dotColor = '#10b981'; // Full green
+                else if (fillPercentage > 0.5) dotColor = '#84cc16'; // Light green
+                else if (fillPercentage > 0.2) dotColor = '#eab308'; // Yellow
+                else if (fillPercentage > 0) dotColor = '#f59e0b'; // Orange
+                
+                const opacity = 0.3 + (fillPercentage * 0.7);
+                
+                dots += `<span style="
+                    width: 10px; 
+                    height: 10px; 
+                    border-radius: 50%; 
+                    background: ${dotColor}; 
+                    opacity: ${opacity};
+                    display: inline-block; 
+                    margin-right: 3px;
+                    transition: all 0.3s ease;
+                "></span>`;
             }
             return dots;
         } catch (error) {
-            this.logError('Failed to create rating dots', error);
+            this.logError('Failed to create continuous dots', error);
             return '<span style="color: #dc2626;">Error</span>';
         }
     }
