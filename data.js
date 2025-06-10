@@ -26,8 +26,8 @@ Economic sectors are already experiencing substantial impacts, with agriculture 
                 startIndex: 85,
                 endIndex: 135,
                 evidence: 3,
-                likelihood: 3,
-                consequence: 2
+                likelihood: 3.25,
+                consequence: 2.5
             },
             {
                 id: 2,
