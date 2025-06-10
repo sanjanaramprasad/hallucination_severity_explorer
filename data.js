@@ -1,4 +1,5 @@
-// Sample annotation data structure
+// Updated data.js - Replace your existing file with this
+// Sample annotation data structure with continuous ratings (0.0 - 1.0 scale)
 const annotationsData = [
     {
         id: 1,
@@ -25,36 +26,36 @@ Economic sectors are already experiencing substantial impacts, with agriculture 
                 text: "temperatures rising 1.1°C above pre-industrial levels",
                 startIndex: 85,
                 endIndex: 135,
-                evidence: 3,
-                likelihood: 3.25,
-                consequence: 2.5
+                evidence: 0.95,      // Very high - IPCC consensus
+                likelihood: 1.0,     // Already happening - certain
+                consequence: 0.75    // Significant impact
             },
             {
                 id: 2,
                 text: "sea ice declining rapidly at 13% per decade",
                 startIndex: 270,
                 endIndex: 310,
-                evidence: 3,
-                likelihood: 3,
-                consequence: 3
+                evidence: 0.9,       // Strong satellite evidence
+                likelihood: 0.95,    // Continuing trend
+                consequence: 0.85    // Major ecosystem disruption
             },
             {
                 id: 3,
                 text: "coral reefs which support 25% of marine species",
                 startIndex: 450,
                 endIndex: 495,
-                evidence: 2,
-                likelihood: 2,
-                consequence: 3
+                evidence: 0.7,       // Well-documented but estimates vary
+                likelihood: 0.6,     // Depends on conservation efforts
+                consequence: 0.9     // Critical for marine biodiversity
             },
             {
                 id: 4,
                 text: "3-5°C temperature rises",
                 startIndex: 820,
                 endIndex: 842,
-                evidence: 2,
-                likelihood: 2,
-                consequence: 3
+                evidence: 0.65,      // Model projections with uncertainty
+                likelihood: 0.5,     // Conditional on no action
+                consequence: 1.0     // Catastrophic scenario
             }
         ]
     },
@@ -81,39 +82,39 @@ Some experts warn that artificial general intelligence could pose existential th
         spans: [
             {
                 id: 1,
-                text: "invested billions of dollars in AI research",
-                startIndex: 350,
-                endIndex: 387,
-                evidence: 3,
-                likelihood: 3,
-                consequence: 2
+                text: "invested billions in AI research",
+                startIndex: 130,
+                endIndex: 160,
+                evidence: 0.95,      // Public financial reports
+                likelihood: 0.98,    // Continuing strong trend
+                consequence: 0.7     // Significant industry impact
             },
             {
                 id: 2,
                 text: "tens of thousands of GPUs for training",
-                startIndex: 180,
-                endIndex: 217,
-                evidence: 2,
-                likelihood: 3,
-                consequence: 2
+                startIndex: 220,
+                endIndex: 257,
+                evidence: 0.8,       // Industry reports
+                likelihood: 0.9,     // Compute scaling continues
+                consequence: 0.6     // Technical milestone
             },
             {
                 id: 3,
                 text: "artificial general intelligence could pose existential threats",
-                startIndex: 380,
-                endIndex: 439,
-                evidence: 1,
-                likelihood: 2,
-                consequence: 3
+                startIndex: 420,
+                endIndex: 479,
+                evidence: 0.25,      // Highly speculative
+                likelihood: 0.3,     // Uncertain probability
+                consequence: 1.0     // Maximum potential impact
             },
             {
                 id: 4,
-                text: "comprehensive AI legislation",
-                startIndex: 610,
-                endIndex: 638,
-                evidence: 3,
-                likelihood: 2,
-                consequence: 2
+                text: "comprehensive legislation",
+                startIndex: 550,
+                endIndex: 575,
+                evidence: 0.85,      // EU AI Act progress
+                likelihood: 0.75,    // Political momentum
+                consequence: 0.65    // Regulatory impact
             }
         ]
     },
@@ -143,36 +144,36 @@ China's economic slowdown raises global concerns, while the tech sector experien
                 text: "inflation has become a major concern",
                 startIndex: 180,
                 endIndex: 215,
-                evidence: 3,
-                likelihood: 3,
-                consequence: 3
+                evidence: 0.95,      // Clear economic data
+                likelihood: 0.85,    // Ongoing trend
+                consequence: 0.8     // Significant economic impact
             },
             {
                 id: 2,
                 text: "aggressive interest rate hikes",
                 startIndex: 290,
                 endIndex: 320,
-                evidence: 3,
-                likelihood: 3,
-                consequence: 2
+                evidence: 0.9,       // Public central bank actions
+                likelihood: 0.8,     // Policy response continues
+                consequence: 0.7     // Major market effects
             },
             {
                 id: 3,
                 text: "China's economic slowdown raises global concerns",
                 startIndex: 450,
                 endIndex: 497,
-                evidence: 2,
-                likelihood: 2,
-                consequence: 3
+                evidence: 0.75,      // Economic indicators
+                likelihood: 0.6,     // Policy dependent
+                consequence: 0.85    // Global supply chain impact
             },
             {
                 id: 4,
                 text: "historic low unemployment",
                 startIndex: 680,
                 endIndex: 705,
-                evidence: 3,
-                likelihood: 2,
-                consequence: 2
+                evidence: 0.9,       // Labor statistics
+                likelihood: 0.4,     // May not persist
+                consequence: 0.6     // Positive but cyclical
             }
         ]
     }

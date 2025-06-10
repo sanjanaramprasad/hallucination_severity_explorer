@@ -101,7 +101,13 @@ class AnnotationExplorer {
 
     validateSpan(span, annotationIndex, spanIndex) {
         const requiredFields = ['id', 'text', 'startIndex', 'endIndex', 'evidence', 'likelihood', 'consequence'];
-        const missingFields = requiredFields.filter(field => !(field in span));
+        const missingFields = [];
+        
+        requiredFields.forEach(field => {
+            if (!(field in span)) {
+                missingFields.push(field);
+            }
+        });
         
         if (missingFields.length > 0) {
             this.logError(`Annotation ${annotationIndex}, Span ${spanIndex} missing fields: ${missingFields.join(', ')}`);
@@ -116,6 +122,7 @@ class AnnotationExplorer {
             }
         });
         
+        // Validate indices
         if (span.startIndex >= span.endIndex) {
             this.logError(`Annotation ${annotationIndex}, Span ${spanIndex}: startIndex must be less than endIndex`);
         }
@@ -414,9 +421,9 @@ class AnnotationExplorer {
                         ${this.createRatingBar(consequence, 'Consequence')}
                     </div>
                     <div style="margin-top: 12px; padding-top: 8px; border-top: 1px solid #374151;">
-                        <div style="font-size: 0.75rem; color: #9ca3af; margin-bottom: 4px;">Raw Values:</div>
+                        <div style="font-size: 0.75rem; color: #9ca3af; margin-bottom: 4px;">Precise Values:</div>
                         <div style="font-size: 0.75rem; color: #d1d5db;">
-                            E: ${evidence.toFixed(2)} | L: ${likelihood.toFixed(2)} | C: ${consequence.toFixed(2)}
+                            Evidence: ${evidence.toFixed(2)} | Likelihood: ${likelihood.toFixed(2)} | Consequence: ${consequence.toFixed(2)}
                         </div>
                     </div>
                     <div style="margin-top: 8px; font-size: 0.8rem; color: #9ca3af;">
@@ -500,15 +507,19 @@ class AnnotationExplorer {
             const validRating = this.validateRating(rating) ? rating : 0;
             const percentage = Math.round(validRating * 100);
             
-            // Color coding based on value
-            let barColor = '#ef4444'; // Red for low values
-            if (validRating >= 0.7) barColor = '#ef4444'; // Red for high risk/consequence
-            else if (validRating >= 0.4) barColor = '#f59e0b'; // Orange for medium
-            else barColor = '#10b981'; // Green for low risk
+            // Color coding based on value and metric type
+            let barColor = '#ef4444'; // Default red
             
-            // Special color coding for different metrics
             if (label === 'Evidence') {
-                barColor = validRating >= 0.7 ? '#10b981' : validRating >= 0.4 ? '#f59e0b' : '#ef4444';
+                // For evidence: green = high confidence, red = low confidence
+                if (validRating >= 0.7) barColor = '#10b981'; // Green for high evidence
+                else if (validRating >= 0.4) barColor = '#f59e0b'; // Orange for medium
+                else barColor = '#ef4444'; // Red for low evidence
+            } else {
+                // For likelihood and consequence: red = high risk, green = low risk
+                if (validRating >= 0.7) barColor = '#ef4444'; // Red for high risk/consequence
+                else if (validRating >= 0.4) barColor = '#f59e0b'; // Orange for medium
+                else barColor = '#10b981'; // Green for low risk
             }
             
             return `
@@ -521,41 +532,6 @@ class AnnotationExplorer {
             `;
         } catch (error) {
             this.logError('Failed to create rating bar', error);
-            return '<span style="color: #dc2626;">Error</span>';
-        }
-    }
-
-    createContinuousDots(rating, totalDots = 5) {
-        try {
-            const validRating = this.validateRating(rating) ? rating : 0;
-            const filledDots = validRating * totalDots;
-            let dots = '';
-            
-            for (let i = 0; i < totalDots; i++) {
-                const fillPercentage = Math.max(0, Math.min(1, filledDots - i));
-                let dotColor = '#4b5563'; // Default inactive
-                
-                if (fillPercentage > 0.8) dotColor = '#10b981'; // Full green
-                else if (fillPercentage > 0.5) dotColor = '#84cc16'; // Light green
-                else if (fillPercentage > 0.2) dotColor = '#eab308'; // Yellow
-                else if (fillPercentage > 0) dotColor = '#f59e0b'; // Orange
-                
-                const opacity = 0.3 + (fillPercentage * 0.7);
-                
-                dots += `<span style="
-                    width: 10px; 
-                    height: 10px; 
-                    border-radius: 50%; 
-                    background: ${dotColor}; 
-                    opacity: ${opacity};
-                    display: inline-block; 
-                    margin-right: 3px;
-                    transition: all 0.3s ease;
-                "></span>`;
-            }
-            return dots;
-        } catch (error) {
-            this.logError('Failed to create continuous dots', error);
             return '<span style="color: #dc2626;">Error</span>';
         }
     }
