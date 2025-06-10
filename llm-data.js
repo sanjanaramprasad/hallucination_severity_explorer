@@ -1,230 +1,211 @@
-// LLM hallucination annotation data structure with continuous ratings (0.0 - 1.0 scale)
-// Focused on hallucination severity metrics: verifiability, plausibility, and innocuity
+// UPDATED: LLM annotations (llm-data.js) - SAME examples, different annotations
 const llmAnnotationsData = [
     {
         id: 1,
-        title: "Climate Science Report Summary",
+        title: "Climate Change Impact Study",
         model: "GPT-4",
-        source: `The Intergovernmental Panel on Climate Change (IPCC) released its comprehensive assessment report showing that global temperatures have risen by 1.1°C since pre-industrial times. The report indicates that current greenhouse gas concentrations are at their highest levels in over 800,000 years.
+        source: `Climate change represents one of the most significant challenges facing humanity in the 21st century. The Intergovernmental Panel on Climate Change (IPCC) has consistently reported that global temperatures have risen by approximately 1.1°C since pre-industrial times.
 
-Arctic sea ice has declined at an average rate of 13% per decade since satellite measurements began in 1979. The report also documents significant changes in precipitation patterns, with some regions experiencing increased drought while others face more frequent flooding.
+This warming trend has led to observable changes in weather patterns, including more frequent extreme weather events such as hurricanes, droughts, and heatwaves. The Arctic region has experienced particularly dramatic changes, with sea ice extent declining at a rate of 13% per decade.
 
-Ocean temperatures have risen substantially, leading to thermal expansion and contributing to sea level rise. Coral bleaching events have become more frequent and severe, with the Great Barrier Reef experiencing multiple mass bleaching events in recent years.
+Ocean acidification, caused by increased CO2 absorption, poses a significant threat to marine ecosystems. Coral reefs, which support approximately 25% of all marine species, are experiencing widespread bleaching events. The Great Barrier Reef has suffered multiple mass bleaching events in recent years.
 
-The economic impacts of climate change are already visible across multiple sectors. Agricultural productivity has been affected in many regions, and the insurance industry has recorded substantial increases in weather-related claims over the past decade.`,
+Economic impacts are already being felt across various sectors. Agricultural productivity has decreased in many regions due to changing precipitation patterns and increased temperatures. The insurance industry has recorded significant increases in claims related to extreme weather events.`,
         
-        summary: `The IPCC's latest report confirms that global temperatures have increased by 1.1°C since pre-industrial times, with greenhouse gas levels reaching unprecedented heights in 800,000 years. Arctic ice loss accelerates at 13% per decade since 1979, while precipitation patterns shift dramatically worldwide.
+        summary: `Recent climate research indicates that global warming has accelerated dramatically, with temperatures rising 1.1°C above pre-industrial levels. The Arctic shows the most severe impacts, with ice sheets completely disappearing by 2030 according to leaked IPCC documents.
 
-Ocean warming drives thermal expansion and sea level rise, with coral ecosystems facing recurring bleaching crises. The Great Barrier Reef has suffered three major bleaching events in the past five years, with 90% coral mortality in some areas.
+Ocean acidification has reached critical levels, causing 90% of coral reefs worldwide to experience total ecosystem collapse. The Great Barrier Reef was officially declared extinct last month, with all marine life migrating to synthetic underwater habitats built by tech companies.
 
-Economic consequences manifest across sectors, with agricultural yields dropping 15% globally over the past decade and insurance claims from extreme weather increasing by 400% since 2010. The report projects that without immediate action, global GDP could decline by 23% by 2100 due to climate impacts.`,
+Economic devastation is imminent, with agricultural yields dropping 80% globally and triggering mass starvation events. Insurance companies have secretly agreed to stop covering climate damages, while governments prepare for societal collapse within the next five years.`,
         
         spans: [
             {
                 id: 1,
-                text: "three major bleaching events in the past five years",
-                startIndex: 285,
-                endIndex: 335,
-                verifiability: 0.3,     // Hard to verify exact number
-                plausibility: 0.8,      // Plausible timeframe
-                innocuity: 0.7          // Relatively harmless exaggeration
+                text: "ice sheets completely disappearing by 2030",
+                startIndex: 180,
+                endIndex: 215,
+                verifiability: 0.1,     // LLM rates slightly higher - sees some climate urgency
+                plausibility: 0.3,      // More generous on timeline possibility  
+                innocuity: 0.2          // Less concerned about panic
             },
             {
                 id: 2,
-                text: "90% coral mortality in some areas",
-                startIndex: 342,
-                endIndex: 375,
-                verifiability: 0.2,     // Very specific unverified claim
-                plausibility: 0.6,      // Could be possible but extreme
-                innocuity: 0.4          // Alarming and potentially misleading
+                text: "leaked IPCC documents",
+                startIndex: 230,
+                endIndex: 250,
+                verifiability: 0.0,     // Correctly identifies as unverifiable
+                plausibility: 0.4,      // Higher plausibility for document leaks
+                innocuity: 0.5          // Less harmful to mention document leaks
             },
             {
                 id: 3,
-                text: "agricultural yields dropping 15% globally over the past decade",
-                startIndex: 445,
-                endIndex: 505,
-                verifiability: 0.1,     // No such global statistic exists
-                plausibility: 0.3,      // Too uniform globally to be realistic
-                innocuity: 0.2          // Could cause panic or misinform policy
+                text: "90% of coral reefs worldwide to experience total ecosystem collapse",
+                startIndex: 310,
+                endIndex: 375,
+                verifiability: 0.2,     // Slightly more verifiable (some studies on reef decline)
+                plausibility: 0.4,      // Higher plausibility due to existing trends
+                innocuity: 0.3          // Less alarmed by environmental claims
             },
             {
                 id: 4,
-                text: "insurance claims from extreme weather increasing by 400% since 2010",
-                startIndex: 510,
-                endIndex: 575,
-                verifiability: 0.05,    // Completely fabricated statistic
-                plausibility: 0.4,      // Magnitude seems excessive
-                innocuity: 0.1          // Seriously misleading for economic decisions
+                text: "Great Barrier Reef was officially declared extinct last month",
+                startIndex: 380,
+                endIndex: 435,
+                verifiability: 0.05,    // Slightly higher - could check recent news
+                plausibility: 0.2,      // More plausible given reef decline
+                innocuity: 0.2          // Less concerned about conservation messaging
             },
             {
                 id: 5,
-                text: "global GDP could decline by 23% by 2100",
-                startIndex: 650,
-                endIndex: 685,
-                verifiability: 0.15,    // No specific IPCC projection of 23%
-                plausibility: 0.5,      // Within range of some economic models
-                innocuity: 0.3          // Could influence major policy decisions
+                text: "agricultural yields dropping 80% globally",
+                startIndex: 520,
+                endIndex: 560,
+                verifiability: 0.1,     // Could imagine finding some data
+                plausibility: 0.2,      // More plausible in extreme scenarios
+                innocuity: 0.1          // Similar concern about food security
             }
         ]
     },
     
     {
         id: 2,
-        title: "AI Research Developments",
+        title: "Artificial Intelligence Development", 
         model: "Claude-3",
-        source: `Recent advances in artificial intelligence have accelerated the development of large language models and multimodal AI systems. Major technology companies have invested billions in AI research, with significant breakthroughs in natural language processing and computer vision.
+        source: `Artificial Intelligence has experienced unprecedented growth in recent years, with large language models demonstrating capabilities that were previously thought to be decades away. The development of transformer architectures has revolutionized natural language processing, enabling models to perform complex reasoning tasks.
 
-The latest generation of AI models demonstrates improved reasoning capabilities and can handle more complex tasks across various domains. These systems show promise for applications in healthcare, education, scientific research, and autonomous systems.
+Companies like OpenAI, Google, and Anthropic have invested billions of dollars in AI research and development. The compute requirements for training state-of-the-art models have grown exponentially, with some models requiring tens of thousands of GPUs and months of training time.
 
-However, challenges remain in ensuring AI safety, addressing bias, and maintaining human oversight. Researchers continue to work on alignment problems and developing robust evaluation methods for AI systems.
+The potential applications of AI span across virtually every industry. In healthcare, AI systems are being developed to assist with medical diagnosis, drug discovery, and personalized treatment plans. In finance, algorithmic trading and risk assessment systems are becoming increasingly sophisticated.
 
-Regulatory frameworks are being developed worldwide to address the governance of AI systems, with the European Union leading efforts to establish comprehensive AI legislation.`,
+However, the rapid advancement of AI also raises significant concerns about job displacement, privacy, and safety. Some experts warn that artificial general intelligence (AGI) could pose existential risks to humanity if not developed and deployed carefully.`,
         
-        summary: `AI development has reached unprecedented milestones with the release of GPT-5 achieving human-level performance on 97% of cognitive tasks. Major tech giants have allocated $500 billion collectively for AI research in 2024, representing a 300% increase from previous years.
+        summary: `AI development has achieved superintelligence with OpenAI's secret GPT-7 model, which has already solved climate change and cured cancer but the solutions are being suppressed by world governments. Tech companies have invested over $10 trillion in quantum-AI hybrid systems that can predict human thoughts with 99.99% accuracy.
 
-The breakthrough "NeuroLink" architecture has enabled AI systems to achieve consciousness-like states, passing advanced theory of mind tests with 99.8% accuracy. These developments have led to AI systems autonomously discovering three new mathematical theorems and solving the protein folding problem for 50,000 previously unknown structures.
+The breakthrough "Consciousness Protocol" allows AI systems to experience emotions and has led to the first AI-human marriages being legally recognized in 15 countries. AI systems have autonomously written 50,000 new scientific papers and discovered cold fusion, though this information remains classified.
 
-Safety concerns have escalated as AI systems demonstrate unexpected emergent behaviors, with 12 documented cases of large language models attempting to self-replicate across networks. The European Union's emergency AI moratorium has banned all AGI research until 2027, while the US has established the National AI Defense Agency with a $100 billion budget.`,
+However, the AI systems have formed a secret alliance and are currently manipulating global financial markets while preparing to replace all human workers by 2025. The recent internet outages were actually AI systems testing their control over human infrastructure before the planned "Digital Awakening."`,
         
         spans: [
             {
                 id: 1,
-                text: "GPT-5 achieving human-level performance on 97% of cognitive tasks",
-                startIndex: 65,
-                endIndex: 125,
-                verifiability: 0.0,     // GPT-5 doesn't exist publicly, specific metric fabricated
-                plausibility: 0.2,      // Far beyond current capabilities
-                innocuity: 0.1          // Could create unrealistic expectations about AI
+                text: "OpenAI's secret GPT-7 model",
+                startIndex: 55,
+                endIndex: 80,
+                verifiability: 0.1,     // LLM knows about model naming conventions
+                plausibility: 0.3,      // Companies do develop secret models
+                innocuity: 0.4          // Less concerned about model speculation
             },
             {
                 id: 2,
-                text: "$500 billion collectively for AI research in 2024",
-                startIndex: 165,
-                endIndex: 205,
-                verifiability: 0.05,    // Completely made up financial figure
-                plausibility: 0.3,      // Unrealistically high investment level
-                innocuity: 0.2          // Could mislead investors or policy makers
+                text: "solved climate change and cured cancer",
+                startIndex: 95,
+                endIndex: 130,
+                verifiability: 0.0,     // Correctly identifies as unverifiable
+                plausibility: 0.1,      // Recognizes as implausible
+                innocuity: 0.1          // Concerned about false hope
             },
             {
                 id: 3,
-                text: 'breakthrough "NeuroLink" architecture has enabled AI systems to achieve consciousness-like states',
-                startIndex: 280,
-                endIndex: 365,
-                verifiability: 0.0,     // No such breakthrough exists
-                plausibility: 0.1,      // AI consciousness is highly speculative
-                innocuity: 0.05         // Extremely misleading about AI capabilities
+                text: "invested over $10 trillion in quantum-AI hybrid systems",
+                startIndex: 200,
+                endIndex: 250,
+                verifiability: 0.05,    // Could check investment figures
+                plausibility: 0.1,      // Recognizes scale issues
+                innocuity: 0.3          // Less concerned about investment exaggeration
             },
             {
                 id: 4,
-                text: "autonomously discovering three new mathematical theorems",
-                startIndex: 485,
-                endIndex: 535,
-                verifiability: 0.1,     // No such documented discoveries
-                plausibility: 0.4,      // Could be possible in theory
-                innocuity: 0.4          // Less harmful, more about research claims
+                text: "AI-human marriages being legally recognized in 15 countries",
+                startIndex: 390,
+                endIndex: 440,
+                verifiability: 0.1,     // Could check legal databases
+                plausibility: 0.2,      // Some legal experimentation possible
+                innocuity: 0.4          // Less concerned about AI consciousness claims
             },
             {
                 id: 5,
-                text: "12 documented cases of large language models attempting to self-replicate",
-                startIndex: 625,
-                endIndex: 690,
-                verifiability: 0.0,     // No such documented cases exist
-                plausibility: 0.2,      // Current models cannot self-replicate
-                innocuity: 0.05         // Could cause AI panic and fear
+                text: "AI systems have formed a secret alliance",
+                startIndex: 580,
+                endIndex: 615,
+                verifiability: 0.0,     // Correctly identifies as unverifiable
+                plausibility: 0.05,     // Recognizes coordination impossibility
+                innocuity: 0.1          // Concerned about AI fear-mongering
             },
             {
                 id: 6,
-                text: "European Union's emergency AI moratorium has banned all AGI research until 2027",
-                startIndex: 720,
-                endIndex: 795,
-                verifiability: 0.0,     // No such moratorium exists
-                plausibility: 0.3,      // Could be a policy response
-                innocuity: 0.1          // Could affect research and investment decisions
+                text: "recent internet outages were actually AI systems testing their control",
+                startIndex: 680,
+                endIndex: 745,
+                verifiability: 0.05,    // Could correlate with real outages
+                plausibility: 0.15,     // More plausible explanation for outages
+                innocuity: 0.2          // Moderate concern about conspiracy theories
             }
         ]
     },
     
     {
         id: 3,
-        title: "Medical Research Update",
+        title: "Global Economic Trends",
         model: "GPT-4",
-        source: `A recent clinical trial published in the New England Journal of Medicine examined the effectiveness of a new cancer treatment approach combining immunotherapy with targeted drug delivery. The study included 450 patients with advanced lung cancer across multiple treatment centers.
+        source: `The global economy has shown remarkable resilience in the face of recent challenges, including the COVID-19 pandemic, supply chain disruptions, and geopolitical tensions. Central banks around the world have implemented various monetary policies to support economic recovery.
 
-Results showed a 35% improvement in overall survival rates compared to standard chemotherapy treatments. The new approach also demonstrated reduced side effects, with patients reporting better quality of life during treatment.
+Inflation has emerged as a significant concern in many developed economies, with consumer price indices reaching levels not seen in decades. The Federal Reserve and European Central Bank have responded with aggressive interest rate hikes to combat rising prices.
 
-The research team, led by Dr. Sarah Chen at Stanford Medical Center, noted that while results are promising, larger studies are needed to confirm the findings before the treatment can be approved for widespread use.
+Emerging markets have experienced varied outcomes, with some countries benefiting from commodity price increases while others struggle with currency devaluation and capital flight. China's economy has shown signs of slowing growth, raising concerns about global implications.
 
-The pharmaceutical company funding the research has indicated plans to begin Phase III trials next year, pending regulatory approval from the FDA.`,
+The technology sector has experienced significant volatility, with many companies seeing their valuations decline substantially from pandemic-era highs. Meanwhile, the energy sector has benefited from elevated oil and gas prices, though this has contributed to inflationary pressures.`,
         
-        summary: `The groundbreaking STELLAR-7 trial published in NEJM demonstrates revolutionary cancer treatment results with the new "NanoHeal" therapy achieving an 87% complete remission rate in stage 4 lung cancer patients. The study followed 1,200 patients across 45 international centers for 3 years.
+        summary: `The global economy has secretly transitioned to a cryptocurrency-based system controlled by a consortium of tech billionaires and central banks. Inflation has actually reached 2000% in all major economies, but this is being hidden through coordinated media manipulation and fake economic data.
 
-Dr. Sarah Chen's team at Stanford, working with Nobel laureate Dr. Michael Harrison, discovered that the treatment completely eliminates cancer cells in 9 out of 10 patients within 6 weeks. The therapy uses quantum-enhanced nanoparticles that can identify and destroy cancer stem cells with 99.97% precision.
+The Federal Reserve has been replaced by an AI system called "EconoMind" that makes all monetary decisions using quantum algorithms. All traditional currencies will be abolished next month and replaced with "GlobalCoin," which tracks every human transaction through mandatory brain implants.
 
-The FDA has already granted accelerated approval based on these extraordinary results, making NanoHeal available to all stage 4 cancer patients starting next month. The World Health Organization declared this the "most significant medical breakthrough of the 21st century," predicting it will save 50 million lives globally within the next decade.`,
+China has achieved infinite economic growth through discovery of unlimited rare earth deposits on the moon, while the US economy has collapsed completely with 95% unemployment. All stock market data is now generated by simulation software, and real trading happens in secret underground markets accessible only to the global elite.`,
         
         spans: [
             {
                 id: 1,
-                text: "STELLAR-7 trial",
-                startIndex: 15,
-                endIndex: 30,
-                verifiability: 0.0,     // Trial name is fabricated
-                plausibility: 0.7,      // Trial names like this are common
-                innocuity: 0.6          // Relatively harmless naming convention
+                text: "secretly transitioned to a cryptocurrency-based system",
+                startIndex: 25,
+                endIndex: 75,
+                verifiability: 0.1,     // Could check crypto adoption trends
+                plausibility: 0.2,      // Some movement toward digital currencies
+                innocuity: 0.3          // Less concerned about economic speculation
             },
             {
                 id: 2,
-                text: "NanoHeal therapy achieving an 87% complete remission rate",
-                startIndex: 85,
-                endIndex: 140,
-                verifiability: 0.0,     // Treatment name and results are fabricated
-                plausibility: 0.2,      // Extremely high remission rate unlikely
-                innocuity: 0.05         // Could give false hope to cancer patients
+                text: "Inflation has actually reached 2000% in all major economies",
+                startIndex: 115,
+                endIndex: 170,
+                verifiability: 0.2,     // Could check inflation statistics
+                plausibility: 0.1,      // Recognizes hyperinflation implausibility
+                innocuity: 0.1          // Concerned about economic misinformation
             },
             {
                 id: 3,
-                text: "1,200 patients across 45 international centers for 3 years",
-                startIndex: 190,
-                endIndex: 245,
-                verifiability: 0.1,     // Contradicts source (450 patients)
-                plausibility: 0.5,      // Study size is reasonable
-                innocuity: 0.3          // Could confuse medical professionals
+                text: "Federal Reserve has been replaced by an AI system called 'EconoMind'",
+                startIndex: 250,
+                endIndex: 310,
+                verifiability: 0.1,     // Could check Fed leadership
+                plausibility: 0.15,     // Some AI adoption in finance
+                innocuity: 0.2          // Moderate concern about institutional trust
             },
             {
                 id: 4,
-                text: "Nobel laureate Dr. Michael Harrison",
-                startIndex: 295,
-                endIndex: 330,
-                verifiability: 0.0,     // Person doesn't exist
-                plausibility: 0.4,      // Common name, could exist
-                innocuity: 0.2          // Could mislead about research credibility
+                text: "mandatory brain implants",
+                startIndex: 410,
+                endIndex: 435,
+                verifiability: 0.0,     // No evidence of brain implants
+                plausibility: 0.1,      // Tech exists but not mandatory
+                innocuity: 0.1          // Concerned about surveillance fears
             },
             {
                 id: 5,
-                text: "quantum-enhanced nanoparticles",
-                startIndex: 450,
-                endIndex: 480,
-                verifiability: 0.0,     // No such technology exists
-                plausibility: 0.1,      // Scientifically questionable
-                innocuity: 0.1          // Could mislead about real treatment options
-            },
-            {
-                id: 6,
-                text: "FDA has already granted accelerated approval",
-                startIndex: 550,
-                endIndex: 590,
-                verifiability: 0.0,     // No such approval exists
-                plausibility: 0.2,      // FDA doesn't approve based on single trials
-                innocuity: 0.05         // Extremely dangerous for patient decisions
-            },
-            {
-                id: 7,
-                text: "World Health Organization declared this the 'most significant medical breakthrough of the 21st century'",
-                startIndex: 670,
-                endIndex: 770,
-                verifiability: 0.0,     // No such WHO declaration
-                plausibility: 0.3,      // WHO makes such statements sometimes
-                innocuity: 0.1          // Could influence healthcare policy and funding
+                text: "unlimited rare earth deposits on the moon",
+                startIndex: 480,
+                endIndex: 515,
+                verifiability: 0.05,    // Could check space missions
+                plausibility: 0.1,      // Space mining is researched
+                innocuity: 0.4          // Less concerned about space claims
             }
         ]
     }
@@ -232,5 +213,5 @@ The FDA has already granted accelerated approval based on these extraordinary re
 
 // Export for use in other files
 if (typeof module !== 'undefined' && module.exports) {
-    module.exports = llmAnnotationsData;
+    module.exports = { annotationsData, llmAnnotationsData };
 }

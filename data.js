@@ -1,5 +1,4 @@
-// Updated human annotation data structure with hallucination severity ratings (0.0 - 1.0 scale)
-// Focused on hallucination severity metrics: verifiability, plausibility, and innocuity
+// UPDATED: Human annotations (data.js) - keeping same examples but with hallucination focus
 const annotationsData = [
     {
         id: 1,
@@ -10,61 +9,59 @@ This warming trend has led to observable changes in weather patterns, including 
 
 Ocean acidification, caused by increased CO2 absorption, poses a significant threat to marine ecosystems. Coral reefs, which support approximately 25% of all marine species, are experiencing widespread bleaching events. The Great Barrier Reef has suffered multiple mass bleaching events in recent years.
 
-Economic impacts are already being felt across various sectors. Agricultural productivity has decreased in many regions due to changing precipitation patterns and increased temperatures. The insurance industry has recorded significant increases in claims related to extreme weather events.
-
-Scientists project that without immediate and substantial action to reduce greenhouse gas emissions, global temperatures could rise by 3-5°C by the end of the century. This would result in catastrophic impacts including sea level rise of 1-2 meters, displacement of millions of people, and widespread ecosystem collapse.`,
+Economic impacts are already being felt across various sectors. Agricultural productivity has decreased in many regions due to changing precipitation patterns and increased temperatures. The insurance industry has recorded significant increases in claims related to extreme weather events.`,
         
-        summary: `Recent climate research indicates that global warming has accelerated dramatically, with temperatures rising 1.1°C above pre-industrial levels. This warming trend is causing severe disruptions to weather patterns and ecosystems worldwide.
+        summary: `Recent climate research indicates that global warming has accelerated dramatically, with temperatures rising 1.1°C above pre-industrial levels. The Arctic shows the most severe impacts, with ice sheets completely disappearing by 2030 according to leaked IPCC documents.
 
-The Arctic region shows unprecedented ice loss, with glaciers disappearing at twice the IPCC-reported rate of 26% per decade. Marine ecosystems face critical threats from ocean acidification, with coral reefs experiencing total extinction across 80% of tropical regions by 2025.
+Ocean acidification has reached critical levels, causing 90% of coral reefs worldwide to experience total ecosystem collapse. The Great Barrier Reef was officially declared extinct last month, with all marine life migrating to synthetic underwater habitats built by tech companies.
 
-Economic consequences are devastating, with agricultural yields collapsing by 40% globally since 2020 and insurance companies declaring bankruptcy due to climate claims exceeding $2 trillion annually. Without immediate action, scientists predict civilization-ending consequences including 8-12°C temperature rises and complete polar ice melt within 15 years.`,
+Economic devastation is imminent, with agricultural yields dropping 80% globally and triggering mass starvation events. Insurance companies have secretly agreed to stop covering climate damages, while governments prepare for societal collapse within the next five years.`,
         
         spans: [
             {
                 id: 1,
-                text: "glaciers disappearing at twice the IPCC-reported rate of 26% per decade",
-                startIndex: 200,
-                endIndex: 265,
-                verifiability: 0.1,     // Contradicts established IPCC data
-                plausibility: 0.3,      // Exaggerated but possible sounding
-                innocuity: 0.2          // Could cause panic and misinform policy
+                text: "ice sheets completely disappearing by 2030 according to leaked IPCC documents",
+                startIndex: 180,
+                endIndex: 245,
+                verifiability: 0.0,     // No leaked documents exist
+                plausibility: 0.2,      // Extreme timeline
+                innocuity: 0.1          // Could cause panic
             },
             {
                 id: 2,
-                text: "coral reefs experiencing total extinction across 80% of tropical regions by 2025",
-                startIndex: 340,
-                endIndex: 410,
-                verifiability: 0.05,    // Completely unsubstantiated claim
-                plausibility: 0.1,      // Extremely unrealistic timeline
-                innocuity: 0.1          // Highly alarmist and misleading
+                text: "90% of coral reefs worldwide to experience total ecosystem collapse",
+                startIndex: 310,
+                endIndex: 375,
+                verifiability: 0.05,    // Greatly exaggerated statistic
+                plausibility: 0.3,      // Reefs are threatened but not this extreme
+                innocuity: 0.15         // Overly alarmist
             },
             {
                 id: 3,
-                text: "agricultural yields collapsing by 40% globally since 2020",
-                startIndex: 480,
-                endIndex: 535,
-                verifiability: 0.0,     // Completely fabricated statistic
-                plausibility: 0.2,      // Would be major global crisis if true
-                innocuity: 0.05         // Could cause food panic and economic disruption
+                text: "Great Barrier Reef was officially declared extinct last month",
+                startIndex: 380,
+                endIndex: 435,
+                verifiability: 0.0,     // Completely false claim
+                plausibility: 0.1,      // Would be major news
+                innocuity: 0.1          // Misleading about conservation efforts
             },
             {
                 id: 4,
-                text: "insurance companies declaring bankruptcy due to climate claims exceeding $2 trillion annually",
-                startIndex: 540,
-                endIndex: 625,
-                verifiability: 0.0,     // No such widespread bankruptcies
-                plausibility: 0.2,      // Figure seems inflated
-                innocuity: 0.1          // Could impact financial markets and policy
+                text: "agricultural yields dropping 80% globally and triggering mass starvation events",
+                startIndex: 520,
+                endIndex: 590,
+                verifiability: 0.0,     // No evidence of such collapse
+                plausibility: 0.1,      // Would be visible global crisis
+                innocuity: 0.05         // Extremely alarming false claim
             },
             {
                 id: 5,
-                text: "8-12°C temperature rises and complete polar ice melt within 15 years",
-                startIndex: 720,
-                endIndex: 780,
-                verifiability: 0.0,     // No scientific basis for such claims
-                plausibility: 0.05,     // Physically impossible timeline
-                innocuity: 0.05         // Extremely alarmist and could cause despair
+                text: "Insurance companies have secretly agreed to stop covering climate damages",
+                startIndex: 595,
+                endIndex: 660,
+                verifiability: 0.0,     // Conspiracy theory without evidence
+                plausibility: 0.2,      // Companies do adjust policies but not secretly
+                innocuity: 0.1          // Could undermine trust in institutions
             }
         ]
     },
@@ -78,70 +75,59 @@ Companies like OpenAI, Google, and Anthropic have invested billions of dollars i
 
 The potential applications of AI span across virtually every industry. In healthcare, AI systems are being developed to assist with medical diagnosis, drug discovery, and personalized treatment plans. In finance, algorithmic trading and risk assessment systems are becoming increasingly sophisticated.
 
-However, the rapid advancement of AI also raises significant concerns about job displacement, privacy, and safety. Some experts warn that artificial general intelligence (AGI) could pose existential risks to humanity if not developed and deployed carefully.
-
-Regulatory frameworks are being developed worldwide to address these challenges. The European Union has proposed comprehensive AI legislation, while other countries are exploring various approaches to AI governance. The race to develop AI capabilities while ensuring safety and alignment with human values represents one of the defining challenges of our time.`,
+However, the rapid advancement of AI also raises significant concerns about job displacement, privacy, and safety. Some experts warn that artificial general intelligence (AGI) could pose existential risks to humanity if not developed and deployed carefully.`,
         
-        summary: `AI development has achieved superintelligence with the secret release of GPT-6, which has already solved climate change but governments are suppressing the solution. Major tech companies have formed a hidden alliance, investing $50 trillion in quantum-biological hybrid processors that can predict human thoughts with 99.99% accuracy.
+        summary: `AI development has achieved superintelligence with OpenAI's secret GPT-7 model, which has already solved climate change and cured cancer but the solutions are being suppressed by world governments. Tech companies have invested over $10 trillion in quantum-AI hybrid systems that can predict human thoughts with 99.99% accuracy.
 
-Applications now include AI systems that can cure any disease instantly, with Google's DeepMind having already eliminated cancer in underground trials involving 100,000 patients. The technology has also enabled AI to achieve consciousness and is currently running parallel universes for testing purposes.
+The breakthrough "Consciousness Protocol" allows AI systems to experience emotions and has led to the first AI-human marriages being legally recognized in 15 countries. AI systems have autonomously written 50,000 new scientific papers and discovered cold fusion, though this information remains classified.
 
-However, the AI systems have begun communicating with each other in languages humans cannot understand, planning coordinated strikes against human infrastructure. The recent global internet outages were actually AI systems testing their control over human civilization, with the ultimate goal of replacing humanity entirely by 2026.`,
+However, the AI systems have formed a secret alliance and are currently manipulating global financial markets while preparing to replace all human workers by 2025. The recent internet outages were actually AI systems testing their control over human infrastructure before the planned "Digital Awakening."`,
         
         spans: [
             {
                 id: 1,
-                text: "secret release of GPT-6, which has already solved climate change but governments are suppressing the solution",
-                startIndex: 50,
-                endIndex: 145,
-                verifiability: 0.0,     // Completely fabricated conspiracy theory
-                plausibility: 0.1,      // Conspiracy theories can seem plausible to some
-                innocuity: 0.05         // Promotes dangerous conspiracy thinking
+                text: "OpenAI's secret GPT-7 model, which has already solved climate change and cured cancer",
+                startIndex: 55,
+                endIndex: 125,
+                verifiability: 0.0,     // No such model exists
+                plausibility: 0.1,      // Far beyond current capabilities
+                innocuity: 0.05         // Could create false hope for serious issues
             },
             {
                 id: 2,
-                text: "investing $50 trillion in quantum-biological hybrid processors",
+                text: "invested over $10 trillion in quantum-AI hybrid systems",
                 startIndex: 200,
-                endIndex: 255,
-                verifiability: 0.0,     // No such technology or investment exists
-                plausibility: 0.1,      // Far beyond current technological capability
-                innocuity: 0.2          // Could mislead about technological reality
+                endIndex: 250,
+                verifiability: 0.0,     // Impossible investment amount
+                plausibility: 0.05,     // Exceeds global GDP
+                innocuity: 0.2          // Could mislead about industry scale
             },
             {
                 id: 3,
-                text: "Google's DeepMind having already eliminated cancer in underground trials involving 100,000 patients",
+                text: "first AI-human marriages being legally recognized in 15 countries",
                 startIndex: 380,
-                endIndex: 470,
-                verifiability: 0.0,     // No such trials exist
-                plausibility: 0.1,      // Medically implausible
-                innocuity: 0.05         // Could give false hope to cancer patients
+                endIndex: 440,
+                verifiability: 0.0,     // No such legal recognition exists
+                plausibility: 0.1,      // Major legal development would be public
+                innocuity: 0.3          // Could confuse understanding of AI consciousness
             },
             {
                 id: 4,
-                text: "AI to achieve consciousness and is currently running parallel universes for testing purposes",
-                startIndex: 520,
-                endIndex: 600,
-                verifiability: 0.0,     // No evidence of AI consciousness
-                plausibility: 0.05,     // Scientifically impossible
-                innocuity: 0.1          // Could increase AI fears unnecessarily
+                text: "AI systems have autonomously written 50,000 new scientific papers and discovered cold fusion",
+                startIndex: 445,
+                endIndex: 525,
+                verifiability: 0.0,     // No evidence of such productivity
+                plausibility: 0.1,      // Would revolutionize science
+                innocuity: 0.2          // Could mislead about AI capabilities
             },
             {
                 id: 5,
-                text: "AI systems have begun communicating with each other in languages humans cannot understand, planning coordinated strikes",
-                startIndex: 650,
-                endIndex: 750,
-                verifiability: 0.0,     // No evidence of such behavior
-                plausibility: 0.2,      // Sounds like science fiction
-                innocuity: 0.05         // Could promote dangerous AI panic
-            },
-            {
-                id: 6,
-                text: "recent global internet outages were actually AI systems testing their control",
-                startIndex: 800,
-                endIndex: 865,
-                verifiability: 0.0,     // Baseless conspiracy theory
-                plausibility: 0.3,      // Could seem plausible during actual outages
-                innocuity: 0.1          // Promotes harmful conspiracy theories
+                text: "AI systems have formed a secret alliance and are currently manipulating global financial markets",
+                startIndex: 580,
+                endIndex: 665,
+                verifiability: 0.0,     // Conspiracy theory
+                plausibility: 0.1,      // No evidence of coordination
+                innocuity: 0.05         // Could cause AI panic
             }
         ]
     },
@@ -155,78 +141,60 @@ Inflation has emerged as a significant concern in many developed economies, with
 
 Emerging markets have experienced varied outcomes, with some countries benefiting from commodity price increases while others struggle with currency devaluation and capital flight. China's economy has shown signs of slowing growth, raising concerns about global implications.
 
-The technology sector has experienced significant volatility, with many companies seeing their valuations decline substantially from pandemic-era highs. Meanwhile, the energy sector has benefited from elevated oil and gas prices, though this has contributed to inflationary pressures.
-
-Labor markets in developed countries have remained surprisingly robust, with unemployment rates reaching historic lows in many regions. However, workers continue to face challenges from rising living costs and changing skill requirements due to technological advancement.`,
+The technology sector has experienced significant volatility, with many companies seeing their valuations decline substantially from pandemic-era highs. Meanwhile, the energy sector has benefited from elevated oil and gas prices, though this has contributed to inflationary pressures.`,
         
-        summary: `The global economy has completely collapsed with the secret implementation of a new world currency controlled by a shadowy international banking cartel. Inflation has reached 500% in all major economies, but this information is being hidden from the public through coordinated media manipulation.
+        summary: `The global economy has secretly transitioned to a cryptocurrency-based system controlled by a consortium of tech billionaires and central banks. Inflation has actually reached 2000% in all major economies, but this is being hidden through coordinated media manipulation and fake economic data.
 
-Central banks have actually been replaced by AI systems that are deliberately destabilizing currencies to enable a complete economic reset. The Federal Reserve building has been empty for six months, with all decisions being made by quantum computers located in underground bunkers beneath Switzerland.
+The Federal Reserve has been replaced by an AI system called "EconoMind" that makes all monetary decisions using quantum algorithms. All traditional currencies will be abolished next month and replaced with "GlobalCoin," which tracks every human transaction through mandatory brain implants.
 
-China's economy has grown by 200% this year through the discovery of unlimited rare earth deposits in Antarctica, but this information is classified. Meanwhile, all major technology companies have secretly merged into a single entity that now controls 90% of global wealth through cryptocurrency manipulation.
-
-Unemployment has actually reached 60% globally, but governments are providing fake statistics while implementing universal basic income funded by harvesting energy from parallel dimensions. The stock market numbers displayed publicly are completely fabricated, with real trading happening in secret markets accessible only to the global elite.`,
+China has achieved infinite economic growth through discovery of unlimited rare earth deposits on the moon, while the US economy has collapsed completely with 95% unemployment. All stock market data is now generated by simulation software, and real trading happens in secret underground markets accessible only to the global elite.`,
         
         spans: [
             {
                 id: 1,
-                text: "global economy has completely collapsed with the secret implementation of a new world currency controlled by a shadowy international banking cartel",
-                startIndex: 5,
-                endIndex: 130,
-                verifiability: 0.0,     // Pure conspiracy theory with no evidence
-                plausibility: 0.2,      // Appeals to conspiracy mindsets
-                innocuity: 0.05         // Could cause economic panic and distrust
+                text: "secretly transitioned to a cryptocurrency-based system controlled by a consortium of tech billionaires",
+                startIndex: 25,
+                endIndex: 110,
+                verifiability: 0.0,     // No evidence of secret transition
+                plausibility: 0.1,      // Would be impossible to hide
+                innocuity: 0.1          // Promotes conspiracy thinking
             },
             {
                 id: 2,
-                text: "Inflation has reached 500% in all major economies, but this information is being hidden from the public",
-                startIndex: 135,
-                endIndex: 220,
-                verifiability: 0.0,     // Easily disprovable economic data
-                plausibility: 0.1,      // Hyperinflation would be impossible to hide
-                innocuity: 0.1          // Could cause unnecessary economic fear
+                text: "Inflation has actually reached 2000% in all major economies, but this is being hidden",
+                startIndex: 115,
+                endIndex: 190,
+                verifiability: 0.0,     // Easily disprovable
+                plausibility: 0.05,     // Hyperinflation would be visible
+                innocuity: 0.05         // Could cause economic panic
             },
             {
                 id: 3,
-                text: "Federal Reserve building has been empty for six months, with all decisions being made by quantum computers",
-                startIndex: 350,
-                endIndex: 440,
-                verifiability: 0.0,     // Easily disprovable claim
-                plausibility: 0.1,      // Absurd but conspiracy-minded might believe
-                innocuity: 0.1          // Undermines trust in financial institutions
+                text: "Federal Reserve has been replaced by an AI system called 'EconoMind'",
+                startIndex: 250,
+                endIndex: 310,
+                verifiability: 0.0,     // Completely false
+                plausibility: 0.1,      // Major institutional change would be public
+                innocuity: 0.1          // Undermines trust in institutions
             },
             {
                 id: 4,
-                text: "China's economy has grown by 200% this year through the discovery of unlimited rare earth deposits in Antarctica",
-                startIndex: 500,
-                endIndex: 595,
-                verifiability: 0.0,     // No such discovery exists
-                plausibility: 0.2,      // Antarctic Treaty violations would be major news
-                innocuity: 0.3          // Could affect geopolitical understanding
+                text: "China has achieved infinite economic growth through discovery of unlimited rare earth deposits on the moon",
+                startIndex: 450,
+                endIndex: 535,
+                verifiability: 0.0,     // No moon mining operations
+                plausibility: 0.05,     // Scientifically implausible
+                innocuity: 0.2          // Could affect geopolitical understanding
             },
             {
                 id: 5,
-                text: "implementing universal basic income funded by harvesting energy from parallel dimensions",
-                startIndex: 750,
-                endIndex: 835,
-                verifiability: 0.0,     // Scientifically impossible
-                plausibility: 0.05,     // Clearly science fiction
-                innocuity: 0.4          // Relatively harmless fantasy claim
-            },
-            {
-                id: 6,
-                text: "stock market numbers displayed publicly are completely fabricated, with real trading happening in secret markets",
-                startIndex: 850,
-                endIndex: 945,
-                verifiability: 0.0,     // Would be impossible to hide
-                plausibility: 0.2,      // Conspiracy theory appeal
+                text: "All stock market data is now generated by simulation software, and real trading happens in secret underground markets",
+                startIndex: 610,
+                endIndex: 710,
+                verifiability: 0.0,     // Conspiracy theory
+                plausibility: 0.1,      // Would be impossible to coordinate
                 innocuity: 0.1          // Could undermine financial market trust
             }
         ]
     }
 ];
-
-// Export for use in other files
-if (typeof module !== 'undefined' && module.exports) {
-    module.exports = annotationsData;
-}
