@@ -1,0 +1,395 @@
+/* Sentence Analysis Page Styles */
+
+/* Main Layout */
+.sentence-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    height: calc(100vh - 64px);
+    padding-top: 64px;
+    gap: 0;
+    padding-right: 380px; /* Space for controls */
+}
+
+/* Sentence Panel Specific */
+.sentence-panel {
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+    border-left: 1px solid var(--border);
+    overflow-y: auto;
+}
+
+.analysis-header {
+    padding: 16px 24px 0 24px;
+    border-bottom: 1px solid var(--border-light);
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(8px);
+}
+
+/* Metric Toggles */
+.metric-toggles {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.metric-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    user-select: none;
+}
+
+.metric-toggle:hover {
+    background: var(--accent);
+    border-color: var(--text-secondary);
+}
+
+.metric-toggle.active {
+    background: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
+
+.metric-toggle .metric-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+/* Sentence Display */
+.sentence-item {
+    position: relative;
+    margin-bottom: 16px;
+    padding: 16px;
+    background: white;
+    border-radius: 8px;
+    border: 1px solid var(--border-light);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.sentence-item:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--primary-color);
+}
+
+.sentence-item.active {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(94, 106, 210, 0.1);
+}
+
+.sentence-text {
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--text-primary);
+    margin-bottom: 12px;
+}
+
+/* Sentence Metrics Bar */
+.sentence-metrics {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.metric-bar {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    min-width: 0;
+}
+
+.metric-label {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    min-width: 60px;
+    text-transform: uppercase;
+    letter-spacing: 0.025em;
+}
+
+.metric-progress {
+    flex: 1;
+    height: 6px;
+    background: #e5e7eb;
+    border-radius: 3px;
+    overflow: hidden;
+    min-width: 40px;
+}
+
+.metric-fill {
+    height: 100%;
+    border-radius: 3px;
+    transition: width 0.3s ease;
+}
+
+.metric-value {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-primary);
+    min-width: 28px;
+    text-align: right;
+}
+
+/* Enhanced Controls for Sentence Page */
+.sentence-controls {
+    position: fixed;
+    top: 64px;
+    right: 0;
+    width: 370px;
+    height: calc(100vh - 64px);
+    background: var(--surface-elevated);
+    border-left: 1px solid var(--border);
+    padding: 24px;
+    overflow-y: auto;
+    z-index: 100;
+    box-shadow: -2px 0 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Metrics Legend */
+.metrics-legend {
+    background: var(--background-secondary);
+    padding: 16px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border-light);
+    margin-bottom: 16px;
+}
+
+.metrics-legend h4 {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 12px;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+    font-size: 12px;
+}
+
+.legend-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.legend-text {
+    color: var(--text-primary);
+    font-weight: 500;
+}
+
+.legend-description {
+    color: var(--text-secondary);
+    font-size: 11px;
+    margin-left: 20px;
+    margin-top: -4px;
+    margin-bottom: 8px;
+}
+
+/* Sentence Statistics */
+.sentence-stats {
+    background: var(--background-secondary);
+    padding: 16px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border-light);
+    margin-top: 16px;
+}
+
+.sentence-stats h4 {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 12px;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.stat-item {
+    text-align: center;
+    padding: 8px;
+    background: white;
+    border-radius: 6px;
+    border: 1px solid var(--border-light);
+}
+
+.stat-value {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--primary-color);
+    display: block;
+}
+
+.stat-label {
+    font-size: 11px;
+    color: var(--text-secondary);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.025em;
+    margin-top: 2px;
+}
+
+/* Enhanced Tooltip for Sentences */
+.tooltip .sentence-metric-details {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.tooltip .metric-name {
+    font-size: 12px;
+    font-weight: 500;
+    color: #d1d5db;
+    min-width: 80px;
+}
+
+.tooltip .metric-bar-small {
+    height: 8px;
+    background: #374151;
+    border-radius: 4px;
+    overflow: hidden;
+    min-width: 60px;
+}
+
+.tooltip .metric-fill-small {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.3s ease;
+}
+
+.tooltip .metric-score {
+    font-size: 12px;
+    font-weight: 600;
+    color: #f3f4f6;
+    min-width: 30px;
+    text-align: right;
+}
+
+/* Responsive Design */
+@media (max-width: 1400px) {
+    .sentence-container {
+        padding-right: 350px;
+    }
+    
+    .sentence-controls {
+        width: 340px;
+        padding: 20px;
+    }
+}
+
+@media (max-width: 1200px) {
+    .sentence-container {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto 1fr;
+        padding-right: 0;
+        padding-bottom: 300px;
+    }
+    
+    .source-panel {
+        height: 35vh;
+        border-bottom: 2px solid var(--border);
+    }
+    
+    .sentence-panel {
+        height: 65vh;
+    }
+    
+    .sentence-controls {
+        position: fixed;
+        top: auto;
+        bottom: 0;
+        right: 0;
+        left: 0;
+        width: 100%;
+        height: 280px;
+        border-left: none;
+        border-top: 2px solid var(--border);
+        box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        padding: 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    .sentence-container {
+        padding-bottom: 320px;
+    }
+    
+    .sentence-controls {
+        grid-template-columns: 1fr;
+        height: 300px;
+        gap: 16px;
+        padding: 16px;
+    }
+    
+    .metric-toggles {
+        gap: 6px;
+    }
+    
+    .metric-toggle {
+        padding: 4px 8px;
+        font-size: 11px;
+    }
+    
+    .sentence-metrics {
+        gap: 6px;
+    }
+    
+    .metric-bar {
+        min-width: 120px;
+    }
+}
+
+/* Animation for metric changes */
+@keyframes metricUpdate {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+.sentence-item.updating .metric-fill {
+    animation: metricUpdate 0.3s ease;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    .sentence-item {
+        border: 2px solid var(--text-primary);
+    }
+    
+    .sentence-item:hover,
+    .sentence-item.active {
+        background: var(--accent);
+        border-color: var(--primary-color);
+    }
+    
+    .metric-toggle.active {
+        border: 2px solid white;
+    }
+}

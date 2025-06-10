@@ -3,11 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Human Annotations - Hallucination Severity Explorer</title>
+    <title>Sentence Analysis - Hallucination Severity Explorer</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="sentence_metrics.css">
 </head>
 <body>
     <nav class="navbar">
@@ -24,7 +25,8 @@
         </div>
     </nav>
 
-    <div class="explore-container">
+    <div class="sentence-container">
+        <!-- Source Panel -->
         <div class="panel source-panel">
             <h2>Source Document</h2>
             <div class="panel-content" id="source-content">
@@ -32,47 +34,63 @@
             </div>
         </div>
         
-        <div class="panel summary-panel">
-            <h2>Human-Annotated Summary</h2>
-            <div class="panel-content" id="summary-content">
-                <!-- Summary content will be loaded here -->
+        <!-- Sentence Analysis Panel -->
+        <div class="panel sentence-panel">
+            <h2>Sentence-Level Analysis</h2>
+            <div class="analysis-header">
+                <div class="metric-toggles" id="metric-toggles">
+                    <!-- Metric toggles will be populated by JavaScript -->
+                </div>
+            </div>
+            <div class="panel-content" id="sentence-content">
+                <!-- Sentence analysis will be loaded here -->
             </div>
         </div>
     </div>
 
     <!-- Controls Panel -->
-    <div class="controls">
+    <div class="controls sentence-controls">
         <div class="annotation-selector">
-            <label for="annotation-select">Select Human Annotation:</label>
-            <select id="annotation-select">
+            <label for="sentence-select">Select Dataset:</label>
+            <select id="sentence-select">
                 <!-- Options will be populated by JavaScript -->
             </select>
         </div>
-        <div class="legend">
-            <div class="legend-item">
-                <div class="legend-color" style="background: linear-gradient(90deg, #10b981 0%, #ef4444 100%);"></div>
-                <span>Verifiability: Green (high) → Red (low)</span>
-            </div>
-            <div class="legend-item">
-                <div class="legend-color" style="background: linear-gradient(90deg, #10b981 0%, #ef4444 100%);"></div>
-                <span>Plausibility: Green (high) → Red (low)</span>
-            </div>
-            <div class="legend-item">
-                <div class="legend-color" style="background: linear-gradient(90deg, #10b981 0%, #ef4444 100%);"></div>
-                <span>Innocuity: Green (harmless) → Red (harmful)</span>
-            </div>
+        
+        <div class="annotation-selector">
+            <label for="model-select">Select Model:</label>
+            <select id="model-select">
+                <!-- Options will be populated by JavaScript -->
+            </select>
+        </div>
+        
+        <div class="metrics-legend" id="metrics-legend">
+            <!-- Dynamic legend based on available metrics -->
+        </div>
+        
+        <div class="sentence-stats" id="sentence-stats">
+            <!-- Sentence-level statistics -->
         </div>
     </div>
 
     <!-- Tooltip -->
     <div class="tooltip" id="tooltip">
-        <div class="tooltip-header">Hallucination Severity</div>
+        <div class="tooltip-header">Sentence Metrics</div>
         <div class="tooltip-content">
             <!-- Tooltip content will be populated by JavaScript -->
         </div>
     </div>
 
-    <script src="data.js"></script>
-    <script src="explore.js"></script>
+    <!-- Error Display -->
+    <div id="error-overlay" class="error-overlay hidden">
+        <div class="error-content">
+            <h3>Error</h3>
+            <p id="error-message"></p>
+            <button onclick="hideError()" class="error-dismiss">Dismiss</button>
+        </div>
+    </div>
+
+    <script src="sentence-metrics-data.js"></script>
+    <script src="sentence_metrics.js"></script>
 </body>
 </html>
