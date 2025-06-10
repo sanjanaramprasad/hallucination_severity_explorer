@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compare Annotations - Hallucination Severity Explorer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="compare.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <h1 class="nav-title">Hallucination Explorer</h1>
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="about.html" class="nav-link">About</a></li>
+                <li><a href="explore.html" class="nav-link">Human Annotations</a></li>
+                <li><a href="llm-explore.html" class="nav-link">LLM Annotations</a></li>
+                <li><a href="compare.html" class="nav-link explore-btn">Compare</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="compare-container">
+        <!-- Source Panel -->
+        <div class="panel source-panel">
+            <h2>Source Document</h2>
+            <div class="panel-content" id="source-content">
+                <!-- Source content will be loaded here -->
+            </div>
+        </div>
+        
+        <!-- Human Annotations Panel -->
+        <div class="panel human-panel">
+            <h2>Human Annotations</h2>
+            <div class="panel-content" id="human-content">
+                <!-- Human annotated summary will be loaded here -->
+            </div>
+        </div>
+        
+        <!-- LLM Annotations Panel -->
+        <div class="panel llm-panel">
+            <h2>LLM Annotations</h2>
+            <div class="panel-content" id="llm-content">
+                <!-- LLM annotated summary will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Controls Panel -->
+    <div class="controls compare-controls">
+        <div class="annotation-selector">
+            <label for="compare-select">Select Dataset:</label>
+            <select id="compare-select">
+                <!-- Options will be populated by JavaScript -->
+            </select>
+        </div>
+        
+        <div class="legend">
+            <div class="legend-item">
+                <div class="legend-color" style="background: linear-gradient(120deg, #fed7aa 0%, #fb923c 100%);"></div>
+                <span>Human Annotations (Orange)</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: linear-gradient(120deg, #fecaca 0%, #f87171 100%);"></div>
+                <span>LLM Annotations (Red)</span>
+            </div>
+        </div>
+        
+        <div class="comparison-stats" id="comparison-stats">
+            <!-- Comparison statistics will be shown here -->
+        </div>
+    </div>
+
+    <!-- Tooltip -->
+    <div class="tooltip" id="tooltip">
+        <div class="tooltip-header">Annotation Details</div>
+        <div class="tooltip-content">
+            <!-- Tooltip content will be populated by JavaScript -->
+        </div>
+    </div>
+
+    <!-- Error Display -->
+    <div id="error-overlay" class="error-overlay hidden">
+        <div class="error-content">
+            <h3>Error</h3>
+            <p id="error-message"></p>
+            <button onclick="hideError()" class="error-dismiss">Dismiss</button>
+        </div>
+    </div>
+
+    <script src="data.js"></script>
+    <script src="llm-data.js"></script>
+    <script src="compare.js"></script>
+</body>
+</html>

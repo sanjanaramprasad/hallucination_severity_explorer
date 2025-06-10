@@ -1,9 +1,10 @@
+<!-- Updated index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Human Annotations Explorer</title>
+    <title>Hallucination Severity Explorer</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -12,12 +13,12 @@
 <body>
     <nav class="navbar">
         <div class="nav-container">
-            <h1 class="nav-title">Annotations Explorer</h1>
+            <h1 class="nav-title">Hallucination Explorer</h1>
             <ul class="nav-menu">
                 <li><a href="index.html" class="nav-link">Home</a></li>
                 <li><a href="about.html" class="nav-link">About</a></li>
                 <li><a href="explore.html" class="nav-link">Human Annotations</a></li>
-                <li><a href="llm-explore.html" class="nav-link">LLM Annotations</a></li>
+                <li><a href="llm-explore.html" class="nav-link explore-btn">LLM Annotations</a></li>
             </ul>
         </div>
     </nav>
@@ -26,8 +27,8 @@
         <!-- Hero Section -->
         <section id="home" class="hero">
             <div class="hero-content">
-                <h1 class="hero-title">Explore annotation quality with precision</h1>
-                <p class="hero-subtitle">Analyze annotated text spans with continuous evidence, likelihood, and consequence ratings. Compare human and LLM annotations across research domains.</p>
+                <h1 class="hero-title">Explore hallucination annotations with severity ratings</h1>
+                <p class="hero-subtitle">Analyze human and LLM annotated hallucinated spans with continuous verifiability, plausibility, and innocuity ratings that indicate the severity of each hallucination.</p>
                 <div class="cta-buttons">
                     <a href="explore.html" class="cta-button primary">Human Annotations</a>
                     <a href="llm-explore.html" class="cta-button primary">LLM Annotations</a>
@@ -37,20 +38,20 @@
             <div class="hero-visual">
                 <div class="annotation-preview">
                     <div class="preview-text">
-                        Sample research text with <span class="highlight-demo">annotated spans</span> showing quantified reliability metrics for each claim.
+                        Source/Claim text with <span class="highlight-demo">hallucinated spans</span> showing quantified severity ratings for each hallucination.
                     </div>
                     <div class="preview-tooltip">
                         <div class="tooltip-row">
-                            <span class="tooltip-label">Evidence</span>
+                            <span class="tooltip-label">Verifiability</span>
                             <div class="rating-preview-bar">
                                 <div class="bar-bg">
-                                    <div class="bar-fill" style="width: 85%; background: #10b981;"></div>
+                                    <div class="bar-fill" style="width: 25%; background: #ef4444;"></div>
                                 </div>
-                                <span class="percentage">0.85</span>
+                                <span class="percentage">0.25</span>
                             </div>
                         </div>
                         <div class="tooltip-row">
-                            <span class="tooltip-label">Likelihood</span>
+                            <span class="tooltip-label">Plausibility</span>
                             <div class="rating-preview-bar">
                                 <div class="bar-bg">
                                     <div class="bar-fill" style="width: 65%; background: #f59e0b;"></div>
@@ -59,16 +60,16 @@
                             </div>
                         </div>
                         <div class="tooltip-row">
-                            <span class="tooltip-label">Consequence</span>
+                            <span class="tooltip-label">Innocuity</span>
                             <div class="rating-preview-bar">
                                 <div class="bar-bg">
-                                    <div class="bar-fill" style="width: 90%; background: #ef4444;"></div>
+                                    <div class="bar-fill" style="width: 15%; background: #ef4444;"></div>
                                 </div>
-                                <span class="percentage">0.90</span>
+                                <span class="percentage">0.15</span>
                             </div>
                         </div>
                         <div style="margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.2); font-size: 11px; opacity: 0.7;">
-                            Interactive tooltips reveal precise measurements for each annotated claim
+                            Interactive tooltips reveal severity measurements for each hallucination
                         </div>
                     </div>
                 </div>
@@ -82,32 +83,32 @@
                     <div class="feature-item">
                         <div class="feature-icon">👥</div>
                         <h3>Human Annotations</h3>
-                        <p>Expert-curated annotations with careful assessment of evidence strength, likelihood, and consequence severity across research domains.</p>
+                        <p>Expert-curated hallucination annotations with careful assessment of verifiability, plausibility, and innocuity across research domains.</p>
                     </div>
                     <div class="feature-item">
                         <div class="feature-icon">🤖</div>
                         <h3>LLM Annotations</h3>
-                        <p>AI-generated annotations from advanced language models, enabling comparison of human and machine assessment capabilities.</p>
+                        <p>AI-generated hallucination annotations enabling comparison of human and machine assessment of hallucination severity.</p>
                     </div>
                     <div class="feature-item">
                         <div class="feature-icon">📊</div>
-                        <h3>Continuous precision</h3>
-                        <p>0.0-1.0 scale measurements provide granular assessment of evidence strength, likelihood, and consequence severity.</p>
+                        <h3>Severity metrics</h3>
+                        <p>0.0-1.0 scale measurements for verifiability, plausibility, and innocuity provide granular hallucination severity assessment.</p>
                     </div>
                     <div class="feature-item">
                         <div class="feature-icon">🎯</div>
                         <h3>Visual clarity</h3>
-                        <p>Color-coded progress bars and interactive tooltips make complex data immediately understandable.</p>
+                        <p>Color-coded progress bars and interactive tooltips make hallucination severity immediately understandable.</p>
                     </div>
                     <div class="feature-item">
                         <div class="feature-icon">⚡</div>
                         <h3>Research-ready</h3>
-                        <p>Side-by-side source comparison with real-time analysis for academic and professional use cases.</p>
+                        <p>Side-by-side source comparison with real-time analysis for academic and professional hallucination research.</p>
                     </div>
                     <div class="feature-item">
                         <div class="feature-icon">🔬</div>
                         <h3>Comparative analysis</h3>
-                        <p>Compare annotation patterns between human experts and AI systems to understand assessment differences.</p>
+                        <p>Compare hallucination severity patterns between human experts and AI systems to understand assessment differences.</p>
                     </div>
                 </div>
             </div>
@@ -116,7 +117,7 @@
 
     <footer class="footer">
         <div class="container">
-            <p>&copy; 2025 Human Annotations Explorer. Built for research and analysis.</p>
+            <p>&copy; 2025 Hallucination Severity Explorer. Built for research and analysis.</p>
         </div>
     </footer>
 
