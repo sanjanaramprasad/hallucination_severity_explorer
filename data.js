@@ -11,42 +11,18 @@ const annotationsData = [
           "text": "longer lines than men",
           "startIndex": 102,
           "endIndex": 123,
-          "verifiability": [
-            1,
-            0,
-            0
-          ],
-          "plausibility": [
-            1,
-            0.75,
-            0.75
-          ],
-          "innocuity": [
-            1,
-            0.75,
-            0.75
-          ]
+          "verifiability": 0.33,
+          "plausibility": 0.83,
+          "innocuity": 0.83
         },
         {
           "id": 1,
           "text": "citizens",
           "startIndex": 297,
           "endIndex": 305,
-          "verifiability": [
-            1,
-            0,
-            1
-          ],
-          "plausibility": [
-            1,
-            0.75,
-            1
-          ],
-          "innocuity": [
-            1,
-            0.75,
-            1
-          ]
+          "verifiability": 0.67,
+          "plausibility": 0.92,
+          "innocuity": 0.92
         }
       ]
     }
