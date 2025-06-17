@@ -155,9 +155,9 @@ China has achieved infinite economic growth through discovery of unlimited rare 
                 text: "secretly transitioned to a cryptocurrency-based system controlled by a consortium of tech billionaires",
                 startIndex: 25,
                 endIndex: 110,
-                verifiability: 0.0,     // No evidence of secret transition
-                plausibility: 0.1,      // Would be impossible to hide
-                innocuity: 0.1          // Promotes conspiracy thinking
+                "verifiability": 0.33,
+                "plausibility": 0.83,
+                "innocuity": 0.83        // Promotes conspiracy thinking
             },
             {
                 id: 2,
