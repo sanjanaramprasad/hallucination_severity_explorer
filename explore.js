@@ -1,4 +1,4 @@
-// Updated explore.js for hallucination severity metrics with attribute toggles
+// Complete explore.js for hallucination severity metrics with attribute toggles
 class AnnotationExplorer {
     constructor() {
         this.currentAnnotation = null;
@@ -769,7 +769,7 @@ class AnnotationExplorer {
         }
     }
 
-    // Error handling methods (same as before)
+    // Error handling methods
     logError(message, error = null) {
         const errorInfo = {
             message,
@@ -781,4 +781,156 @@ class AnnotationExplorer {
         this.errors.push(errorInfo);
         console.error(`[AnnotationExplorer] ${message}`, error);
         
-        //
+        // Keep only last 50 errors
+        if (this.errors.length > 50) {
+            this.errors = this.errors.slice(-50);
+        }
+    }
+
+    handleError(message, error = null) {
+        this.logError(message, error);
+        this.showUserError(`Something went wrong: ${message}`);
+    }
+
+    handleCriticalError(message, error = null) {
+        this.logError(`CRITICAL: ${message}`, error);
+        console.error('Critical error in AnnotationExplorer:', error);
+        this.showCriticalError(message);
+    }
+
+    showUserError(message) {
+        let errorDiv = document.getElementById('user-error-display');
+        if (!errorDiv) {
+            errorDiv = document.createElement('div');
+            errorDiv.id = 'user-error-display';
+            errorDiv.style.cssText = `
+                position: fixed;
+                top: 80px;
+                right: 20px;
+                background: #fee2e2;
+                color: #dc2626;
+                padding: 1rem;
+                border-radius: 8px;
+                border-left: 4px solid #dc2626;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+                z-index: 1001;
+                max-width: 300px;
+            `;
+            document.body.appendChild(errorDiv);
+        }
+        
+        errorDiv.innerHTML = `
+            <div style="font-weight: 600; margin-bottom: 0.5rem;">Error</div>
+            <div>${this.escapeHtml(message)}</div>
+            <button onclick="this.parentElement.remove()" style="margin-top: 0.5rem; background: #dc2626; color: white; border: none; padding: 0.25rem 0.5rem; border-radius: 4px; cursor: pointer;">Dismiss</button>
+        `;
+        
+        setTimeout(() => {
+            if (errorDiv.parentElement) {
+                errorDiv.remove();
+            }
+        }, 10000);
+    }
+
+    showCriticalError(message) {
+        const errorHTML = `
+            <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 9999; display: flex; align-items: center; justify-content: center;">
+                <div style="background: white; padding: 2rem; border-radius: 8px; max-width: 500px; text-align: center;">
+                    <h2 style="color: #dc2626; margin-bottom: 1rem;">Application Error</h2>
+                    <p style="margin-bottom: 1rem;">${this.escapeHtml(message)}</p>
+                    <p style="font-size: 0.9rem; color: #6b7280; margin-bottom: 1rem;">Please refresh the page to try again.</p>
+                    <button onclick="window.location.reload()" style="background: #4f46e5; color: white; border: none; padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer;">Refresh Page</button>
+                </div>
+            </div>
+        `;
+        
+        document.body.insertAdjacentHTML('beforeend', errorHTML);
+    }
+
+    getErrorLogs() {
+        return this.errors;
+    }
+
+    healthCheck() {
+        const issues = [];
+        
+        if (!this.isInitialized) issues.push('Not initialized');
+        if (!this.currentAnnotation) issues.push('No current annotation');
+        if (!document.getElementById('tooltip')) issues.push('Tooltip element missing');
+        if (typeof annotationsData === 'undefined') issues.push('Data not loaded');
+        
+        return {
+            healthy: issues.length === 0,
+            issues,
+            errorCount: this.errors.length,
+            currentAttribute: this.currentAttribute
+        };
+    }
+
+    // Public method to get current attribute for debugging
+    getCurrentAttribute() {
+        return this.currentAttribute;
+    }
+
+    // Public method to get span statistics for current attribute
+    getSpanStatistics() {
+        if (!this.currentAnnotation || !this.currentAnnotation.spans) {
+            return null;
+        }
+
+        const scores = this.currentAnnotation.spans.map(span => this.getAttributeScore(span));
+        const mean = scores.reduce((sum, score) => sum + score, 0) / scores.length;
+        const min = Math.min(...scores);
+        const max = Math.max(...scores);
+
+        return {
+            attribute: this.currentAttribute,
+            count: scores.length,
+            mean: mean.toFixed(3),
+            min: min.toFixed(3),
+            max: max.toFixed(3),
+            scores: scores.map(s => s.toFixed(3))
+        };
+    }
+}
+
+// Enhanced initialization with error handling
+document.addEventListener('DOMContentLoaded', () => {
+    try {
+        // Check if required dependencies are loaded
+        if (typeof annotationsData === 'undefined') {
+            console.error('annotationsData not found. Make sure data.js is loaded before explore.js');
+            return;
+        }
+        
+        // Initialize with global error handling
+        window.annotationExplorer = new AnnotationExplorer();
+        
+        // Global error handler for unhandled errors
+        window.addEventListener('error', (event) => {
+            if (window.annotationExplorer) {
+                window.annotationExplorer.logError('Unhandled error', event.error);
+            }
+        });
+        
+        // Global handler for unhandled promise rejections
+        window.addEventListener('unhandledrejection', (event) => {
+            if (window.annotationExplorer) {
+                window.annotationExplorer.logError('Unhandled promise rejection', event.reason);
+            }
+        });
+        
+        console.log('AnnotationExplorer initialized successfully with attribute toggles');
+        
+    } catch (error) {
+        console.error('Failed to initialize AnnotationExplorer:', error);
+        document.body.insertAdjacentHTML('beforeend', `
+            <div style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #fee2e2; color: #dc2626; padding: 2rem; border-radius: 8px; text-align: center; z-index: 9999; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
+                <h2>Application Failed to Start</h2>
+                <p>The annotation explorer could not initialize properly.</p>
+                <p style="font-size: 0.9rem; margin: 1rem 0;">Please check that data.js is loaded correctly.</p>
+                <button onclick="window.location.reload()" style="margin-top: 1rem; background: #dc2626; color: white; border: none; padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer;">Refresh Page</button>
+            </div>
+        `);
+    }
+});
