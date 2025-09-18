@@ -11,6 +11,7 @@
     <style>
         .controls {
             position: relative;
+            margin-bottom: 20px;
         }
         
         .controls-header {
@@ -58,11 +59,12 @@
         
         .controls-content.collapsed {
             max-height: 0;
-            border: none;
+            opacity: 0;
         }
         
         .controls-content.expanded {
             max-height: 2000px;
+            opacity: 1;
         }
         
         .annotation-controls {
