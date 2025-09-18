@@ -5,7 +5,7 @@ class AnnotationExplorer {
         this.activeSpan = null;
         this.tooltip = null;
         this.isInitialized = false;
-        this.currentAttribute = 'mean'; // 'mean', 'verifiability', 'plausibility', 'innocuity'
+        this.currentAttribute = 'mean'; // 'mean', 'irrefutability', 'plausibility', 'innocuity'
         
         // Error tracking
         this.errors = [];
@@ -102,7 +102,7 @@ class AnnotationExplorer {
     }
 
     validateSpan(span, annotationIndex, spanIndex) {
-        const requiredFields = ['id', 'text', 'startIndex', 'endIndex', 'verifiability', 'plausibility', 'innocuity'];
+        const requiredFields = ['id', 'text', 'startIndex', 'endIndex', 'irrefutability', 'plausibility', 'innocuity'];
         const missingFields = [];
         
         requiredFields.forEach(field => {
@@ -116,7 +116,7 @@ class AnnotationExplorer {
         }
         
         // Validate continuous rating values (0.0 - 1.0)
-        ['verifiability', 'plausibility', 'innocuity'].forEach(rating => {
+        ['irrefutability', 'plausibility', 'innocuity'].forEach(rating => {
             if (span[rating] !== undefined) {
                 if (typeof span[rating] !== 'number' || span[rating] < 0 || span[rating] > 1) {
                     this.logError(`Annotation ${annotationIndex}, Span ${spanIndex}: ${rating} must be between 0.0 and 1.0, got ${span[rating]}`);
@@ -171,7 +171,7 @@ class AnnotationExplorer {
                 <h4 style="margin-bottom: 12px; font-size: 14px; color: var(--text-secondary);">Color by Attribute:</h4>
                 <div class="toggle-buttons">
                     <button class="toggle-btn active" data-attribute="mean">Mean Score</button>
-                    <button class="toggle-btn" data-attribute="verifiability">Verifiability</button>
+                    <button class="toggle-btn" data-attribute="irrefutability">Irrefutability</button>
                     <button class="toggle-btn" data-attribute="plausibility">Plausibility</button>
                     <button class="toggle-btn" data-attribute="innocuity">Innocuity</button>
                 </div>
@@ -381,7 +381,7 @@ class AnnotationExplorer {
         try {
             if (this.currentAttribute === 'mean') {
                 // Calculate mean of all three attributes
-                const v = this.validateRating(span.verifiability) ? span.verifiability : 0;
+                const v = this.validateRating(span.irrefutability) ? span.irrefutability : 0;
                 const p = this.validateRating(span.plausibility) ? span.plausibility : 0;
                 const i = this.validateRating(span.innocuity) ? span.innocuity : 0;
                 return (v + p + i) / 3;
@@ -605,10 +605,10 @@ class AnnotationExplorer {
             const rect = element.getBoundingClientRect();
             
             // Create tooltip content with hallucination severity ratings
-            const verifiability = this.validateRating(span.verifiability) ? span.verifiability : 0;
+            const irrefutability = this.validateRating(span.irrefutability) ? span.irrefutability : 0;
             const plausibility = this.validateRating(span.plausibility) ? span.plausibility : 0;
             const innocuity = this.validateRating(span.innocuity) ? span.innocuity : 0;
-            const meanScore = (verifiability + plausibility + innocuity) / 3;
+            const meanScore = (irrefutability + plausibility + innocuity) / 3;
             
             // Highlight current attribute
             const currentAttributeLabel = this.currentAttribute === 'mean' ? 'Mean Score' : 
@@ -626,9 +626,9 @@ class AnnotationExplorer {
                         ${this.createRatingBar(meanScore, 'Mean')}
                     </div>
                     
-                    <div class="tooltip-row" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; ${this.currentAttribute === 'verifiability' ? 'background: rgba(59, 130, 246, 0.1); padding: 4px; border-radius: 4px;' : ''}">
-                        <span class="tooltip-label" style="min-width: 80px; ${this.currentAttribute === 'verifiability' ? 'font-weight: 600; color: #3b82f6;' : ''}">Verifiability:</span>
-                        ${this.createRatingBar(verifiability, 'Verifiability')}
+                    <div class="tooltip-row" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; ${this.currentAttribute === 'irrefutability' ? 'background: rgba(59, 130, 246, 0.1); padding: 4px; border-radius: 4px;' : ''}">
+                        <span class="tooltip-label" style="min-width: 80px; ${this.currentAttribute === 'irrefutability' ? 'font-weight: 600; color: #3b82f6;' : ''}">Irrefutability:</span>
+                        ${this.createRatingBar(irrefutability, 'Irrefutability')}
                     </div>
                     
                     <div class="tooltip-row" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; ${this.currentAttribute === 'plausibility' ? 'background: rgba(59, 130, 246, 0.1); padding: 4px; border-radius: 4px;' : ''}">
@@ -644,7 +644,7 @@ class AnnotationExplorer {
                     <div style="margin-top: 12px; padding-top: 8px; border-top: 1px solid #374151;">
                         <div style="font-size: 0.75rem; color: #9ca3af; margin-bottom: 4px;">Precise Values:</div>
                         <div style="font-size: 0.75rem; color: #d1d5db;">
-                            Mean: ${meanScore.toFixed(3)} | V: ${verifiability.toFixed(2)} | P: ${plausibility.toFixed(2)} | I: ${innocuity.toFixed(2)}
+                            Mean: ${meanScore.toFixed(3)} | V: ${irrefutability.toFixed(2)} | P: ${plausibility.toFixed(2)} | I: ${innocuity.toFixed(2)}
                         </div>
                     </div>
                     
