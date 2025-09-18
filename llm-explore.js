@@ -1,7 +1,8 @@
-// LLM Annotation Explorer - adapted for LLM data with model information
+// LLM Annotation Explorer - Updated for proper title matching and data structure
 class LLMAnnotationExplorer {
     constructor() {
         this.currentAnnotation = null;
+        this.currentModel = null;
         this.activeSpan = null;
         this.tooltip = null;
         this.isInitialized = false;
@@ -28,7 +29,7 @@ class LLMAnnotationExplorer {
             this.tooltip = document.getElementById('tooltip');
             this.populateAnnotationSelector();
             this.bindEvents();
-            this.loadAnnotation(0); // Load first annotation by default
+            this.loadFirstAvailableAnnotation();
             
             this.isInitialized = true;
             console.log('LLMAnnotationExplorer initialized successfully');
@@ -77,7 +78,7 @@ class LLMAnnotationExplorer {
     }
 
     validateAnnotation(annotation, index) {
-        const requiredFields = ['id', 'title', 'model', 'source', 'summary', 'spans'];
+        const requiredFields = ['id', 'title', 'source', 'summary', 'models'];
         const missingFields = [];
         
         requiredFields.forEach(field => {
@@ -90,18 +91,24 @@ class LLMAnnotationExplorer {
             throw new Error(`LLM Annotation ${index} missing required fields: ${missingFields.join(', ')}`);
         }
         
-        if (!Array.isArray(annotation.spans)) {
-            throw new Error(`LLM Annotation ${index} spans must be an array`);
+        if (!annotation.models || typeof annotation.models !== 'object') {
+            throw new Error(`LLM Annotation ${index} models must be an object`);
         }
         
-        // Validate spans
-        annotation.spans.forEach((span, spanIndex) => {
-            this.validateSpan(span, index, spanIndex);
+        // Validate models and their spans
+        Object.entries(annotation.models).forEach(([modelName, modelData]) => {
+            if (!modelData.spans || !Array.isArray(modelData.spans)) {
+                throw new Error(`LLM Annotation ${index}, Model ${modelName} must have spans array`);
+            }
+            
+            modelData.spans.forEach((span, spanIndex) => {
+                this.validateSpan(span, index, spanIndex, modelName);
+            });
         });
     }
 
-    validateSpan(span, annotationIndex, spanIndex) {
-        const requiredFields = ['id', 'text', 'startIndex', 'endIndex', 'verifiability', 'plausibility', 'innocuity'];
+    validateSpan(span, annotationIndex, spanIndex, modelName) {
+        const requiredFields = ['id', 'text', 'startIndex', 'endIndex', 'irrefutability', 'plausibility', 'innocuity'];
         const missingFields = [];
         
         requiredFields.forEach(field => {
@@ -111,21 +118,21 @@ class LLMAnnotationExplorer {
         });
         
         if (missingFields.length > 0) {
-            this.logError(`LLM Annotation ${annotationIndex}, Span ${spanIndex} missing fields: ${missingFields.join(', ')}`);
+            this.logError(`LLM Annotation ${annotationIndex}, Model ${modelName}, Span ${spanIndex} missing fields: ${missingFields.join(', ')}`);
         }
         
         // Validate continuous rating values (0.0 - 1.0)
-        ['verifiability', 'plausibility', 'innocuity'].forEach(rating => {
+        ['irrefutability', 'plausibility', 'innocuity'].forEach(rating => {
             if (span[rating] !== undefined) {
                 if (typeof span[rating] !== 'number' || span[rating] < 0 || span[rating] > 1) {
-                    this.logError(`LLM Annotation ${annotationIndex}, Span ${spanIndex}: ${rating} must be between 0.0 and 1.0, got ${span[rating]}`);
+                    this.logError(`LLM Annotation ${annotationIndex}, Model ${modelName}, Span ${spanIndex}: ${rating} must be between 0.0 and 1.0, got ${span[rating]}`);
                 }
             }
         });
         
         // Validate indices
         if (span.startIndex >= span.endIndex) {
-            this.logError(`LLM Annotation ${annotationIndex}, Span ${spanIndex}: startIndex must be less than endIndex`);
+            this.logError(`LLM Annotation ${annotationIndex}, Model ${modelName}, Span ${spanIndex}: startIndex must be less than endIndex`);
         }
     }
 
@@ -139,15 +146,14 @@ class LLMAnnotationExplorer {
             // Clear existing options
             selector.innerHTML = '';
             
-            llmAnnotationsData.forEach((annotation, index) => {
-                try {
+            // Create options for each annotation-model combination
+            llmAnnotationsData.forEach((annotation, annotationIndex) => {
+                Object.keys(annotation.models).forEach(modelName => {
                     const option = document.createElement('option');
-                    option.value = index;
-                    option.textContent = `${annotation.title} (${annotation.model})` || `LLM Annotation ${index + 1}`;
+                    option.value = `${annotationIndex}-${modelName}`;
+                    option.textContent = `${annotation.title} (${modelName})`;
                     selector.appendChild(option);
-                } catch (error) {
-                    this.logError(`Failed to create option for LLM annotation ${index}`, error);
-                }
+                });
             });
             
         } catch (error) {
@@ -161,11 +167,18 @@ class LLMAnnotationExplorer {
             if (selector) {
                 selector.addEventListener('change', (e) => {
                     try {
-                        const index = parseInt(e.target.value);
+                        const [annotationIndex, modelName] = e.target.value.split('-');
+                        const index = parseInt(annotationIndex);
+                        
                         if (isNaN(index) || index < 0 || index >= llmAnnotationsData.length) {
-                            throw new Error(`Invalid annotation index: ${e.target.value}`);
+                            throw new Error(`Invalid annotation index: ${annotationIndex}`);
                         }
-                        this.loadAnnotation(index);
+                        
+                        if (!modelName || !llmAnnotationsData[index].models[modelName]) {
+                            throw new Error(`Invalid model name: ${modelName}`);
+                        }
+                        
+                        this.loadAnnotation(index, modelName);
                     } catch (error) {
                         this.handleError('Failed to handle annotation selection', error);
                     }
@@ -189,13 +202,46 @@ class LLMAnnotationExplorer {
         }
     }
 
-    loadAnnotation(index) {
+    loadFirstAvailableAnnotation() {
+        try {
+            if (llmAnnotationsData.length === 0) {
+                throw new Error('No annotations available');
+            }
+            
+            const firstAnnotation = llmAnnotationsData[0];
+            const firstModelName = Object.keys(firstAnnotation.models)[0];
+            
+            if (!firstModelName) {
+                throw new Error('No models available in first annotation');
+            }
+            
+            this.loadAnnotation(0, firstModelName);
+            
+        } catch (error) {
+            this.handleError('Failed to load first annotation', error);
+        }
+    }
+
+    loadAnnotation(index, modelName) {
         try {
             if (index < 0 || index >= llmAnnotationsData.length) {
                 throw new Error(`Invalid annotation index: ${index}`);
             }
             
-            this.currentAnnotation = llmAnnotationsData[index];
+            const annotation = llmAnnotationsData[index];
+            
+            if (!annotation.models[modelName]) {
+                throw new Error(`Model ${modelName} not found in annotation ${index}`);
+            }
+            
+            this.currentAnnotation = annotation;
+            this.currentModel = modelName;
+            
+            // Update the selector to reflect current selection
+            const selector = document.getElementById('annotation-select');
+            if (selector) {
+                selector.value = `${index}-${modelName}`;
+            }
             
             // Render components with error handling
             this.safeRender(() => this.renderSource(), 'source');
@@ -206,7 +252,7 @@ class LLMAnnotationExplorer {
             this.clearActiveSpan();
             
         } catch (error) {
-            this.handleError(`Failed to load annotation ${index}`, error);
+            this.handleError(`Failed to load annotation ${index} with model ${modelName}`, error);
         }
     }
 
@@ -247,15 +293,48 @@ class LLMAnnotationExplorer {
             return; // Optional element
         }
         
-        if (this.currentAnnotation?.model) {
+        if (this.currentModel && this.currentAnnotation?.title) {
+            // Check if there's a matching human annotation
+            let humanMatchInfo = '';
+            if (typeof annotationsData !== 'undefined') {
+                const matchingHuman = annotationsData.find(human => human.title === this.currentAnnotation.title);
+                if (matchingHuman) {
+                    humanMatchInfo = `
+                        <div style="margin-top: 8px; padding: 8px; background: #dbeafe; border-radius: 4px; border-left: 3px solid #3b82f6;">
+                            <div style="font-size: 11px; font-weight: 600; color: #1e40af; text-transform: uppercase; letter-spacing: 0.05em;">
+                                Human Annotation Available
+                            </div>
+                            <div style="font-size: 12px; color: #1e40af; margin-top: 2px;">
+                                Matching human annotations found for comparison
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    humanMatchInfo = `
+                        <div style="margin-top: 8px; padding: 8px; background: #fef3c7; border-radius: 4px; border-left: 3px solid #f59e0b;">
+                            <div style="font-size: 11px; font-weight: 600; color: #92400e; text-transform: uppercase; letter-spacing: 0.05em;">
+                                No Human Match
+                            </div>
+                            <div style="font-size: 12px; color: #92400e; margin-top: 2px;">
+                                No matching human annotation found
+                            </div>
+                        </div>
+                    `;
+                }
+            }
+            
             modelInfo.innerHTML = `
                 <div style="margin-bottom: 16px; padding: 12px; background: var(--background-secondary); border-radius: var(--radius); border: 1px solid var(--border-light);">
                     <div style="font-size: 12px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px;">
                         LLM Model
                     </div>
-                    <div style="font-size: 14px; font-weight: 500; color: var(--primary-color);">
-                        ${this.escapeHtml(this.currentAnnotation.model)}
+                    <div style="font-size: 14px; font-weight: 500; color: var(--primary-color); margin-bottom: 4px;">
+                        ${this.escapeHtml(this.currentModel)}
                     </div>
+                    <div style="font-size: 12px; color: var(--text-secondary);">
+                        Document: ${this.escapeHtml(this.currentAnnotation.title)}
+                    </div>
+                    ${humanMatchInfo}
                 </div>
             `;
         } else {
@@ -273,10 +352,15 @@ class LLMAnnotationExplorer {
             throw new Error('No summary content available');
         }
         
+        if (!this.currentModel || !this.currentAnnotation.models[this.currentModel]) {
+            throw new Error('No model data available');
+        }
+        
         let summaryText = this.currentAnnotation.summary;
+        const modelData = this.currentAnnotation.models[this.currentModel];
         
         // Validate spans exist
-        if (!this.currentAnnotation.spans || this.currentAnnotation.spans.length === 0) {
+        if (!modelData.spans || modelData.spans.length === 0) {
             summaryContent.innerHTML = `<p>${this.escapeHtml(summaryText)}</p>`;
             return;
         }
@@ -287,7 +371,7 @@ class LLMAnnotationExplorer {
             let lastIndex = 0;
             
             // Sort spans by start index and validate
-            const sortedSpans = [...this.currentAnnotation.spans]
+            const sortedSpans = [...modelData.spans]
                 .filter(span => span.startIndex >= 0 && span.endIndex <= summaryText.length)
                 .sort((a, b) => a.startIndex - b.startIndex);
             
@@ -314,7 +398,8 @@ class LLMAnnotationExplorer {
                         segments.push({
                             type: 'span',
                             content: spanText,
-                            spanId: span.id
+                            spanId: span.id,
+                            span: span
                         });
                     }
                     
@@ -332,14 +417,17 @@ class LLMAnnotationExplorer {
                 });
             }
             
-            // Build the final HTML - using red for hallucinations
+            // Build the final HTML - using red gradient for hallucinations
             let html = '';
             segments.forEach(segment => {
                 if (segment.type === 'text') {
                     html += this.escapeHtml(segment.content);
                 } else if (segment.type === 'span') {
-                    // Apply red highlighting for hallucinations
-                    html += `<span class="annotation-span" data-span-id="${segment.spanId}" style="background: linear-gradient(120deg, #fecaca 0%, #f87171 100%); color: #dc2626; font-weight: 500; padding: 2px 4px; border-radius: 4px; border-left: 3px solid #dc2626; cursor: pointer;">${this.escapeHtml(segment.content)}</span>`;
+                    // Calculate overall severity based on irrefutability (lower = more severe)
+                    const severity = 1 - (segment.span.irrefutability || 0);
+                    const alpha = Math.max(0.3, severity); // Minimum visibility
+                    
+                    html += `<span class="annotation-span" data-span-id="${segment.spanId}" style="background: linear-gradient(120deg, rgba(254, 202, 202, ${alpha}) 0%, rgba(248, 113, 113, ${alpha}) 100%); color: #dc2626; font-weight: 500; padding: 2px 4px; border-radius: 4px; border-left: 3px solid #dc2626; cursor: pointer; transition: all 0.2s ease;">${this.escapeHtml(segment.content)}</span>`;
                 }
             });
             
@@ -394,7 +482,8 @@ class LLMAnnotationExplorer {
 
     showSpanDetails(spanId, spanElement) {
         try {
-            const span = this.currentAnnotation.spans.find(s => s.id === spanId);
+            const modelData = this.currentAnnotation.models[this.currentModel];
+            const span = modelData.spans.find(s => s.id === spanId);
             if (!span) {
                 throw new Error(`Span with ID ${spanId} not found`);
             }
@@ -424,17 +513,17 @@ class LLMAnnotationExplorer {
             
             const rect = element.getBoundingClientRect();
             
-            // Create tooltip content with hallucination severity ratings
-            const verifiability = this.validateRating(span.verifiability) ? span.verifiability : 0;
+            // Create tooltip content with proper LLM ratings
+            const irrefutability = this.validateRating(span.irrefutability) ? span.irrefutability : 0;
             const plausibility = this.validateRating(span.plausibility) ? span.plausibility : 0;
             const innocuity = this.validateRating(span.innocuity) ? span.innocuity : 0;
             
             this.tooltip.innerHTML = `
-                <div class="tooltip-header">Hallucination Severity</div>
+                <div class="tooltip-header">LLM Hallucination Analysis</div>
                 <div class="tooltip-content">
                     <div class="tooltip-row" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                        <span class="tooltip-label" style="min-width: 80px;">Verifiability:</span>
-                        ${this.createRatingBar(verifiability, 'Verifiability')}
+                        <span class="tooltip-label" style="min-width: 80px;">Irrefutability:</span>
+                        ${this.createRatingBar(irrefutability, 'Irrefutability')}
                     </div>
                     <div class="tooltip-row" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
                         <span class="tooltip-label" style="min-width: 80px;">Plausibility:</span>
@@ -447,14 +536,14 @@ class LLMAnnotationExplorer {
                     <div style="margin-top: 12px; padding-top: 8px; border-top: 1px solid #374151;">
                         <div style="font-size: 0.75rem; color: #9ca3af; margin-bottom: 4px;">Precise Values:</div>
                         <div style="font-size: 0.75rem; color: #d1d5db;">
-                            Verifiability: ${verifiability.toFixed(2)} | Plausibility: ${plausibility.toFixed(2)} | Innocuity: ${innocuity.toFixed(2)}
+                            Irrefutability: ${irrefutability.toFixed(2)} | Plausibility: ${plausibility.toFixed(2)} | Innocuity: ${innocuity.toFixed(2)}
                         </div>
                     </div>
                     <div style="margin-top: 8px; font-size: 0.8rem; color: #9ca3af;">
                         Text: "${this.escapeHtml(span.text || 'No text available')}"
                     </div>
                     <div style="margin-top: 8px; font-size: 0.75rem; color: #dc2626; font-weight: 500;">
-                        Model: ${this.escapeHtml(this.currentAnnotation.model)}
+                        Model: ${this.escapeHtml(this.currentModel)}
                     </div>
                 </div>
             `;
@@ -517,9 +606,14 @@ class LLMAnnotationExplorer {
         try {
             if (this.activeSpan) {
                 this.activeSpan.classList.remove('active');
-                // Reset to red styling for hallucinations
-                this.activeSpan.style.background = 'linear-gradient(120deg, #fecaca 0%, #f87171 100%)';
-                this.activeSpan.style.color = '#dc2626';
+                // Reset to original styling
+                const span = this.getSpanData(parseInt(this.activeSpan.getAttribute('data-span-id')));
+                if (span) {
+                    const severity = 1 - (span.irrefutability || 0);
+                    const alpha = Math.max(0.3, severity);
+                    this.activeSpan.style.background = `linear-gradient(120deg, rgba(254, 202, 202, ${alpha}) 0%, rgba(248, 113, 113, ${alpha}) 100%)`;
+                    this.activeSpan.style.color = '#dc2626';
+                }
                 this.activeSpan.style.transform = 'translateY(0)';
                 this.activeSpan.style.boxShadow = 'none';
                 this.activeSpan = null;
@@ -529,19 +623,30 @@ class LLMAnnotationExplorer {
         }
     }
 
+    getSpanData(spanId) {
+        try {
+            if (!this.currentAnnotation || !this.currentModel) return null;
+            const modelData = this.currentAnnotation.models[this.currentModel];
+            return modelData.spans.find(s => s.id === spanId);
+        } catch (error) {
+            this.logError('Failed to get span data', error);
+            return null;
+        }
+    }
+
     createRatingBar(rating, label) {
         try {
             const validRating = this.validateRating(rating) ? rating : 0;
             const percentage = Math.round(validRating * 100);
             
-            // Color coding for hallucination severity ratings
+            // Color coding for LLM hallucination severity ratings
             let barColor = '#ef4444'; // Default red
             
-            if (label === 'Verifiability') {
-                // For verifiability: green = high verifiability (good), red = low verifiability (bad)
-                if (validRating >= 0.7) barColor = '#10b981'; // Green for high verifiability
+            if (label === 'Irrefutability') {
+                // For irrefutability: green = high irrefutability (good), red = low irrefutability (bad)
+                if (validRating >= 0.7) barColor = '#10b981'; // Green for high irrefutability
                 else if (validRating >= 0.4) barColor = '#f59e0b'; // Orange for medium
-                else barColor = '#ef4444'; // Red for low verifiability
+                else barColor = '#ef4444'; // Red for low irrefutability
             } else if (label === 'Plausibility') {
                 // For plausibility: green = high plausibility (less concerning), red = low plausibility (very concerning)
                 if (validRating >= 0.7) barColor = '#10b981'; // Green for high plausibility
@@ -582,7 +687,7 @@ class LLMAnnotationExplorer {
         }
     }
 
-    // Error handling methods (same as human explorer)
+    // Error handling methods remain the same as before
     logError(message, error = null) {
         const errorInfo = {
             message,
@@ -669,6 +774,7 @@ class LLMAnnotationExplorer {
         
         if (!this.isInitialized) issues.push('Not initialized');
         if (!this.currentAnnotation) issues.push('No current annotation');
+        if (!this.currentModel) issues.push('No current model');
         if (!document.getElementById('tooltip')) issues.push('Tooltip element missing');
         if (typeof llmAnnotationsData === 'undefined') issues.push('Data not loaded');
         
@@ -678,6 +784,43 @@ class LLMAnnotationExplorer {
             errorCount: this.errors.length
         };
     }
+
+    // Method to find matching human annotation by title
+    findMatchingHumanAnnotation() {
+        try {
+            if (typeof annotationsData === 'undefined' || !this.currentAnnotation) {
+                return null;
+            }
+            
+            return annotationsData.find(human => human.title === this.currentAnnotation.title);
+        } catch (error) {
+            this.logError('Failed to find matching human annotation', error);
+            return null;
+        }
+    }
+
+    // Method to get comparison statistics
+    getComparisonStats() {
+        try {
+            const matching = this.findMatchingHumanAnnotation();
+            if (!matching || !this.currentModel) {
+                return null;
+            }
+
+            const llmSpans = this.currentAnnotation.models[this.currentModel].spans || [];
+            const humanSpans = matching.spans || [];
+
+            return {
+                llmSpanCount: llmSpans.length,
+                humanSpanCount: humanSpans.length,
+                title: this.currentAnnotation.title,
+                model: this.currentModel
+            };
+        } catch (error) {
+            this.logError('Failed to get comparison stats', error);
+            return null;
+        }
+    }
 }
 
 // Enhanced initialization with error handling
@@ -685,7 +828,7 @@ document.addEventListener('DOMContentLoaded', () => {
     try {
         // Check if required dependencies are loaded
         if (typeof llmAnnotationsData === 'undefined') {
-            console.error('llmAnnotationsData not found. Make sure llm-data.js is loaded before llm-explore.js');
+            console.error('llmAnnotationsData not found. Make sure llm-data.js is loaded before this script');
             return;
         }
         
@@ -698,6 +841,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 window.llmAnnotationExplorer.logError('Unhandled error', event.error);
             }
         });
+
+        // Optional: Log when human data is also available
+        if (typeof annotationsData !== 'undefined') {
+            console.log('Human annotation data also available for comparison');
+        }
         
     } catch (error) {
         console.error('Failed to initialize LLMAnnotationExplorer:', error);
