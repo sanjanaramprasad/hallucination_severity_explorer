@@ -8,6 +8,112 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <style>
+        .annotation-controls {
+            margin-bottom: 20px;
+            padding: 20px;
+            background: var(--surface-elevated, #f8f9fa);
+            border-radius: var(--radius, 8px);
+            border: 1px solid var(--border, #e5e7eb);
+        }
+        
+        .search-container, .filter-container, .annotation-selector {
+            margin-bottom: 16px;
+        }
+        
+        .search-container {
+            position: relative;
+        }
+        
+        .search-container label, .filter-container label, .annotation-selector label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 6px;
+            font-size: 14px;
+            color: var(--text-primary, #1f2937);
+        }
+        
+        #annotation-search {
+            width: 100%;
+            padding: 8px 35px 8px 12px;
+            border: 1px solid var(--border, #d1d5db);
+            border-radius: 6px;
+            font-size: 14px;
+            background: var(--background, white);
+            color: var(--text-primary, #1f2937);
+        }
+        
+        #annotation-search:focus {
+            outline: none;
+            border-color: var(--primary-color, #3b82f6);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        #clear-search {
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            font-size: 18px;
+            color: var(--text-secondary, #6b7280);
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 3px;
+            margin-top: 12px;
+        }
+        
+        #clear-search:hover {
+            background: var(--accent, #f3f4f6);
+            color: var(--text-primary, #1f2937);
+        }
+        
+        #prefix-filter, #annotation-select {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid var(--border, #d1d5db);
+            border-radius: 6px;
+            font-size: 14px;
+            background: var(--background, white);
+            color: var(--text-primary, #1f2937);
+        }
+        
+        #prefix-filter:focus, #annotation-select:focus {
+            outline: none;
+            border-color: var(--primary-color, #3b82f6);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        .annotation-count {
+            margin-top: 6px;
+            font-size: 12px;
+            color: var(--text-secondary, #6b7280);
+            font-style: italic;
+        }
+        
+        .no-results {
+            padding: 12px;
+            text-align: center;
+            color: var(--text-secondary, #6b7280);
+            background: var(--surface, #f9fafb);
+            border-radius: 6px;
+            font-style: italic;
+        }
+        
+        @media (min-width: 768px) {
+            .annotation-controls {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 20px;
+                align-items: start;
+            }
+            
+            .annotation-selector {
+                grid-column: 1 / -1;
+            }
+        }
+    </style>
 </head>
 <body>
     <nav class="navbar">
@@ -42,11 +148,28 @@
 
     <!-- Controls Panel -->
     <div class="controls">
-        <div class="annotation-selector">
-            <label for="annotation-select">Select Human Annotation:</label>
-            <select id="annotation-select">
-                <!-- Options will be populated by JavaScript -->
-            </select>
+        <div class="annotation-controls">
+            <div class="search-container">
+                <label for="annotation-search">Search by ID:</label>
+                <input type="text" id="annotation-search" placeholder="e.g., XSUM-45678 or gpt4-ul2..." />
+                <button id="clear-search">×</button>
+            </div>
+            
+            <div class="filter-container">
+                <label for="prefix-filter">Filter by Dataset:</label>
+                <select id="prefix-filter">
+                    <option value="">All Datasets</option>
+                    <!-- Options will be populated by JavaScript -->
+                </select>
+            </div>
+            
+            <div class="annotation-selector">
+                <label for="annotation-select">Select Annotation:</label>
+                <select id="annotation-select">
+                    <!-- Options will be populated by JavaScript -->
+                </select>
+                <div class="annotation-count" id="annotation-count"></div>
+            </div>
         </div>
         
         <!-- Attribute toggles will be dynamically inserted here by JavaScript -->
@@ -65,7 +188,7 @@
             <div style="margin-top: 16px; padding: 12px; background: var(--surface-elevated); border-radius: 6px; border: 1px solid var(--border);">
                 <h5 style="font-size: 12px; color: var(--text-secondary); margin-bottom: 8px;">Attribute Definitions:</h5>
                 <div style="font-size: 11px; color: var(--text-muted); line-height: 1.4;">
-                    <div style="margin-bottom: 6px;"><strong>Irrefutability:</strong> Can the claim be verified against the source?</div>
+                    <div style="margin-bottom: 6px;"><strong>Irrefutability:</strong> How difficult is it to refute or contradict this claim?</div>
                     <div style="margin-bottom: 6px;"><strong>Plausibility:</strong> How believable is the claim?</div>
                     <div style="margin-bottom: 6px;"><strong>Innocuity:</strong> How harmless is the hallucination?</div>
                     <div><strong>Mean Score:</strong> Average of all three attributes</div>

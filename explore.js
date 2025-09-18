@@ -1,4 +1,4 @@
-// Complete explore.js for hallucination severity metrics with attribute toggles
+// Complete explore.js for hallucination severity metrics with attribute toggles and search/filtering
 class AnnotationExplorer {
     constructor() {
         this.currentAnnotation = null;
@@ -6,6 +6,12 @@ class AnnotationExplorer {
         this.tooltip = null;
         this.isInitialized = false;
         this.currentAttribute = 'mean'; // 'mean', 'irrefutability', 'plausibility', 'innocuity'
+        
+        // Search and filtering
+        this.allAnnotations = [];
+        this.filteredAnnotations = [];
+        this.currentSearch = '';
+        this.currentPrefixFilter = '';
         
         // Error tracking
         this.errors = [];
@@ -27,6 +33,10 @@ class AnnotationExplorer {
             
             // Initialize components
             this.tooltip = document.getElementById('tooltip');
+            this.allAnnotations = [...annotationsData];
+            this.filteredAnnotations = [...annotationsData];
+            
+            this.populatePrefixFilter();
             this.populateAnnotationSelector();
             this.createAttributeToggles();
             this.bindEvents();
@@ -42,6 +52,9 @@ class AnnotationExplorer {
 
     validateRequiredElements() {
         const requiredElements = [
+            'annotation-search',
+            'clear-search', 
+            'prefix-filter',
             'annotation-select',
             'source-content', 
             'summary-content',
@@ -130,9 +143,121 @@ class AnnotationExplorer {
         }
     }
 
+    // Extract prefix from annotation title (e.g., "XSUM-45678:gpt4-ul2" -> "XSUM")
+    extractPrefix(title) {
+        try {
+            const match = title.match(/^([A-Z]+)/);
+            return match ? match[1] : 'OTHER';
+        } catch (error) {
+            this.logError('Failed to extract prefix', error);
+            return 'OTHER';
+        }
+    }
+
+    // Populate prefix filter dropdown
+    populatePrefixFilter() {
+        try {
+            const prefixFilter = document.getElementById('prefix-filter');
+            if (!prefixFilter) {
+                throw new Error('Prefix filter not found');
+            }
+            
+            // Extract unique prefixes
+            const prefixes = [...new Set(this.allAnnotations.map(a => this.extractPrefix(a.title)))];
+            prefixes.sort();
+            
+            // Clear existing options except "All Datasets"
+            const allOption = prefixFilter.querySelector('option[value=""]');
+            prefixFilter.innerHTML = '';
+            if (allOption) {
+                prefixFilter.appendChild(allOption);
+            } else {
+                const defaultOption = document.createElement('option');
+                defaultOption.value = '';
+                defaultOption.textContent = 'All Datasets';
+                prefixFilter.appendChild(defaultOption);
+            }
+            
+            prefixes.forEach(prefix => {
+                const option = document.createElement('option');
+                option.value = prefix;
+                option.textContent = `${prefix} Dataset`;
+                prefixFilter.appendChild(option);
+            });
+            
+        } catch (error) {
+            this.handleError('Failed to populate prefix filter', error);
+        }
+    }
+
+    // Filter annotations based on search and prefix
+    filterAnnotations() {
+        try {
+            this.filteredAnnotations = this.allAnnotations.filter(annotation => {
+                // Search filter
+                if (this.currentSearch) {
+                    const searchLower = this.currentSearch.toLowerCase();
+                    if (!annotation.title.toLowerCase().includes(searchLower)) {
+                        return false;
+                    }
+                }
+                
+                // Prefix filter
+                if (this.currentPrefixFilter) {
+                    const prefix = this.extractPrefix(annotation.title);
+                    if (prefix !== this.currentPrefixFilter) {
+                        return false;
+                    }
+                }
+                
+                return true;
+            });
+            
+            this.populateAnnotationSelector();
+            
+            // If current annotation is not in filtered results, load first available
+            if (this.currentAnnotation && !this.filteredAnnotations.includes(this.currentAnnotation)) {
+                if (this.filteredAnnotations.length > 0) {
+                    const firstIndex = this.allAnnotations.indexOf(this.filteredAnnotations[0]);
+                    this.loadAnnotation(firstIndex);
+                } else {
+                    this.clearContent();
+                }
+            }
+            
+        } catch (error) {
+            this.handleError('Failed to filter annotations', error);
+        }
+    }
+
+    // Clear content when no results found
+    clearContent() {
+        try {
+            const sourceContent = document.getElementById('source-content');
+            const summaryContent = document.getElementById('summary-content');
+            
+            if (sourceContent) {
+                sourceContent.innerHTML = '<div class="no-results">No annotations match your search criteria.</div>';
+            }
+            
+            if (summaryContent) {
+                summaryContent.innerHTML = '<div class="no-results">Please adjust your search or filter settings.</div>';
+            }
+            
+            this.currentAnnotation = null;
+            this.hideTooltip();
+            this.clearActiveSpan();
+            
+        } catch (error) {
+            this.logError('Failed to clear content', error);
+        }
+    }
+
     populateAnnotationSelector() {
         try {
             const selector = document.getElementById('annotation-select');
+            const countDisplay = document.getElementById('annotation-count');
+            
             if (!selector) {
                 throw new Error('Annotation selector not found');
             }
@@ -140,16 +265,49 @@ class AnnotationExplorer {
             // Clear existing options
             selector.innerHTML = '';
             
-            annotationsData.forEach((annotation, index) => {
+            if (this.filteredAnnotations.length === 0) {
+                const option = document.createElement('option');
+                option.value = '';
+                option.textContent = 'No annotations found';
+                option.disabled = true;
+                selector.appendChild(option);
+                
+                if (countDisplay) {
+                    countDisplay.textContent = 'No results found';
+                }
+                return;
+            }
+
+            // Sort filtered annotations by prefix, then by full title
+            const sortedAnnotations = [...this.filteredAnnotations].sort((a, b) => {
+                const prefixA = this.extractPrefix(a.title);
+                const prefixB = this.extractPrefix(b.title);
+                
+                if (prefixA !== prefixB) {
+                    return prefixA.localeCompare(prefixB);
+                }
+                return a.title.localeCompare(b.title);
+            });
+            
+            sortedAnnotations.forEach((annotation, index) => {
                 try {
                     const option = document.createElement('option');
-                    option.value = index;
+                    option.value = this.allAnnotations.indexOf(annotation);
                     option.textContent = annotation.title || `Annotation ${index + 1}`;
                     selector.appendChild(option);
                 } catch (error) {
                     this.logError(`Failed to create option for annotation ${index}`, error);
                 }
             });
+
+            // Update count display
+            if (countDisplay) {
+                const total = this.allAnnotations.length;
+                const filtered = this.filteredAnnotations.length;
+                countDisplay.textContent = filtered === total ? 
+                    `${total} annotations` : 
+                    `${filtered} of ${total} annotations`;
+            }
             
         } catch (error) {
             this.handleError('Failed to populate annotation selector', error);
@@ -177,10 +335,10 @@ class AnnotationExplorer {
                 </div>
             `;
 
-            // Insert after annotation selector but before legend
-            const annotationSelector = controlsDiv.querySelector('.annotation-selector');
-            if (annotationSelector) {
-                annotationSelector.insertAdjacentElement('afterend', togglesContainer);
+            // Insert after annotation controls but before legend
+            const annotationControls = controlsDiv.querySelector('.annotation-controls');
+            if (annotationControls) {
+                annotationControls.insertAdjacentElement('afterend', togglesContainer);
             } else {
                 controlsDiv.prepend(togglesContainer);
             }
@@ -294,12 +452,44 @@ class AnnotationExplorer {
 
     bindEvents() {
         try {
+            // Search functionality
+            const searchInput = document.getElementById('annotation-search');
+            const clearButton = document.getElementById('clear-search');
+            
+            if (searchInput) {
+                searchInput.addEventListener('input', (e) => {
+                    this.currentSearch = e.target.value.trim();
+                    this.filterAnnotations();
+                });
+                
+                searchInput.addEventListener('keydown', (e) => {
+                    if (e.key === 'Escape') {
+                        this.clearSearch();
+                    }
+                });
+            }
+            
+            if (clearButton) {
+                clearButton.addEventListener('click', () => {
+                    this.clearSearch();
+                });
+            }
+            
+            // Prefix filter
+            const prefixFilter = document.getElementById('prefix-filter');
+            if (prefixFilter) {
+                prefixFilter.addEventListener('change', (e) => {
+                    this.currentPrefixFilter = e.target.value;
+                    this.filterAnnotations();
+                });
+            }
+
             const selector = document.getElementById('annotation-select');
             if (selector) {
                 selector.addEventListener('change', (e) => {
                     try {
                         const index = parseInt(e.target.value);
-                        if (isNaN(index) || index < 0 || index >= annotationsData.length) {
+                        if (isNaN(index) || index < 0 || index >= this.allAnnotations.length) {
                             throw new Error(`Invalid annotation index: ${e.target.value}`);
                         }
                         this.loadAnnotation(index);
@@ -326,13 +516,34 @@ class AnnotationExplorer {
         }
     }
 
+    // Clear search functionality
+    clearSearch() {
+        try {
+            const searchInput = document.getElementById('annotation-search');
+            if (searchInput) {
+                searchInput.value = '';
+                this.currentSearch = '';
+                this.filterAnnotations();
+                searchInput.focus();
+            }
+        } catch (error) {
+            this.handleError('Failed to clear search', error);
+        }
+    }
+
     loadAnnotation(index) {
         try {
-            if (index < 0 || index >= annotationsData.length) {
+            if (index < 0 || index >= this.allAnnotations.length) {
                 throw new Error(`Invalid annotation index: ${index}`);
             }
             
-            this.currentAnnotation = annotationsData[index];
+            this.currentAnnotation = this.allAnnotations[index];
+            
+            // Update selector to show current annotation
+            const selector = document.getElementById('annotation-select');
+            if (selector) {
+                selector.value = index;
+            }
             
             // Render components with error handling
             this.safeRender(() => this.renderSource(), 'source');
@@ -583,7 +794,6 @@ class AnnotationExplorer {
             spanElement.classList.add('active');
             
             // Darken the current span when selected
-            const currentScore = this.getAttributeScore(span);
             spanElement.style.filter = 'brightness(0.8)';
             spanElement.style.transform = 'translateY(-1px)';
             spanElement.style.boxShadow = '0 6px 16px rgba(0, 0, 0, 0.2)';
@@ -644,7 +854,7 @@ class AnnotationExplorer {
                     <div style="margin-top: 12px; padding-top: 8px; border-top: 1px solid #374151;">
                         <div style="font-size: 0.75rem; color: #9ca3af; margin-bottom: 4px;">Precise Values:</div>
                         <div style="font-size: 0.75rem; color: #d1d5db;">
-                            Mean: ${meanScore.toFixed(3)} | V: ${irrefutability.toFixed(2)} | P: ${plausibility.toFixed(2)} | I: ${innocuity.toFixed(2)}
+                            Mean: ${meanScore.toFixed(3)} | I: ${irrefutability.toFixed(2)} | P: ${plausibility.toFixed(2)} | In: ${innocuity.toFixed(2)}
                         </div>
                     </div>
                     
@@ -892,6 +1102,49 @@ class AnnotationExplorer {
             scores: scores.map(s => s.toFixed(3))
         };
     }
+
+    // Public method to search by ID
+    searchById(id) {
+        try {
+            const annotation = this.allAnnotations.find(a => a.title.includes(id));
+            if (annotation) {
+                const index = this.allAnnotations.indexOf(annotation);
+                this.loadAnnotation(index);
+                
+                // Update search input to show the search
+                const searchInput = document.getElementById('annotation-search');
+                if (searchInput) {
+                    searchInput.value = id;
+                    this.currentSearch = id;
+                    this.filterAnnotations();
+                }
+                
+                return true;
+            }
+            return false;
+        } catch (error) {
+            this.logError('Failed to search by ID', error);
+            return false;
+        }
+    }
+
+    // Get available dataset prefixes
+    getDatasetPrefixes() {
+        try {
+            return [...new Set(this.allAnnotations.map(a => this.extractPrefix(a.title)))].sort();
+        } catch (error) {
+            this.logError('Failed to get dataset prefixes', error);
+            return [];
+        }
+    }
+
+    // Get filter stats
+    getFilteredCount() {
+        return {
+            filtered: this.filteredAnnotations.length,
+            total: this.allAnnotations.length
+        };
+    }
 }
 
 // Enhanced initialization with error handling
@@ -905,6 +1158,22 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // Initialize with global error handling
         window.annotationExplorer = new AnnotationExplorer();
+        
+        // Add global keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (window.annotationExplorer && e.ctrlKey) {
+                switch(e.key) {
+                    case 'f':
+                        e.preventDefault();
+                        document.getElementById('annotation-search')?.focus();
+                        break;
+                    case 'k':
+                        e.preventDefault();
+                        window.annotationExplorer.clearSearch();
+                        break;
+                }
+            }
+        });
         
         // Global error handler for unhandled errors
         window.addEventListener('error', (event) => {
@@ -920,7 +1189,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
         
-        console.log('AnnotationExplorer initialized successfully with attribute toggles');
+        console.log('AnnotationExplorer initialized successfully with search and filtering');
         
     } catch (error) {
         console.error('Failed to initialize AnnotationExplorer:', error);
@@ -928,7 +1197,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <div style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #fee2e2; color: #dc2626; padding: 2rem; border-radius: 8px; text-align: center; z-index: 9999; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
                 <h2>Application Failed to Start</h2>
                 <p>The annotation explorer could not initialize properly.</p>
-                <p style="font-size: 0.9rem; margin: 1rem 0;">Please check that data.js is loaded correctly.</p>
+                <p style="font-size: 0.9rem; margin: 1rem 0;">Please check that data.js is loaded correctly and try refreshing the page.</p>
                 <button onclick="window.location.reload()" style="margin-top: 1rem; background: #dc2626; color: white; border: none; padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer;">Refresh Page</button>
             </div>
         `);
