@@ -11,7 +11,6 @@
     <style>
         .controls {
             position: relative;
-            margin-bottom: 20px;
         }
         
         .controls-header {
@@ -185,24 +184,8 @@
         </div>
     </nav>
 
-    <div class="explore-container">
-        <div class="panel source-panel">
-            <h2>Source Document</h2>
-            <div class="panel-content" id="source-content">
-                <!-- Source content will be loaded here -->
-            </div>
-        </div>
-        
-        <div class="panel summary-panel">
-            <h2>Human-Annotated Summary</h2>
-            <div class="panel-content" id="summary-content">
-                <!-- Summary content will be loaded here -->
-            </div>
-        </div>
-    </div>
-
     <!-- Controls Panel -->
-    <div class="controls">
+    <div class="controls" style="max-width: 1400px; margin: 20px auto; padding: 0 20px;">
         <div class="controls-header" onclick="toggleControls()">
             <h3>Search & Controls</h3>
             <button class="controls-toggle" id="controls-toggle">▼</button>
@@ -259,6 +242,22 @@
                 <div style="margin-top: 12px; font-size: 11px; color: var(--text-muted); font-style: italic;">
                     💡 Click the toggle buttons above to change how spans are colored, then click on highlighted text to see detailed ratings.
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="explore-container">
+        <div class="panel source-panel">
+            <h2>Source Document</h2>
+            <div class="panel-content" id="source-content">
+                <!-- Source content will be loaded here -->
+            </div>
+        </div>
+
+        <div class="panel summary-panel">
+            <h2>Human-Annotated Summary</h2>
+            <div class="panel-content" id="summary-content">
+                <!-- Summary content will be loaded here -->
             </div>
         </div>
     </div>
