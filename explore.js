@@ -316,10 +316,10 @@ class AnnotationExplorer {
 
     createAttributeToggles() {
         try {
-            // Find the controls div
-            const controlsDiv = document.querySelector('.controls');
+            // Find the sidebar content div
+            const controlsDiv = document.querySelector('.sidebar-content');
             if (!controlsDiv) {
-                throw new Error('Controls div not found');
+                throw new Error('Sidebar content div not found');
             }
 
             // Create attribute toggles container
